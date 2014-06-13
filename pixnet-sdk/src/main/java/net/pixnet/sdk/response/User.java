@@ -1,5 +1,8 @@
 package net.pixnet.sdk.response;
 
+/**
+ * User info
+ */
 public class User{
     /**
      * User name

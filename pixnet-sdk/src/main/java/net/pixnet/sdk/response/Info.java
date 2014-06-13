@@ -1,5 +1,8 @@
 package net.pixnet.sdk.response;
 
+/**
+ * Article Info
+ */
 public class Info{
     /**
      * Article trackbacks count

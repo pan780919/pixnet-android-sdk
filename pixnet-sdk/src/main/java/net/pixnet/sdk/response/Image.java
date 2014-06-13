@@ -1,5 +1,8 @@
 package net.pixnet.sdk.response;
 
+/**
+ * Image info
+ */
 public class Image{
     /**
      * Image url
