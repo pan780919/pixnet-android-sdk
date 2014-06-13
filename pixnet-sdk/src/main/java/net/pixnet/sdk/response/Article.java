@@ -25,16 +25,52 @@ public class Article extends BasicResponse{
      * category id
      */
     public String category_id;
+    /**
+     * article url
+     */
     public String link;
+    /**
+     * article status : 0~7
+     */
     public String status;
+    /**
+     * Tag list
+     */
     public ArrayList<Tag> tags;
+    /**
+     * is_top
+     */
     public String is_top;
+    /**
+     * comment_perm
+     */
     public String comment_perm;
+    /**
+     * comment_hidden
+     */
     public String comment_hidden;
+    /**
+     * Article title
+     */
     public String title;
+    /**
+     * thumb
+     */
     public String thumb;
+    /**
+     * Article info
+     */
     public Info info;
+    /**
+     * User who created the article
+     */
     public User user;
+    /**
+     * Article body
+     */
     public String body;
+    /**
+     * Image list
+     */
     public ArrayList<Image> images;
 }
