@@ -3,9 +3,24 @@ package net.pixnet.sdk.response;
 import java.util.ArrayList;
 
 public class CommentsList{
+    /**
+     * Total comments
+     */
     public int total;
+    /**
+     * Article that comments come from
+     */
     public Article article;
+    /**
+     * List of comments
+     */
     public ArrayList<Comment> comments;
+    /**
+     * Comments show per page
+     */
     public int pre_page;
+    /**
+     * Current page
+     */
     public int page;
 }
