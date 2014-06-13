@@ -1,15 +1,16 @@
 package net.pixnet.sdk.response;
 
 /**
- * Created by Ben on 2014/6/13.
+ * default response
  */
 public class BasicResponse {
     /**
-     * response message
+     * auxiliary message
      */
     public String message;
     /**
      * error code
+     * 0 = success
      */
     public String error;
 }
