@@ -2,7 +2,7 @@ package net.pixnet.sdk.response;
 
 import java.util.ArrayList;
 
-public class Site_CategoriesList extends BasicResponse{
+public class Site_CategoryList extends BasicResponse{
     /**
      * PIXNET categories
      */

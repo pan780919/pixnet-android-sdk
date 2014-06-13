@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Categories List
  */
-public class CategoriesList extends BasicResponse{
+public class CategoryList extends BasicResponse{
     /**
      * List of categories
      */

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Blocks list
  */
-public class BlocksList{
+public class BlocksList extends BasicResponse{
     /**
      * Blocks
      */

@@ -3,7 +3,7 @@ package net.pixnet.sdk.response;
 /**
  * Config
  */
-public class Config extends BasicResponse{
+public class AlbumConfig extends BasicResponse{
     /**
      * Show user is vip or not
      */

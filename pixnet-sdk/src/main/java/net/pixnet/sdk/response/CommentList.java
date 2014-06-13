@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Comments list
  */
-public class CommentsList extends BasicResponse{
+public class CommentList extends BasicResponse{
     /**
      * Total comments
      */
