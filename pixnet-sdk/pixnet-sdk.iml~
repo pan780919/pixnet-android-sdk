@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
+<module external.linked.project.path="C:\Users\Koi\Desktop\pixnet-android-sdk\pixnet-android-sdk\pixnet-sdk" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" external.system.module.group="pixnet-android-sdk" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+=======
 <module external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" external.system.module.group="pixnet-android-sdk" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+>>>>>>> 744577afa79676f9162151edf2ccb1020ee15e0d
   <component name="FacetManager">
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
@@ -57,6 +61,10 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
+<<<<<<< HEAD
+      <excludeFolder url="file://$MODULE_DIR$/.gradle" />
+=======
+>>>>>>> 744577afa79676f9162151edf2ccb1020ee15e0d
       <excludeFolder url="file://$MODULE_DIR$/build/apk" />
       <excludeFolder url="file://$MODULE_DIR$/build/assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/bundles" />
@@ -71,8 +79,16 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+<<<<<<< HEAD
+<<<<<<< HEAD
+    <orderEntry type="library" exported="" name="appcompat-v7-19.0.1" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-19.0.1" level="project" />
+=======
     <orderEntry type="library" exported="" name="appcompat-v7-19.1.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-19.1.0" level="project" />
+>>>>>>> 744577afa79676f9162151edf2ccb1020ee15e0d
+=======
+>>>>>>> 388f77e1815d3ba793633be71655d297c9ece53c
   </component>
 </module>
 
