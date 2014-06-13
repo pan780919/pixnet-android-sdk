@@ -30,7 +30,14 @@ public class Article extends BasicResponse{
      */
     public String link;
     /**
-     * article status : 0~7
+     * article status :
+     * 0:delete
+     * 1:draft
+     * 2:public
+     * 3:secret
+     * 4:hide
+     * 5:friends
+     * 7:joint
      */
     public String status;
     /**
@@ -43,10 +50,16 @@ public class Article extends BasicResponse{
     public String is_top;
     /**
      * comment_perm
+     * 0:close
+     * 1:open for anyone
+     * 2:open for logged user
+     * 3:open for friends
      */
     public String comment_perm;
     /**
      * comment_hidden
+     * 0:public
+     * 1:hide
      */
     public String comment_hidden;
     /**
