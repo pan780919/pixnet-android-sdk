@@ -2,7 +2,7 @@ package net.pixnet.sdk.response;
 
 import java.util.ArrayList;
 
-public class Catagory{
+public class Category{
     public String id;
     public String type;
     public String order;
@@ -11,5 +11,5 @@ public class Catagory{
     public String show_index;
     public String site_category_id;
     public String site_category_done;
-    public ArrayList<Catagory> child_categories;
+    public ArrayList<Category> child_categories;
 }
