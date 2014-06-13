@@ -61,4 +61,12 @@ public class Comment extends BasicResponse{
      * Article this comment comes from
      */
     public Article article;
+    /**
+     * Set this comment comes from
+     */
+    public Set set;
+    /**
+     * Element this comment comes from
+     */
+    public Element element;
 }
