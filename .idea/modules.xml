@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/emma-sdk/emma-sdk.iml" filepath="$PROJECT_DIR$/emma-sdk/emma-sdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/pixnet-android-sdk.iml" filepath="$PROJECT_DIR$/pixnet-android-sdk.iml" />
-      <module fileurl="file://$PROJECT_DIR$/pixnet-sdk/pixnet-sdk.iml" filepath="$PROJECT_DIR$/pixnet-sdk/pixnet-sdk.iml" />
     </modules>
   </component>
 </project>
