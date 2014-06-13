@@ -24,9 +24,9 @@ public class Category{
      */
     public String description;
     /**
-     * Category index
+     * Show index or not
      */
-    public String show_index;
+    public boolean show_index;
     /**
      * site_category_id
      */
