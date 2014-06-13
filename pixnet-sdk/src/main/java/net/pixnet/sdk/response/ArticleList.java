@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /**
  * Created by Koi 2014/6/13.
  */
-public class Article extends BasicResponse {
+public class ArticleList extends BasicResponse {
     /**
      * Article list
      */
