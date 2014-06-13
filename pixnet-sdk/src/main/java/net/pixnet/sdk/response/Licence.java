@@ -1,5 +1,5 @@
 package net.pixnet.sdk.response;
 
-class Licence{
+public class Licence{
     public String type;
 }

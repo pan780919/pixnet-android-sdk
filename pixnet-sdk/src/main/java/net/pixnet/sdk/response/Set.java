@@ -2,7 +2,7 @@ package net.pixnet.sdk.response;
 
 import java.util.ArrayList;
 
-public class Set{
+public class Set extends BasicResponse{
     public String id;
     public String type;
     public String title;
