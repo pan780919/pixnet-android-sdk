@@ -1,5 +1,8 @@
 package net.pixnet.sdk.response;
 
+/**
+ * Response for comment
+ */
 public class Comment extends BasicResponse{
     /**
      * Comment id

@@ -2,6 +2,9 @@ package net.pixnet.sdk.response;
 
 import java.util.ArrayList;
 
+/**
+ * Response for Category
+ */
 public class Category extends BasicResponse{
     /**
      * Category id

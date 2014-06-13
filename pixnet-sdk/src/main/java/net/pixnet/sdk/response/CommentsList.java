@@ -2,6 +2,9 @@ package net.pixnet.sdk.response;
 
 import java.util.ArrayList;
 
+/**
+ * Comments list
+ */
 public class CommentsList extends BasicResponse{
     /**
      * Total comments

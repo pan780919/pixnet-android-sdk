@@ -1,5 +1,8 @@
 package net.pixnet.sdk.response;
 
+/**
+ * Config
+ */
 public class Config extends BasicResponse{
     /**
      * Show user is vip or not

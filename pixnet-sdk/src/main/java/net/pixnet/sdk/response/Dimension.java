@@ -1,5 +1,8 @@
 package net.pixnet.sdk.response;
 
+/**
+ * Element dimension
+ */
 public class Dimension{
     /**
      * Original dimension

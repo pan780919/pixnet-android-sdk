@@ -2,6 +2,9 @@ package net.pixnet.sdk.response;
 
 import java.util.ArrayList;
 
+/**
+ * Element
+ */
 public class Element extends BasicResponse{
     /**
      * Element id

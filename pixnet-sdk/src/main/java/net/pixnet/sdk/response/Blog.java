@@ -1,5 +1,8 @@
 package net.pixnet.sdk.response;
 
+/**
+ * Blog info
+ */
 public class Blog extends BasicResponse{
     /**
      * Blog url
