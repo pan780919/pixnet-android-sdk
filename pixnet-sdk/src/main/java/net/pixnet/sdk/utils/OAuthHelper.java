@@ -5,8 +5,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +34,7 @@ public class OAuthHelper {
      * @throws org.json.JSONException
      */
     public OAuthHelper(String client_id, String client_secret,
-                              String redirect_uri) throws IOException, JSONException {
+                       String redirect_uri) throws IOException, JSONException {
         this.client_id = client_id;
         this.client_secret = client_secret;
         this.redirect_uri = redirect_uri;
@@ -73,25 +71,13 @@ public class OAuthHelper {
      *
      * @param access_token
      *            Access_token
-     * @param title
-     *            Article title
-     * @param body
-     *            Article body
      * @param param
      *            other param add with &type=param_value
      * @return The return String from server
      * @throws java.io.IOException
      */
-    public String post(String access_token, String title, String body,
-                       List<NameValuePair> param) throws IOException {
+    public String post(String postUrl,String access_token, List<NameValuePair> param) throws IOException {
         final String inaccess_token = access_token;
-        final String intitle = title;
-        final String inbody  = body;
-        URL urlPost = new URL(
-                "https://emma.pixnet.cc/blog/articles?access_token="
-                        + access_token + "&title="
-                        + URLEncoder.encode(title, "UTF-8") + "&body="
-                        + URLEncoder.encode(body, "UTF-8") + param);
         List<NameValuePair> params;
         if(param==null) {
             params = new ArrayList<NameValuePair>();
@@ -106,23 +92,10 @@ public class OAuthHelper {
                 return inaccess_token;
             }
         });
-        params.add(new NameValuePair() {
-            public String getName() {
-                return "title";
-            }
-            public String getValue() {
-                return intitle;
-            }
-        });
-        params.add(new NameValuePair() {
-            public String getName() {
-                return "body";
-            }
-            public String getValue() {
-                return inbody;
-            }
-        });
-        String response = new HttpHelper().post(URL_POST_ARTICLES,params);
+        HttpHelper hh = new HttpHelper();
+        hh.timeout_connection = 10000;
+        hh.timeout_socket = 30000;
+        String response = hh.post(postUrl,params);
         // System.out.println(urlPost.toString());
         return response;
     }
