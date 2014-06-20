@@ -4,8 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import net.pixnet.sdk.response.Article;
-
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -62,7 +60,6 @@ public class HttpHelper {
      * @return true if the network is fine or false if network don't work
      */
     public static boolean isAvailable(Context ctx){
-        Article a;
         ConnectivityManager cm= (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info=cm.getActiveNetworkInfo();
         if(info==null)

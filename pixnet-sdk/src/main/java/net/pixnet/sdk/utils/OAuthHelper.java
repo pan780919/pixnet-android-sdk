@@ -4,12 +4,8 @@ import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +32,8 @@ public class OAuthHelper {
      *            your client secret
      * @param redirect_uri
      *            your redirect url
-     * @throws IOException
-     * @throws JSONException
+     * @throws java.io.IOException
+     * @throws org.json.JSONException
      */
     public OAuthHelper(String client_id, String client_secret,
                               String redirect_uri) throws IOException, JSONException {
@@ -52,7 +48,7 @@ public class OAuthHelper {
      *
      * @return formatted request url
      */
-    private String getRequestUrl() {
+    public String getRequestUrl() {
         return URL_AUTH
                 + "?client_id=" + client_id
                 + "&redirect_uri=" + redirect_uri
@@ -84,7 +80,7 @@ public class OAuthHelper {
      * @param param
      *            other param add with &type=param_value
      * @return The return String from server
-     * @throws IOException
+     * @throws java.io.IOException
      */
     public String post(String access_token, String title, String body,
                        List<NameValuePair> param) throws IOException {
