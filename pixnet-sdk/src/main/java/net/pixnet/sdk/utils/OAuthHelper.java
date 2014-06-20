@@ -1,4 +1,7 @@
-package net.pixnet.sdk.network;
+package net.pixnet.sdk.utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,13 +10,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 /**
  * OAuth connection tool
  */
 public class OAuthHelper {
+
+    private static final String URL_AUTH = "https://emma.pixnet.cc/oauth2/authorize";
+    private static final String URL_GRANT = "https://emma.pixnet.cc/oauth2/grant";
+
     private String access_token = "";
     private String client_id = "";
     private String client_secret = "";
@@ -40,15 +44,28 @@ public class OAuthHelper {
 
 
     /**
-     * The url that can auth and return the code for accesstoken
+     * The url that can auth and return the code for access token
      *
-     * @return RequestUrl
+     * @return formatted request url
      */
-    public String getRequestUrl() {
-        String url = "https://emma.pixnet.cc/oauth2/authorize?client_id="
-                + client_id + "&redirect_uri=" + redirect_uri
+    private String getRequestUrl() {
+        return URL_AUTH
+                + "?client_id=" + client_id
+                + "&redirect_uri=" + redirect_uri
                 + "&response_type=code";
-        return url;
+    }
+
+    /**
+     * format grant url with parameters
+     * @param code
+     * @return formatted grant url
+     */
+    private String getGrantUrl(String code) {
+        return URL_GRANT
+                + "?grant_type=authorization_code&code=" + code
+                + "&redirect_uri=" + redirect_uri
+                + "&client_id=" + client_id
+                + "&client_secret=" + client_secret;
     }
 
     /**
@@ -94,12 +111,7 @@ public class OAuthHelper {
      * @throws JSONException
      */
     public String getAccessToken(String code) throws IOException, JSONException {
-        String urlgrant = "https://emma.pixnet.cc/oauth2/grant?grant_type=authorization_code&code="
-                + code
-                + "&redirect_uri="
-                + redirect_uri
-                + "&client_id="
-                + client_id + "&client_secret=" + client_secret;
+        String urlgrant = getGrantUrl(code);
         URL url = new URL(urlgrant);
         URLConnection conn = url.openConnection();
         BufferedReader br = new BufferedReader(new InputStreamReader(
