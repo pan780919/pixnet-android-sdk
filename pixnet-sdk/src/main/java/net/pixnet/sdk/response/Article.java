@@ -152,8 +152,10 @@ public class Article extends BasicResponse{
                     thumb = article.getString("thumb");
                 }
                 if(article.has("info")){
+                    info = new Info(article.getJSONObject("info"));
                 }
                 if(article.has("user")){
+                    user = new User(article.getJSONObject("user"));
                 }
                 if(article.has("body")){
                     body = article.getString("body");
