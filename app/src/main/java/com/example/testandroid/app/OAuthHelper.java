@@ -1,17 +1,13 @@
-package net.pixnet.sdk.utils;
+package com.example.testandroid.app;
 
-import org.apache.http.NameValuePair;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 
 /**
  * OAuth connection tool
@@ -35,8 +31,8 @@ public class OAuthHelper {
      *            your client secret
      * @param redirect_uri
      *            your redirect url
-     * @throws IOException
-     * @throws JSONException
+     * @throws java.io.IOException
+     * @throws org.json.JSONException
      */
     public OAuthHelper(String client_id, String client_secret,
                               String redirect_uri) throws IOException, JSONException {
@@ -83,7 +79,7 @@ public class OAuthHelper {
      * @param param
      *            other param add with &type=param_value
      * @return The return String from server
-     * @throws IOException
+     * @throws java.io.IOException
      */
     public String post(String access_token, String title, String body,
                        String param) throws IOException {
@@ -110,55 +106,19 @@ public class OAuthHelper {
      * @param code
      *            Code from RequestUrl
      * @return Set code and Get AccessToken
-     * @throws IOException
-     * @throws JSONException
+     * @throws java.io.IOException
+     * @throws org.json.JSONException
      */
     public String getAccessToken(String code) throws IOException, JSONException {
-        final String incode = code;
-        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new NameValuePair() {
-            public String getName() {
-                return "grant_type";
-            }
-            public String getValue() {
-                return "authorization_code";
-            }
-        });
-        params.add(new NameValuePair() {
-            public String getName() {
-                return "code";
-            }
-            public String getValue() {
-                return incode;
-            }
-        });
-        params.add(new NameValuePair() {
-            public String getName() {
-                return "redirect_uri";
-            }
-            public String getValue() {
-                return redirect_uri;
-            }
-        });
-        params.add(new NameValuePair() {
-            public String getName() {
-                return "client_id";
-            }
-            public String getValue() {
-                return client_id;
-            }
-        });
-        params.add(new NameValuePair() {
-            public String getName() {
-                return "client_secret";
-            }
-            public String getValue() {
-                return client_secret;
-            }
-        });
-        String response = new HttpHelper().get(URL_GRANT,params);
-        JSONObject obj = new JSONObject(response);
-        access_token = (String) obj.get("access_token");
-        return  access_token;
+        String urlgrant = getGrantUrl(code);
+        URL url = new URL(urlgrant);
+        String response = new HttpHelper().get(URL_GRANT);
+        //URLConnection conn = url.openConnection();
+        //BufferedReader br = new BufferedReader(new InputStreamReader(
+        //        conn.getInputStream(), "UTF-8"));
+        //String json = br.readLine();
+        //JSONObject obj = new JSONObject(json);
+        //access_token = (String) obj.get("access_token");
+        return response;
     }
 }
