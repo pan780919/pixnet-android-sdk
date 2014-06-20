@@ -12,6 +12,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * OAuth connection tool
@@ -20,7 +21,7 @@ public class OAuthHelper {
 
     private static final String URL_AUTH = "https://emma.pixnet.cc/oauth2/authorize";
     private static final String URL_GRANT = "https://emma.pixnet.cc/oauth2/grant";
-
+    private static final String URL_POST_ARTICLES="https://emma.pixnet.cc/blog/articles";
     private String access_token = "";
     private String client_id = "";
     private String client_secret = "";
@@ -86,23 +87,48 @@ public class OAuthHelper {
      * @throws IOException
      */
     public String post(String access_token, String title, String body,
-                       String param) throws IOException {
+                       List<NameValuePair> param) throws IOException {
+        final String inaccess_token = access_token;
+        final String intitle = title;
+        final String inbody  = body;
         URL urlPost = new URL(
                 "https://emma.pixnet.cc/blog/articles?access_token="
                         + access_token + "&title="
                         + URLEncoder.encode(title, "UTF-8") + "&body="
                         + URLEncoder.encode(body, "UTF-8") + param);
+        List<NameValuePair> params;
+        if(param==null) {
+            params = new ArrayList<NameValuePair>();
+        }else{
+            params = param;
+        }
+        params.add(new NameValuePair() {
+            public String getName() {
+                return "access_token";
+            }
+            public String getValue() {
+                return inaccess_token;
+            }
+        });
+        params.add(new NameValuePair() {
+            public String getName() {
+                return "title";
+            }
+            public String getValue() {
+                return intitle;
+            }
+        });
+        params.add(new NameValuePair() {
+            public String getName() {
+                return "body";
+            }
+            public String getValue() {
+                return inbody;
+            }
+        });
+        String response = new HttpHelper().post(URL_POST_ARTICLES,params);
         // System.out.println(urlPost.toString());
-        HttpURLConnection con = (HttpURLConnection) urlPost.openConnection();
-        con.setDoOutput(true);
-        con.setDoInput(true);
-        con.setRequestProperty("Content-Type",
-                "application/x-www-form-urlencoded");
-        con.setRequestMethod("POST");
-        con.connect();
-        BufferedReader br = new BufferedReader(new InputStreamReader(
-                con.getInputStream(), "UTF-8"));
-        return br.readLine();
+        return response;
     }
 
     /**
@@ -110,10 +136,8 @@ public class OAuthHelper {
      * @param code
      *            Code from RequestUrl
      * @return Set code and Get AccessToken
-     * @throws IOException
-     * @throws JSONException
      */
-    public String getAccessToken(String code) throws IOException, JSONException {
+    public String getAccessToken(String code)  {
         final String incode = code;
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new NameValuePair() {
@@ -156,9 +180,13 @@ public class OAuthHelper {
                 return client_secret;
             }
         });
-        String response = new HttpHelper().get(URL_GRANT,params);
-        JSONObject obj = new JSONObject(response);
-        access_token = (String) obj.get("access_token");
+        try {
+            String response = new HttpHelper().get(URL_GRANT, params);
+            JSONObject obj = new JSONObject(response);
+            access_token = (String) obj.get("access_token");
+        }catch(JSONException e){
+            access_token = "Code error";
+        }
         return  access_token;
     }
 }
