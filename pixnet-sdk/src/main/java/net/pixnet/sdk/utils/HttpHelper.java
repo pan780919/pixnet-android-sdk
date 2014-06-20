@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import net.pixnet.sdk.response.Article;
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -42,13 +44,25 @@ import java.util.List;
  */
 public class HttpHelper {
 
+    /**
+     * default connection timeout
+     */
     public static final int DEF_TIMEOUT_CONNECTION=3000;
+    /**
+     * default socket timeout
+     */
     public static final int DEF_TIMEOUT_SOCKET=5000;
 
-    public int timeout_connection=DEF_TIMEOUT_SOCKET;
+    public int timeout_connection=DEF_TIMEOUT_CONNECTION;
     public int timeout_socket=DEF_TIMEOUT_SOCKET;
 
+    /**
+     * detect network is available or no
+     * @param ctx is a Context
+     * @return true if the network is fine or false if network don't work
+     */
     public static boolean isAvailable(Context ctx){
+        Article a;
         ConnectivityManager cm= (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info=cm.getActiveNetworkInfo();
         if(info==null)
@@ -59,6 +73,11 @@ public class HttpHelper {
         else return false;
     }
 
+    /**
+     * detect network type is WIFI or not
+     * @param ctx is a Context
+     * @return true with currently network type is WIFI or false if is other types
+     */
     public static boolean isWIFI(Context ctx){
         ConnectivityManager cm= (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info=cm.getActiveNetworkInfo();
@@ -71,15 +90,34 @@ public class HttpHelper {
         else return false;
     }
 
+    /**
+     * get without parameter and header
+     */
     public String get(String url){
         return get(url, null, null);
     }
+
+    /**
+     * get without header
+     */
     public String get(String url, ArrayList<NameValuePair> params){
         return get(url, params, null);
     }
+
+    /**
+     * get without parameter
+     */
     public String get(String url, Header[] headers){
         return get(url, null, headers);
     }
+
+    /**
+     * perform http get method
+     * @param url
+     * @param params
+     * @param headers
+     * @return a string result
+     */
     public String get(String url, ArrayList<NameValuePair> params, Header[] headers){
         url=formatUrl(url, params);
         Helper.log("GET:"+url);
@@ -91,12 +129,27 @@ public class HttpHelper {
         return getStringFromInputStream(in);
     }
 
+    /**
+     * post without header
+     */
     public String post(String url, List<NameValuePair> params){
         return post(url, params, null);
     }
+
+    /**
+     * post without parameter
+     */
     public String post(String url, Header[] headers){
         return post(url, null, headers);
     }
+
+    /**
+     * perform http post method
+     * @param url
+     * @param params
+     * @param headers
+     * @return a string result
+     */
     public String post(String url, List<NameValuePair> params, Header[] headers){
         url=formatUrl(url);
         Helper.log("POST:"+url);
@@ -117,9 +170,20 @@ public class HttpHelper {
         return getStringFromInputStream(in);
     }
 
+    /**
+     * delete without parameter
+     */
     public String delete(String url, Header[] headers){
         return delete(url, null, headers);
     }
+
+    /**
+     * perform http delete method
+     * @param url
+     * @param params
+     * @param headers
+     * @return a string result
+     */
     public String delete(String url, ArrayList<NameValuePair> params, Header[] headers){
         url=formatUrl(url, params);
         Helper.log("DELETE:"+url);
@@ -130,9 +194,19 @@ public class HttpHelper {
         return getStringFromInputStream(in);
     }
 
+    /**
+     * formatUrl without parameter
+     */
     private String formatUrl(String url){
         return formatUrl(url, null);
     }
+
+    /**
+     * append query string and prepend "http:" to url if need
+     * @param url
+     * @param params
+     * @return
+     */
     private String formatUrl(String url, ArrayList<NameValuePair> params){
         //ex. //example.com/xxx
         if(url.indexOf("http")<0)
@@ -215,6 +289,11 @@ public class HttpHelper {
     public void cancel(){
     }
 
+    /**
+     * url encode by utf-8
+     * @param url
+     * @return encoded url
+     */
     public static String encodeUrl(String url){
         String str;
         try {

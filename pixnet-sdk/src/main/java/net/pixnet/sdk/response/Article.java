@@ -86,4 +86,8 @@ public class Article extends BasicResponse{
      * Image list
      */
     public ArrayList<Image> images;
+
+    private void formatJson(String response){
+
+    }
 }
