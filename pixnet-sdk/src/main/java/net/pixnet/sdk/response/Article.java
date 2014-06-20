@@ -1,5 +1,6 @@
 package net.pixnet.sdk.response;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -128,6 +129,12 @@ public class Article extends BasicResponse{
                     status = article.getString("status");
                 }
                 if(article.has("tags")) {
+                    JSONArray taglist = article.getJSONArray("tags");
+                    tags = new ArrayList<Tag>();
+                    for (int i = 0; i < taglist.length(); i++) {
+                        JSONObject tagObject = taglist.getJSONObject(i);
+                        tags.add(new Tag(tagObject.getString("tag"),tagObject.getInt("locked"),tagObject.getString("added_by")));
+                    }
                 }
                 if(article.has("is_top")){
                     is_top = article.getString("is_top");
