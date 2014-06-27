@@ -170,7 +170,6 @@ public class HttpHelper {
             if (entity != null) post.setEntity(entity);
         }
         InputStream in = request(post);
-
         return getStringFromInputStream(in);
     }
 
@@ -234,7 +233,9 @@ public class HttpHelper {
     }
 
     private InputStream request(HttpUriRequest request) {
+        System.out.println("request"+request.toString());
         requestObj = request;
+        userStop = false;
         HttpClient client = createHttpClient();
         HttpResponse response = null;
         try {
@@ -258,7 +259,6 @@ public class HttpHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return in;
     }
 

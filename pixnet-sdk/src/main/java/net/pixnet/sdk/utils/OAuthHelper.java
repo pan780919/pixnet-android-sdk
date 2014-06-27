@@ -27,7 +27,7 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class OAuthHelper {
 
-    private static final String SIGNATRUE_METHOD="HMAC-SHA1";
+    private static final String SIGNATRUE_METHOD = "HMAC-SHA1";
     private static final String URL_AUTH = "https://emma.pixnet.cc/oauth2/authorize";
     private static final String URL_GRANT = "https://emma.pixnet.cc/oauth2/grant";
     private static final String URL_POST_ARTICLES = "https://emma.pixnet.cc/blog/articles";
@@ -40,57 +40,56 @@ public class OAuthHelper {
     private String redirect_uri = "";
     private String consumer_secret;
     private String consumer_key;
-    private String nonce=null;
-    private String timestamp=null;
-    private String accessToken=null;
-    private String token_secret=null;
-
+    private String nonce = null;
+    private String timestamp = null;
+    private String accessToken = null;
+    private String token_secret = null;
+    String postUrl;
+    List<NameValuePair> param;
+    HttpRequestList list = new HttpRequestList();
     private HttpHelper hh;
 
-    public static enum OAuthVersion{
+    public static enum OAuthVersion {
         VER_1,
         VER_2
     }
 
     /**
      * new helper for OAuth
-     * @param version
-     *          OAuthVersion.VER_1 or OAuthVersion.VER_2
-     * @param consumerKey
-     *          your consume key / client id
-     * @param consumerSecret
-     *          your consumer secret
+     *
+     * @param version        OAuthVersion.VER_1 or OAuthVersion.VER_2
+     * @param consumerKey    your consume key / client id
+     * @param consumerSecret your consumer secret
      */
     public OAuthHelper(OAuthVersion version, String consumerKey, String consumerSecret) {
-        ver=version;
-        consumer_secret=consumerSecret;
-        consumer_key=consumerKey;
+        ver = version;
+        consumer_secret = consumerSecret;
+        consumer_key = consumerKey;
     }
 
-    public boolean xAuthLogin(String userName, String passwd, String accessTokenUrl){
-        if(accessToken!=null) return true;
+    public boolean xAuthLogin(String userName, String passwd, String accessTokenUrl) {
+        if (accessToken != null) return true;
 
-        ArrayList<NameValuePair> params=new ArrayList<NameValuePair>();
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("x_auth_mode", "client_auth"));
         params.add(new BasicNameValuePair("x_auth_password", passwd));
         params.add(new BasicNameValuePair("x_auth_username", userName));
 
-        String res=post(accessTokenUrl, params);
+        String res = post(accessTokenUrl, params);
 
-        HashMap<String, String> resParams=HttpHelper.parseParamsByResponse(res);
-        String token    =resParams.get("oauth_token");
-        String secret   =resParams.get("oauth_token_secret");
+        HashMap<String, String> resParams = HttpHelper.parseParamsByResponse(res);
+        String token = resParams.get("oauth_token");
+        String secret = resParams.get("oauth_token_secret");
 
-        if(token!=null && secret!=null){
+        if (token != null && secret != null) {
             setTokenAndSecret(token, secret);
             return true;
-        }
-        else return false;
+        } else return false;
     }
 
-    public void setTokenAndSecret(String token, String secret){
-        accessToken=token;
-        token_secret=secret;
+    public void setTokenAndSecret(String token, String secret) {
+        accessToken = token;
+        token_secret = secret;
     }
 
     /**
@@ -121,12 +120,10 @@ public class OAuthHelper {
 
 
     /**
-     *
-     * @param code
-     *            Code from RequestUrl
+     * @param code Code from RequestUrl
      * @return Set code and Get AccessToken
      */
-    public String getAccessToken(String code)  {
+    public String getAccessToken(String code) {
         final String incode = code;
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("grant_type", "authorization_code"));
@@ -138,10 +135,10 @@ public class OAuthHelper {
         try {
             JSONObject obj = new JSONObject(response);
             access_token = (String) obj.get("access_token");
-        }catch(JSONException e){
+        } catch (JSONException e) {
             access_token = "Code error";
         }
-        return  access_token;
+        return access_token;
     }
 
     /**
@@ -161,41 +158,49 @@ public class OAuthHelper {
             params = param;
         }
         params.add(new BasicNameValuePair("access_token", inaccess_token));
-        HttpHelper hh = new HttpHelper();
+        this.postUrl = postUrl;
+        this.param = params;
+        hh = new HttpHelper();
         hh.timeout_connection = 10000;
         hh.timeout_socket = 30000;
+        int num;
+        while ((num = list.addRequest(hh)) == -1) ;
         String response = hh.post(postUrl, params);
+        list.removeRequest(hh);
+
         // System.out.println(urlPost.toString());
         return response;
     }
 
-    private void computeNoceAndTimestamp(){
-        nonce=getNonce();
-        timestamp=getTimeStamp();
+    private void computeNoceAndTimestamp() {
+        nonce = getNonce();
+        timestamp = getTimeStamp();
     }
 
     /**
      * get without parameters
+     *
      * @param url
      * @return
      */
-    public String get(String url){
+    public String get(String url) {
         return get(url, null);
     }
 
     /**
      * perform http get method with OAuth
+     *
      * @param url
      * @param params
      * @return
      */
-    public String get(String url, ArrayList<NameValuePair> params){
-        switch (ver){
+    public String get(String url, ArrayList<NameValuePair> params) {
+        switch (ver) {
             case VER_1:
                 computeNoceAndTimestamp();
-                String signatrue=getSignatrue(HttpGet.METHOD_NAME, url, params);
-                String headerStr=getHeaderString(signatrue);
-                Header[] headers=getHeader(headerStr);
+                String signatrue = getSignatrue(HttpGet.METHOD_NAME, url, params);
+                String headerStr = getHeaderString(signatrue);
+                Header[] headers = getHeader(headerStr);
                 return getHttpHelper().get(url, params, headers);
             case VER_2:
                 // perform oauth 2.0
@@ -207,17 +212,18 @@ public class OAuthHelper {
 
     /**
      * perform http post method with OAuth
+     *
      * @param url
      * @param params
      * @return
      */
-    public String post(String url, ArrayList<NameValuePair> params){
-        switch (ver){
+    public String post(String url, ArrayList<NameValuePair> params) {
+        switch (ver) {
             case VER_1:
                 computeNoceAndTimestamp();
-                String signatrue=getSignatrue(HttpPost.METHOD_NAME, url, params);
-                String headerStr=getHeaderString(signatrue);
-                Header[] headers=getHeader(headerStr);
+                String signatrue = getSignatrue(HttpPost.METHOD_NAME, url, params);
+                String headerStr = getHeaderString(signatrue);
+                Header[] headers = getHeader(headerStr);
                 return getHttpHelper().post(url, params, headers);
             case VER_2:
                 // perform oauth 2.0
@@ -229,17 +235,18 @@ public class OAuthHelper {
 
     /**
      * perform http delete method with OAuth
+     *
      * @param url
      * @param params
      * @return
      */
-    public String delete(String url, ArrayList<NameValuePair> params){
-        switch (ver){
+    public String delete(String url, ArrayList<NameValuePair> params) {
+        switch (ver) {
             case VER_1:
                 computeNoceAndTimestamp();
-                String signatrue=getSignatrue(HttpDelete.METHOD_NAME, url, params);
-                String headerStr=getHeaderString(signatrue);
-                Header[] headers=getHeader(headerStr);
+                String signatrue = getSignatrue(HttpDelete.METHOD_NAME, url, params);
+                String headerStr = getHeaderString(signatrue);
+                Header[] headers = getHeader(headerStr);
                 return getHttpHelper().delete(url, params, headers);
             case VER_2:
                 // perform oauth 2.0
@@ -249,74 +256,74 @@ public class OAuthHelper {
         }
     }
 
-    private Header[] getHeader(String headerStr){
-        Header[] headers={
+    private Header[] getHeader(String headerStr) {
+        Header[] headers = {
                 new BasicHeader("Authorization", headerStr)
-                ,new BasicHeader("Content-Type","application/x-www-form-urlencoded")
+                , new BasicHeader("Content-Type", "application/x-www-form-urlencoded")
         };
         return headers;
     }
 
-    private String getSignatrue(String method, String url, ArrayList<NameValuePair> params){
-        String paraStr=getParamsString(params);
+    private String getSignatrue(String method, String url, ArrayList<NameValuePair> params) {
+        String paraStr = getParamsString(params);
 //		Helper.log(paraStr);
-        String baseStr=getBaseString(method, url, paraStr);
-        String secret=HttpHelper.encodeUrl(consumer_secret)+"&";
-        if(token_secret!=null) secret+=HttpHelper.encodeUrl(token_secret);
+        String baseStr = getBaseString(method, url, paraStr);
+        String secret = HttpHelper.encodeUrl(consumer_secret) + "&";
+        if (token_secret != null) secret += HttpHelper.encodeUrl(token_secret);
         return computeShaHash(baseStr, secret);
     }
 
-    private String getParamsString(ArrayList<NameValuePair> params){
-        ArrayList<String> paraList=getBasicOAuthParameters();
-        if(params!=null){
-            for(NameValuePair item:params){
+    private String getParamsString(ArrayList<NameValuePair> params) {
+        ArrayList<String> paraList = getBasicOAuthParameters();
+        if (params != null) {
+            for (NameValuePair item : params) {
                 paraList.add(item.getName() + "=" + HttpHelper.encodeUrl(item.getValue()));
             }
         }
         return formatParameterString(paraList);
     }
 
-    private ArrayList<String> getBasicOAuthParameters(){
-        ArrayList<String> paraList=new ArrayList<String>();
-        paraList.add("oauth_nonce="+nonce);
-        paraList.add("oauth_consumer_key="+consumer_key);
-        paraList.add("oauth_signature_method="+SIGNATRUE_METHOD);
-        paraList.add("oauth_timestamp="+timestamp);
+    private ArrayList<String> getBasicOAuthParameters() {
+        ArrayList<String> paraList = new ArrayList<String>();
+        paraList.add("oauth_nonce=" + nonce);
+        paraList.add("oauth_consumer_key=" + consumer_key);
+        paraList.add("oauth_signature_method=" + SIGNATRUE_METHOD);
+        paraList.add("oauth_timestamp=" + timestamp);
         paraList.add("oauth_version=1.0");
-        if(accessToken!=null) paraList.add("oauth_token="+accessToken);
+        if (accessToken != null) paraList.add("oauth_token=" + accessToken);
 
         return paraList;
     }
 
-    private String getBaseString(String method, String url, String paraStr){
-        String baseStr=method
-                +"&"+HttpHelper.encodeUrl(url)
-                +"&"+HttpHelper.encodeUrl(paraStr);
+    private String getBaseString(String method, String url, String paraStr) {
+        String baseStr = method
+                + "&" + HttpHelper.encodeUrl(url)
+                + "&" + HttpHelper.encodeUrl(paraStr);
 
         return baseStr;
     }
 
-    private String getHeaderString(String signatrue){
-        String headerStr="OAuth"
-                +" oauth_nonce=\""+nonce+"\""
-                +", oauth_signature_method=\""+SIGNATRUE_METHOD+"\""
-                +", oauth_timestamp=\""+timestamp+"\""
-                +", oauth_consumer_key=\""+HttpHelper.encodeUrl(consumer_key)+"\""
-                +", oauth_signature=\""+HttpHelper.encodeUrl(signatrue)+"\""
-                +", oauth_version=\"1.0\""
-                ;
-        if(accessToken!=null) headerStr+=", oauth_token=\""+HttpHelper.encodeUrl(accessToken)+"\"";
+    private String getHeaderString(String signatrue) {
+        String headerStr = "OAuth"
+                + " oauth_nonce=\"" + nonce + "\""
+                + ", oauth_signature_method=\"" + SIGNATRUE_METHOD + "\""
+                + ", oauth_timestamp=\"" + timestamp + "\""
+                + ", oauth_consumer_key=\"" + HttpHelper.encodeUrl(consumer_key) + "\""
+                + ", oauth_signature=\"" + HttpHelper.encodeUrl(signatrue) + "\""
+                + ", oauth_version=\"1.0\"";
+        if (accessToken != null)
+            headerStr += ", oauth_token=\"" + HttpHelper.encodeUrl(accessToken) + "\"";
 
         return headerStr;
     }
 
-    private String formatParameterString(ArrayList<String> params){
-        String paraStr="";
+    private String formatParameterString(ArrayList<String> params) {
+        String paraStr = "";
 
         Collections.sort(params);
-        for(String str:params){
-            if(paraStr.length()>0) paraStr+="&";
-            paraStr+=str;
+        for (String str : params) {
+            if (paraStr.length() > 0) paraStr += "&";
+            paraStr += str;
         }
 
         return paraStr;
@@ -332,8 +339,7 @@ public class OAuthHelper {
             mac.init(signingKey);
             byte[] rawHmac = mac.doFinal(data.getBytes("UTF-8"));
             result = new String(Base64.encode(rawHmac, Base64.NO_WRAP));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -357,20 +363,20 @@ public class OAuthHelper {
         return sb.toString();
     }
 
-    private String getTimeStamp(){
-        long seconds = (long) (System.currentTimeMillis()/1000d);
+    private String getTimeStamp() {
+        long seconds = (long) (System.currentTimeMillis() / 1000d);
         String secondsString = String.valueOf(seconds);
         return secondsString;
     }
 
-    private HttpHelper getHttpHelper(){
-        if(hh==null)
-            hh=new HttpHelper();
+    private HttpHelper getHttpHelper() {
+        if (hh == null)
+            hh = new HttpHelper();
         return hh;
     }
 
     public void cancel() {
-        if(hh!=null){
+        if (hh != null) {
             hh.cancel();
         }
     }
