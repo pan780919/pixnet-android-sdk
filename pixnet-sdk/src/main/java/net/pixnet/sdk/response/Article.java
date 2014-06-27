@@ -1,10 +1,20 @@
 package net.pixnet.sdk.response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
 /**
  * Response for Article
  */
-public class Article extends BasicResponse{
+public class Article extends BasicResponse {
+
+    public Article(String response) {
+        formatJson(response);
+    }
+
     /**
      * article id
      */
@@ -86,4 +96,81 @@ public class Article extends BasicResponse{
      * Image list
      */
     public ArrayList<Image> images;
+
+    public void formatJson(String response) {
+        try {
+            JSONObject obj = new JSONObject(response);
+            if (obj.has("message")) {
+                message = obj.getString("message");
+            }
+            if (obj.has("error")) {
+                error = obj.getString("error");
+            }
+            if (obj.has("article")) {
+                JSONObject article = obj.getJSONObject("article");
+                if (article.has("id")) {
+                    id = article.getString("id");
+                }
+                if (article.has("public_at")) {
+                    public_at = article.getString("public_at");
+                }
+                if (article.has("site_category")) {
+                    site_category = article.getString("site_category");
+                }
+                if (article.has("category")) {
+                    category = article.getString("category");
+                }
+                if (article.has("category_id")) {
+                    category_id = article.getString("category_id");
+                }
+                if (article.has("link")) {
+                    link = article.getString("link");
+                }
+                if (article.has("status")) {
+                    status = article.getString("status");
+                }
+                if (article.has("tags")) {
+                    JSONArray taglist = article.getJSONArray("tags");
+                    tags = new ArrayList<Tag>();
+                    for (int i = 0; i < taglist.length(); i++) {
+                        JSONObject tagObject = taglist.getJSONObject(i);
+                        tags.add(new Tag(tagObject));
+                    }
+                }
+                if (article.has("is_top")) {
+                    is_top = article.getString("is_top");
+                }
+                if (article.has("comment_perm")) {
+                    comment_perm = article.getString("comment_perm");
+                }
+                if (article.has("comment_hidden")) {
+                    comment_hidden = article.getString("comment_hidden");
+                }
+                if (article.has("title")) {
+                    title = article.getString("title");
+                }
+                if (article.has("thumb")) {
+                    thumb = article.getString("thumb");
+                }
+                if (article.has("info")) {
+                    info = new Info(article.getJSONObject("info"));
+                }
+                if (article.has("user")) {
+                    user = new User(article.getJSONObject("user"));
+                }
+                if (article.has("body")) {
+                    body = article.getString("body");
+                }
+                if (article.has("images")) {
+                    JSONArray imagelist = article.getJSONArray("images");
+                    images = new ArrayList<Image>();
+                    for (int i = 0; i < imagelist.length(); i++) {
+                        JSONObject imageObject = imagelist.getJSONObject(i);
+                        images.add(new Image(imageObject));
+                    }
+                }
+            }
+        } catch (JSONException e) {
+        }
+    }
 }

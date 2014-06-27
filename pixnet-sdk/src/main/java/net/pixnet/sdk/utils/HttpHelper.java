@@ -4,8 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import net.pixnet.sdk.response.Article;
-
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -37,6 +35,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -62,7 +61,6 @@ public class HttpHelper {
      * @return true if the network is fine or false if network don't work
      */
     public static boolean isAvailable(Context ctx){
-        Article a;
         ConnectivityManager cm= (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info=cm.getActiveNetworkInfo();
         if(info==null)
@@ -76,7 +74,7 @@ public class HttpHelper {
     /**
      * detect network type is WIFI or not
      * @param ctx is a Context
-     * @return true with currently network type is WIFI or false if is other types
+     * @return true with currently network type is WIFI or false if others
      */
     public static boolean isWIFI(Context ctx){
         ConnectivityManager cm= (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -287,6 +285,24 @@ public class HttpHelper {
     }
 
     public void cancel(){
+    }
+
+    public static HashMap<String, String> parseParamsByResponse(String response){
+        HashMap<String, String> map=new HashMap<String, String>();
+
+        String[] strAry=response.split("&");
+        int i=0, len=strAry.length;
+        while(i<len){
+            String tmpStr=strAry[i];
+            int tmpIdx=tmpStr.indexOf("=");
+            if(tmpIdx<1 || tmpIdx>(tmpStr.length()-2)) continue;
+
+            String[] tmpAry=tmpStr.split("=");
+            map.put(tmpAry[0], tmpAry[1]);
+            i++;
+        }
+
+        return map;
     }
 
     /**
