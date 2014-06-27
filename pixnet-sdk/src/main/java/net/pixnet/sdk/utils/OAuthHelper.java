@@ -141,37 +141,6 @@ public class OAuthHelper {
         return access_token;
     }
 
-    /**
-     * Post Article
-     *
-     * @param access_token Access_token
-     * @param param        other param add with &type=param_value
-     * @return The return String from server
-     * @throws java.io.IOException
-     */
-    public String post(String postUrl, String access_token, List<NameValuePair> param) {
-        final String inaccess_token = access_token;
-        List<NameValuePair> params;
-        if (param == null) {
-            params = new ArrayList<NameValuePair>();
-        } else {
-            params = param;
-        }
-        params.add(new BasicNameValuePair("access_token", inaccess_token));
-        this.postUrl = postUrl;
-        this.param = params;
-        hh = new HttpHelper();
-        hh.timeout_connection = 10000;
-        hh.timeout_socket = 30000;
-        int num;
-        while ((num = list.addRequest(hh)) == -1) ;
-        String response = hh.post(postUrl, params);
-        list.removeRequest(hh);
-
-        // System.out.println(urlPost.toString());
-        return response;
-    }
-
     private void computeNoceAndTimestamp() {
         nonce = getNonce();
         timestamp = getTimeStamp();
@@ -226,8 +195,17 @@ public class OAuthHelper {
                 Header[] headers = getHeader(headerStr);
                 return getHttpHelper().post(url, params, headers);
             case VER_2:
-                // perform oauth 2.0
-                return null;
+                hh = new HttpHelper();
+                hh.timeout_connection = 10000;
+                hh.timeout_socket = 30000;
+                while ((list.addRequest(hh)) == -1){
+                    try {
+                        Thread.sleep(1000);
+                    }catch (Exception e){}
+                }
+                String response = hh.post(url, params);
+                list.removeRequest(hh);
+                return response;
             default:
                 return null;
         }
