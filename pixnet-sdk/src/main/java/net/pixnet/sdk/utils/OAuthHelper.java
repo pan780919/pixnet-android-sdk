@@ -12,7 +12,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +30,9 @@ public class OAuthHelper {
     private static final String SIGNATRUE_METHOD="HMAC-SHA1";
     private static final String URL_AUTH = "https://emma.pixnet.cc/oauth2/authorize";
     private static final String URL_GRANT = "https://emma.pixnet.cc/oauth2/grant";
-    private static final String URL_POST_ARTICLES="https://emma.pixnet.cc/blog/articles";
+    private static final String URL_POST_ARTICLES = "https://emma.pixnet.cc/blog/articles";
+
+    private OAuthVersion ver = OAuthVersion.VER_1;
 
     private String access_token = "";
     private String client_id = "";
@@ -44,7 +45,7 @@ public class OAuthHelper {
     private String accessToken=null;
     private String token_secret=null;
 
-    private OAuthVersion ver = OAuthVersion.VER_1;
+    private HttpHelper hh;
 
     public static enum OAuthVersion{
         VER_1,
@@ -106,6 +107,7 @@ public class OAuthHelper {
 
     /**
      * format grant url with parameters
+     *
      * @param code
      * @return formatted grant url
      */
@@ -145,26 +147,24 @@ public class OAuthHelper {
     /**
      * Post Article
      *
-     * @param access_token
-     *            Access_token
-     * @param param
-     *            other param add with &type=param_value
+     * @param access_token Access_token
+     * @param param        other param add with &type=param_value
      * @return The return String from server
      * @throws java.io.IOException
      */
-    public String post(String postUrl,String access_token, List<NameValuePair> param) throws IOException {
+    public String post(String postUrl, String access_token, List<NameValuePair> param) {
         final String inaccess_token = access_token;
         List<NameValuePair> params;
-        if(param==null) {
+        if (param == null) {
             params = new ArrayList<NameValuePair>();
-        }else{
+        } else {
             params = param;
         }
         params.add(new BasicNameValuePair("access_token", inaccess_token));
         HttpHelper hh = new HttpHelper();
         hh.timeout_connection = 10000;
         hh.timeout_socket = 30000;
-        String response = hh.post(postUrl,params);
+        String response = hh.post(postUrl, params);
         // System.out.println(urlPost.toString());
         return response;
     }
@@ -364,6 +364,14 @@ public class OAuthHelper {
     }
 
     private HttpHelper getHttpHelper(){
-        return new HttpHelper();
+        if(hh==null)
+            hh=new HttpHelper();
+        return hh;
+    }
+
+    public void cancel() {
+        if(hh!=null){
+            hh.cancel();
+        }
     }
 }
