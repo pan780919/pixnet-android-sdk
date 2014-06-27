@@ -2,8 +2,6 @@ package net.pixnet.sdk.utils;
 
 import android.util.SparseArray;
 
-import java.util.HashMap;
-
 /**
  * A SparseArray stored HttpRequests and control amount of requests
  */
