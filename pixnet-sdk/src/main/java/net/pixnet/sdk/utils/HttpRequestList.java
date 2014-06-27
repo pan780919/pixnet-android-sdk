@@ -12,13 +12,16 @@ public class HttpRequestList {
 
     /**
      * Set the limit of amount of requests
+     *
      * @param limit limit of requests
      */
-    public void setLimit(int limit){
+    public void setLimit(int limit) {
         this.limit = limit;
     }
+
     /**
      * If reach the limit then stuck the request , else put the request into the SparseArray.
+     *
      * @param request Http_request
      * @return the position of the request
      */
@@ -33,6 +36,7 @@ public class HttpRequestList {
 
     /**
      * remove the request at position - key from the SparseArray.
+     *
      * @param key the position where you want to remove a request.
      */
     public void removeRequest(int key) {
@@ -41,13 +45,14 @@ public class HttpRequestList {
 
     /**
      * cancel the request at position - key from the SparseArray.
+     *
      * @param key the position where you want to cancel a request.
      */
     public void cancelRequest(int key) {
         try {
-            HttpHelper hh = map.get(key,null);
-            if(hh!=null)
-            hh.cancel();
+            HttpHelper hh = map.get(key, null);
+            if (hh != null)
+                hh.cancel();
         } catch (Exception e) {
 
         }
