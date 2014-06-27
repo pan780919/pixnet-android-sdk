@@ -45,44 +45,48 @@ public class HttpHelper {
     /**
      * default connection timeout
      */
-    public static final int DEF_TIMEOUT_CONNECTION=3000;
+    public static final int DEF_TIMEOUT_CONNECTION = 3000;
     /**
      * default socket timeout
      */
-    public static final int DEF_TIMEOUT_SOCKET=5000;
+    public static final int DEF_TIMEOUT_SOCKET = 5000;
 
-    public int timeout_connection=DEF_TIMEOUT_CONNECTION;
-    public int timeout_socket=DEF_TIMEOUT_SOCKET;
+    public int timeout_connection = DEF_TIMEOUT_CONNECTION;
+    public int timeout_socket = DEF_TIMEOUT_SOCKET;
+    private HttpUriRequest requestObj;
+    private boolean userStop = false;
 
     /**
      * detect network is available or no
+     *
      * @param ctx is a Context
      * @return true if the network is fine or false if network don't work
      */
-    public static boolean isAvailable(Context ctx){
-        ConnectivityManager cm= (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo info=cm.getActiveNetworkInfo();
-        if(info==null)
+    public static boolean isAvailable(Context ctx) {
+        ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = cm.getActiveNetworkInfo();
+        if (info == null)
             return false;
 
-        if(info.isAvailable())
+        if (info.isAvailable())
             return true;
         else return false;
     }
 
     /**
      * detect network type is WIFI or not
+     *
      * @param ctx is a Context
      * @return true with currently network type is WIFI or false if is other types
      */
-    public static boolean isWIFI(Context ctx){
-        ConnectivityManager cm= (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo info=cm.getActiveNetworkInfo();
-        if(info==null)
+    public static boolean isWIFI(Context ctx) {
+        ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = cm.getActiveNetworkInfo();
+        if (info == null)
             return false;
 
-        int type=info.getType();
-        if(type==ConnectivityManager.TYPE_WIFI || type==ConnectivityManager.TYPE_WIMAX)
+        int type = info.getType();
+        if (type == ConnectivityManager.TYPE_WIFI || type == ConnectivityManager.TYPE_WIMAX)
             return true;
         else return false;
     }
@@ -90,38 +94,39 @@ public class HttpHelper {
     /**
      * get without parameter and header
      */
-    public String get(String url){
+    public String get(String url) {
         return get(url, null, null);
     }
 
     /**
      * get without header
      */
-    public String get(String url, ArrayList<NameValuePair> params){
+    public String get(String url, ArrayList<NameValuePair> params) {
         return get(url, params, null);
     }
 
     /**
      * get without parameter
      */
-    public String get(String url, Header[] headers){
+    public String get(String url, Header[] headers) {
         return get(url, null, headers);
     }
 
     /**
      * perform http get method
+     *
      * @param url
      * @param params
      * @param headers
      * @return a string result
      */
-    public String get(String url, ArrayList<NameValuePair> params, Header[] headers){
-        url=formatUrl(url, params);
-        Helper.log("GET:"+url);
+    public String get(String url, ArrayList<NameValuePair> params, Header[] headers) {
+        url = formatUrl(url, params);
+        Helper.log("GET:" + url);
 
-        HttpGet get=new HttpGet(url);
-        if(headers!=null) get.setHeaders(headers);
-        InputStream in=request(get);
+        HttpGet get = new HttpGet(url);
+        if (headers != null) get.setHeaders(headers);
+        InputStream in = request(get);
 
         return getStringFromInputStream(in);
     }
@@ -129,40 +134,41 @@ public class HttpHelper {
     /**
      * post without header
      */
-    public String post(String url, List<NameValuePair> params){
+    public String post(String url, List<NameValuePair> params) {
         return post(url, params, null);
     }
 
     /**
      * post without parameter
      */
-    public String post(String url, Header[] headers){
+    public String post(String url, Header[] headers) {
         return post(url, null, headers);
     }
 
     /**
      * perform http post method
+     *
      * @param url
      * @param params
      * @param headers
      * @return a string result
      */
-    public String post(String url, List<NameValuePair> params, Header[] headers){
-        url=formatUrl(url);
-        Helper.log("POST:"+url);
+    public String post(String url, List<NameValuePair> params, Header[] headers) {
+        url = formatUrl(url);
+        Helper.log("POST:" + url);
 
-        HttpPost post=new HttpPost(url);
+        HttpPost post = new HttpPost(url);
         post.setHeaders(headers);
-        if(params!=null){
-            HttpEntity entity=null;
+        if (params != null) {
+            HttpEntity entity = null;
             try {
-                entity=new UrlEncodedFormEntity(params, HTTP.UTF_8);
+                entity = new UrlEncodedFormEntity(params, HTTP.UTF_8);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            if(entity!=null) post.setEntity(entity);
+            if (entity != null) post.setEntity(entity);
         }
-        InputStream in=request(post);
+        InputStream in = request(post);
 
         return getStringFromInputStream(in);
     }
@@ -170,23 +176,24 @@ public class HttpHelper {
     /**
      * delete without parameter
      */
-    public String delete(String url, Header[] headers){
+    public String delete(String url, Header[] headers) {
         return delete(url, null, headers);
     }
 
     /**
      * perform http delete method
+     *
      * @param url
      * @param params
      * @param headers
      * @return a string result
      */
-    public String delete(String url, ArrayList<NameValuePair> params, Header[] headers){
-        url=formatUrl(url, params);
-        Helper.log("DELETE:"+url);
-        HttpDelete del=new HttpDelete(url);
+    public String delete(String url, ArrayList<NameValuePair> params, Header[] headers) {
+        url = formatUrl(url, params);
+        Helper.log("DELETE:" + url);
+        HttpDelete del = new HttpDelete(url);
         del.setHeaders(headers);
-        InputStream in=request(del);
+        InputStream in = request(del);
 
         return getStringFromInputStream(in);
     }
@@ -194,52 +201,57 @@ public class HttpHelper {
     /**
      * formatUrl without parameter
      */
-    private String formatUrl(String url){
+    private String formatUrl(String url) {
         return formatUrl(url, null);
     }
 
     /**
      * append query string and prepend "http:" to url if need
+     *
      * @param url
      * @param params
      * @return
      */
-    private String formatUrl(String url, ArrayList<NameValuePair> params){
+    private String formatUrl(String url, ArrayList<NameValuePair> params) {
         //ex. //example.com/xxx
-        if(url.indexOf("http")<0)
-            url="http:"+url;
+        if (url.indexOf("http") < 0)
+            url = "http:" + url;
 
-        if(params!=null){
-            String qs="";
-            for(NameValuePair nv:params){
-                if(qs.length()==0)
-                    qs+="?";
+        if (params != null) {
+            String qs = "";
+            for (NameValuePair nv : params) {
+                if (qs.length() == 0)
+                    qs += "?";
                 else
-                    qs+="&";
-                qs+=nv.getName()+"="+nv.getValue();
+                    qs += "&";
+                qs += nv.getName() + "=" + nv.getValue();
             }
-            url+=qs;
+            url += qs;
         }
 
         return url;
     }
 
-    private InputStream request(HttpUriRequest request){
-        HttpClient client=createHttpClient();
-        HttpResponse response=null;
+    private InputStream request(HttpUriRequest request) {
+        requestObj = request;
+        HttpClient client = createHttpClient();
+        HttpResponse response = null;
         try {
-            response=client.execute(request);
+            response = client.execute(request);
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            if (userStop) {
+            } else {
+                e.printStackTrace();
+            }
         }
-        if(response==null) return null;
+        if (response == null||userStop) return null;
 
-        HttpEntity entity=response.getEntity();
-        InputStream in=null;
+        HttpEntity entity = response.getEntity();
+        InputStream in = null;
         try {
-            in=entity.getContent();
+            in = entity.getContent();
         } catch (IllegalStateException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -249,14 +261,14 @@ public class HttpHelper {
         return in;
     }
 
-    private String getStringFromInputStream(InputStream in){
-        if(in==null) return null;
+    private String getStringFromInputStream(InputStream in) {
+        if (in == null) return null;
 
-        byte []data = new byte[1024];
+        byte[] data = new byte[1024];
         int length;
         ByteArrayOutputStream mByteArrayOutputStream = new ByteArrayOutputStream();
         try {
-            while( (length = in.read(data)) != -1 )
+            while ((length = in.read(data)) != -1)
                 mByteArrayOutputStream.write(data, 0, length);
         } catch (IOException e) {
             e.printStackTrace();
@@ -265,7 +277,7 @@ public class HttpHelper {
         return new String(mByteArrayOutputStream.toByteArray());
     }
 
-    private HttpClient createHttpClient(){
+    private HttpClient createHttpClient() {
         HttpParams params = new BasicHttpParams();
 
         HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
@@ -283,21 +295,26 @@ public class HttpHelper {
         return new DefaultHttpClient(conMgr, params);
     }
 
-    public void cancel(){
+    public void cancel() {
+        if (requestObj != null) {
+            userStop = true;
+            requestObj.abort();
+        }
     }
 
     /**
      * url encode by utf-8
+     *
      * @param url
      * @return encoded url
      */
-    public static String encodeUrl(String url){
+    public static String encodeUrl(String url) {
         String str;
         try {
             str = URLEncoder.encode(url, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            str=url;
+            str = url;
         }
         return str;
     }
