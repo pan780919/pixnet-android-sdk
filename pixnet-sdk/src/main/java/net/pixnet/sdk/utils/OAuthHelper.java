@@ -173,10 +173,11 @@ public class OAuthHelper {
                 hh.timeout_connection = 10000;
                 hh.timeout_socket = 30000;
                 int num;
-                while ((num = list.addRequest(hh)) == -1){
+                while ((num = list.addRequest(hh)) == -1) {
                     try {
                         Thread.sleep(1000);
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
                 String response = hh.get(url, params);
                 list.removeRequest(num);
@@ -206,10 +207,11 @@ public class OAuthHelper {
                 hh.timeout_connection = 10000;
                 hh.timeout_socket = 30000;
                 int num;
-                while ((num = list.addRequest(hh)) == -1){
+                while ((num = list.addRequest(hh)) == -1) {
                     try {
                         Thread.sleep(1000);
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
                 String response = hh.post(url, params);
                 list.removeRequest(num);
@@ -235,8 +237,19 @@ public class OAuthHelper {
                 Header[] headers = getHeader(headerStr);
                 return getHttpHelper().delete(url, params, headers);
             case VER_2:
-                // perform oauth 2.0
-                return null;
+                hh = new HttpHelper();
+                hh.timeout_connection = 10000;
+                hh.timeout_socket = 30000;
+                int num;
+                while ((num = list.addRequest(hh)) == -1) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                    }
+                }
+                String response = hh.delete(url, params, null);
+                list.removeRequest(num);
+                return response;
             default:
                 return null;
         }
