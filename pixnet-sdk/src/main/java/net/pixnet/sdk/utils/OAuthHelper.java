@@ -198,13 +198,14 @@ public class OAuthHelper {
                 hh = new HttpHelper();
                 hh.timeout_connection = 10000;
                 hh.timeout_socket = 30000;
-                while ((list.addRequest(hh)) == -1){
+                int num;
+                while ((num = list.addRequest(hh)) == -1){
                     try {
                         Thread.sleep(1000);
                     }catch (Exception e){}
                 }
                 String response = hh.post(url, params);
-                list.removeRequest(hh);
+                list.removeRequest(num);
                 return response;
             default:
                 return null;
