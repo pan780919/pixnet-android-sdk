@@ -44,9 +44,7 @@ public class OAuthHelper {
     private String timestamp = null;
     private String accessToken = null;
     private String token_secret = null;
-    String postUrl;
-    List<NameValuePair> param;
-    HttpRequestList list = new HttpRequestList();
+    public HttpRequestList list = new HttpRequestList();
     private HttpHelper hh;
 
     public static enum OAuthVersion {
