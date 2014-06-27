@@ -8,7 +8,7 @@ import java.util.HashMap;
  * A SparseArray stored HttpRequests and control amount of requests
  */
 public class HttpRequestList {
-    private SparseArray<HttpHelper> map = new SparseArray<HttpHelper>();
+    SparseArray<HttpHelper> map = new SparseArray<HttpHelper>();
     private int count = 0;
     private int limit = 3;
 
