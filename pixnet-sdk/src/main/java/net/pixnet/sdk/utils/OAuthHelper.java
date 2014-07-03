@@ -150,7 +150,6 @@ public class OAuthHelper {
      * @param access_token Access_token
      * @param param        other param add with &type=param_value
      * @return The return String from server
-     * @throws java.io.IOException
      */
     public String post(String postUrl, String access_token, List<NameValuePair> param) {
         final String inaccess_token = access_token;
