@@ -14,15 +14,19 @@ public class Blog {
         this.rc = rc;
     }
 
-    public void getBlogInfo(String user, Handler handler) {
+    public void getBlogInfo(String user, Handler handler, RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("user", user));
-        rc.request("http://emma.pixnet.cc/blog", params, "GET", handler);
+        if (handler != null) {
+            rc.request("http://emma.pixnet.cc/blog", params, "GET", handler);
+        } else {
+            rc.request("http://emma.pixnet.cc/blog", params, "GET", callback);
+        }
     }
 
-    public void setBlogInfo(String accesstoken, String name, String description, String keyword, String site_category_id,Handler handler) {
+    public void setBlogInfo(String access_token, String name, String description, String keyword, String site_category_id, Handler handler, RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", accesstoken));
+        params.add(new BasicNameValuePair("access_token", access_token));
         if (name != null) {
             params.add(new BasicNameValuePair("name", name));
         }
@@ -35,6 +39,10 @@ public class Blog {
         if (site_category_id != null) {
             params.add(new BasicNameValuePair("site_category_id", site_category_id));
         }
-        rc.request("https://emma.pixnet.cc/blog", params, "POST", handler);
+        if (handler != null) {
+            rc.request("https://emma.pixnet.cc/blog", params, "POST", handler);
+        } else {
+            rc.request("https://emma.pixnet.cc/blog", params, "POST", callback);
+        }
     }
 }

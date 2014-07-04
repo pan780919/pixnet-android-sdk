@@ -60,7 +60,7 @@ public class RequestController {
             Handler handler = request.getHandler();
             Message msg = new Message();
             Bundle bundle = new Bundle();
-            bundle.putString("res", response);
+            bundle.putString("response", response);
             msg.setData(bundle);
             handler.sendMessage(msg);
         } else {
