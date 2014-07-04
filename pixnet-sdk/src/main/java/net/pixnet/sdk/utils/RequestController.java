@@ -10,16 +10,27 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-
+/**
+ * Control the request queue
+ */
 public class RequestController {
     private Queue<Request> requestQueue = new LinkedList<Request>();
     private Thread worker;
     private OAuthHelper reqOauth;
 
+    /**
+     *
+     * @param client_id
+     * @param client_secret
+     */
     RequestController(String client_id, String client_secret) {
         reqOauth = new OAuthHelper(OAuthHelper.OAuthVersion.VER_2, client_id, client_secret);
         runWorker();
     }
+
+    /**
+     * Create a thread to check if their are request in the queue
+     */
     private void runWorker(){
         worker = new Thread(new Runnable() {
             public void run() {
@@ -50,6 +61,14 @@ public class RequestController {
         });
         worker.start();
     }
+
+    /**
+     * Get user request and put into the queue / Handler
+     * @param requestUrl
+     * @param params
+     * @param httpMethod
+     * @param handler
+     */
     void request(String requestUrl, ArrayList<NameValuePair> params, String httpMethod, Handler handler) {
         Request request = new Request(requestUrl, params, httpMethod, handler);
         requestQueue.offer(request);
@@ -57,7 +76,13 @@ public class RequestController {
             runWorker();
         }
     }
-
+    /**
+     * Get user request and put into the queue / RequestCallback
+     * @param requestUrl
+     * @param params
+     * @param httpMethod
+     * @param handler
+     */
     void request(String requestUrl, ArrayList<NameValuePair> params, String httpMethod, RequestCallback callback) {
         Request request = new Request(requestUrl, params, httpMethod, callback);
         requestQueue.offer(request);
@@ -67,6 +92,9 @@ public class RequestController {
     }
 }
 
+/**
+ * The Request object recorded the url , params, httpmethod , handler ,callback , and wait in the queue
+ */
 class Request {
     private String requestURL;
     private ArrayList<NameValuePair> params;
