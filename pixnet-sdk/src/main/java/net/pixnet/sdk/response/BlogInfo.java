@@ -3,7 +3,7 @@ package net.pixnet.sdk.response;
 /**
  * Blog info
  */
-public class Blog extends BasicResponse{
+public class BlogInfo extends BasicResponse{
     /**
      * Blog url
      */
