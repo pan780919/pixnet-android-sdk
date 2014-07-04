@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class RequestControler {
+public class RequestController {
     private Queue<Request> requestQueue = new LinkedList<Request>();
     private Thread worker;
     private OAuthHelper reqOauth;
 
-    RequestControler(String client_id, String client_secret) {
+    RequestController(String client_id, String client_secret) {
         reqOauth = new OAuthHelper(OAuthHelper.OAuthVersion.VER_2, client_id, client_secret);
         worker = new Thread(new Runnable() {
             public void run() {
