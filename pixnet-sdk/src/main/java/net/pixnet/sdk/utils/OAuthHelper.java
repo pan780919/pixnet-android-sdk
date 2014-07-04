@@ -62,6 +62,8 @@ public class OAuthHelper {
         ver = version;
         consumer_secret = consumerSecret;
         consumer_key = consumerKey;
+        client_id = consumerKey;
+        client_secret = consumerSecret;
     }
 
     public boolean xAuthLogin(String userName, String passwd, String accessTokenUrl) {
