@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import net.pixnet.sdk.response.*;
 
 public class RequestController {
     private Queue<Request> requestQueue = new LinkedList<Request>();
@@ -19,46 +18,52 @@ public class RequestController {
 
     RequestController(String client_id, String client_secret) {
         reqOauth = new OAuthHelper(OAuthHelper.OAuthVersion.VER_2, client_id, client_secret);
+        runWorker();
+    }
+    private void runWorker(){
         worker = new Thread(new Runnable() {
             public void run() {
                 Request request;
-                while (true) {
-                    if ((request = requestQueue.poll()) != null) {
-                        String httpMethod = request.getHttpMethod();
-                        String response = "";
-                        if (httpMethod == "GET") {
-                            response = reqOauth.get(request.getRequestURL(), request.getParams());
-                        } else if (httpMethod == "POST") {
-                            Article art = new Article(reqOauth.post(request.getRequestURL(), request.getParams()));
-                            response = art.title;
-                        } else if (httpMethod == "DELECT") {
-                            response = reqOauth.delete(request.getRequestURL(), request.getParams());
-                        }
-                        if (request.getHandler() != null) {
-                            Handler handler = request.getHandler();
-                            Message msg = new Message();
-                            Bundle bundle = new Bundle();
-                            bundle.putString("res", response);
-                            msg.setData(bundle);
-                            handler.sendMessage(msg);
-                        } else {
-                            request.getCallback().callback(response);
-                        }
+                while ((request = requestQueue.poll()) != null) {
+                    String httpMethod = request.getHttpMethod();
+                    String response = "";
+                    if (httpMethod == "GET") {
+                        response = reqOauth.get(request.getRequestURL(), request.getParams());
+                    } else if (httpMethod == "POST") {
+                        response = reqOauth.post(request.getRequestURL(), request.getParams());
+                    } else if (httpMethod == "DELECT") {
+                        response = reqOauth.delete(request.getRequestURL(), request.getParams());
+                    }
+                    if (request.getHandler() != null) {
+                        Handler handler = request.getHandler();
+                        Message msg = new Message();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("res", response);
+                        msg.setData(bundle);
+                        handler.sendMessage(msg);
+                    } else {
+                        request.getCallback().callback(response);
                     }
                 }
+
             }
         });
         worker.start();
     }
-
     void request(String requestUrl, ArrayList<NameValuePair> params, String httpMethod, Handler handler) {
         Request request = new Request(requestUrl, params, httpMethod, handler);
         requestQueue.offer(request);
+        if(!worker.isAlive()){
+            runWorker();
+        }
     }
 
     void request(String requestUrl, ArrayList<NameValuePair> params, String httpMethod, RequestCallback callback) {
         Request request = new Request(requestUrl, params, httpMethod, callback);
         requestQueue.offer(request);
+        if(!worker.isAlive()){
+            worker.start();
+        }
     }
 }
 
