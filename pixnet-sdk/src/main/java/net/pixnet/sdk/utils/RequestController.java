@@ -1,10 +1,16 @@
 package net.pixnet.sdk.utils;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+
 import org.apache.http.NameValuePair;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import net.pixnet.sdk.response.*;
 
 public class RequestController {
     private Queue<Request> requestQueue = new LinkedList<Request>();
@@ -19,12 +25,24 @@ public class RequestController {
                 while (true) {
                     if ((request = requestQueue.poll()) != null) {
                         String httpMethod = request.getHttpMethod();
+                        String response = "";
                         if (httpMethod == "GET") {
-                            System.out.println(reqOauth.get(request.getRequestURL(), request.getParams()));
+                            response = reqOauth.get(request.getRequestURL(), request.getParams());
                         } else if (httpMethod == "POST") {
-                            System.out.println(reqOauth.post(request.getRequestURL(), request.getParams()));
+                            Article art = new Article(reqOauth.post(request.getRequestURL(), request.getParams()));
+                            response = art.title;
                         } else if (httpMethod == "DELECT") {
-                            System.out.println(reqOauth.delete(request.getRequestURL(), request.getParams()));
+                            response = reqOauth.delete(request.getRequestURL(), request.getParams());
+                        }
+                        if (request.getHandler() != null) {
+                            Handler handler = request.getHandler();
+                            Message msg = new Message();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("res", response);
+                            msg.setData(bundle);
+                            handler.sendMessage(msg);
+                        } else {
+                            request.getCallback().callback(response);
                         }
                     }
                 }
@@ -33,8 +51,13 @@ public class RequestController {
         worker.start();
     }
 
-    void request(String requestUrl, ArrayList<NameValuePair> params, String httpMethod) {
-        Request request = new Request(requestUrl, params, httpMethod);
+    void request(String requestUrl, ArrayList<NameValuePair> params, String httpMethod, Handler handler) {
+        Request request = new Request(requestUrl, params, httpMethod, handler);
+        requestQueue.offer(request);
+    }
+
+    void request(String requestUrl, ArrayList<NameValuePair> params, String httpMethod, RequestCallback callback) {
+        Request request = new Request(requestUrl, params, httpMethod, callback);
         requestQueue.offer(request);
     }
 }
@@ -43,11 +66,29 @@ class Request {
     private String requestURL;
     private ArrayList<NameValuePair> params;
     private String httpMethod;
+    private Handler handler;
+    private RequestCallback callback;
 
-    Request(String requestURL, ArrayList<NameValuePair> params, String httpMethod) {
+    Request(String requestURL, ArrayList<NameValuePair> params, String httpMethod, Handler handler) {
         this.requestURL = requestURL;
         this.params = params;
         this.httpMethod = httpMethod;
+        this.handler = handler;
+    }
+
+    Request(String requestURL, ArrayList<NameValuePair> params, String httpMethod, RequestCallback callback) {
+        this.requestURL = requestURL;
+        this.params = params;
+        this.httpMethod = httpMethod;
+        this.callback = callback;
+    }
+
+    public RequestCallback getCallback() {
+        return callback;
+    }
+
+    public Handler getHandler() {
+        return handler;
     }
 
     public String getRequestURL() {
@@ -61,4 +102,8 @@ class Request {
     public String getHttpMethod() {
         return httpMethod;
     }
+}
+
+interface RequestCallback {
+    void callback(String response);
 }
