@@ -15,6 +15,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -23,6 +24,7 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -34,14 +36,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 /**
  * http connection tools
  */
-public class HttpHelper {
+public class HttpHelper implements HttpConnectionTool {
 
     /**
      * default connection timeout
@@ -93,130 +94,27 @@ public class HttpHelper {
     }
 
     /**
-     * get without parameter and header
-     */
-    public String get(String url) {
-        return get(url, null, null);
-    }
-
-    /**
-     * get without header
-     */
-    public String get(String url, ArrayList<NameValuePair> params) {
-        return get(url, params, null);
-    }
-
-    /**
-     * get without parameter
-     */
-    public String get(String url, Header[] headers) {
-        return get(url, null, headers);
-    }
-
-    /**
-     * perform http get method
+     * prepend "http:" to url if need
      *
      * @param url
-     * @param params
-     * @param headers
-     * @return a string result
-     */
-    public String get(String url, ArrayList<NameValuePair> params, Header[] headers) {
-        url = formatUrl(url, params);
-        Helper.log("GET:" + url);
-
-        HttpGet get = new HttpGet(url);
-        if (headers != null) get.setHeaders(headers);
-        InputStream in = request(get);
-
-        return getStringFromInputStream(in);
-    }
-
-    /**
-     * post without header
-     */
-    public String post(String url, List<NameValuePair> params) {
-        return post(url, params, null);
-    }
-
-    /**
-     * post without parameter
-     */
-    public String post(String url, Header[] headers) {
-        return post(url, null, headers);
-    }
-
-    /**
-     * perform http post method
-     *
-     * @param url
-     * @param params
-     * @param headers
-     * @return a string result
-     */
-    public String post(String url, List<NameValuePair> params, Header[] headers) {
-        url = formatUrl(url);
-        Helper.log("POST:" + url);
-
-        HttpPost post = new HttpPost(url);
-        post.setHeaders(headers);
-        if (params != null) {
-            HttpEntity entity = null;
-            try {
-                entity = new UrlEncodedFormEntity(params, HTTP.UTF_8);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            if (entity != null) post.setEntity(entity);
-        }
-        InputStream in = request(post);
-        return getStringFromInputStream(in);
-    }
-
-    /**
-     * delete without parameter
-     */
-    public String delete(String url, Header[] headers) {
-        return delete(url, null, headers);
-    }
-
-    /**
-     * perform http delete method
-     *
-     * @param url
-     * @param params
-     * @param headers
-     * @return a string result
-     */
-    public String delete(String url, ArrayList<NameValuePair> params, Header[] headers) {
-        url = formatUrl(url, params);
-        Helper.log("DELETE:" + url);
-        HttpDelete del = new HttpDelete(url);
-        del.setHeaders(headers);
-        InputStream in = request(del);
-
-        return getStringFromInputStream(in);
-    }
-
-    /**
-     * formatUrl without parameter
+     * @return
      */
     private String formatUrl(String url) {
-        return formatUrl(url, null);
+        //ex. //example.com/xxx
+        if (url.indexOf("http") < 0)
+            url = "http:" + url;
+
+        return url;
     }
 
     /**
-     * append query string and prepend "http:" to url if need
+     * append query string
      *
      * @param url
      * @param params
      * @return
      */
-    private String formatUrl(String url, ArrayList<NameValuePair> params) {
-        //ex. //example.com/xxx
-        if (url.indexOf("http") < 0)
-            url = "http:" + url;
-
+    private String appendQueryString(String url, List<NameValuePair> params){
         if (params != null) {
             String qs = "";
             for (NameValuePair nv : params) {
@@ -228,12 +126,11 @@ public class HttpHelper {
             }
             url += qs;
         }
-
         return url;
     }
 
     private InputStream request(HttpUriRequest request) {
-        System.out.println("request"+request.toString());
+//        System.out.println("request"+request.toString());
         requestObj = request;
         userStop = false;
         HttpClient client = createHttpClient();
@@ -243,8 +140,7 @@ public class HttpHelper {
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            if (userStop) {
-            } else {
+            if (!userStop) {
                 e.printStackTrace();
             }
         }
@@ -336,5 +232,61 @@ public class HttpHelper {
             str = url;
         }
         return str;
+    }
+
+    @Override
+    public String performRequest(Request request) {
+        String url=formatUrl(request.getUrl());
+        List<NameValuePair> params=request.getParams();
+        List<NameValuePair> headerList=request.getHeaders();
+
+        Header[] headers=null;
+        if(headerList!=null){
+            int i=0, len=headerList.size();
+            if(len>0) {
+                headers = new Header[len];
+                while (i < len) {
+                    NameValuePair header = headerList.get(i);
+                    headers[i] = new BasicHeader(header.getName(), header.getValue());
+                    i++;
+                }
+            }
+        }
+
+        HttpUriRequest hur;
+        switch (request.getMethod()){
+            case GET:
+                url=appendQueryString(url, params);
+                hur = new HttpGet(url);
+                break;
+            case POST:
+                hur = new HttpPost(url);
+                if (params != null) {
+                    HttpEntity entity = null;
+                    try {
+                        entity = new UrlEncodedFormEntity(params, HTTP.UTF_8);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    if (entity != null)
+                        ((HttpPost)hur).setEntity(entity);
+                }
+                break;
+            case PUT:
+                url = appendQueryString(url, params);
+                hur=new HttpPut(url);
+                break;
+            case DELETE:
+                url = appendQueryString(url, params);
+                hur=new HttpDelete(url);
+                break;
+            default:
+                hur=null;
+        }
+
+        if (headers != null)
+            hur.setHeaders(headers);
+        InputStream in = request(hur);
+        return getStringFromInputStream(in);
     }
 }

@@ -2,12 +2,8 @@ package net.pixnet.sdk.utils;
 
 import android.util.Base64;
 
-import org.apache.http.Header;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +12,7 @@ import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import javax.crypto.Mac;
@@ -24,12 +21,11 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  * OAuth connection tool
  */
-public class OAuthHelper {
+public class OAuthHelper extends HttpHelper {
 
     private static final String SIGNATRUE_METHOD = "HMAC-SHA1";
     private static final String URL_AUTH = "https://emma.pixnet.cc/oauth2/authorize";
     private static final String URL_GRANT = "https://emma.pixnet.cc/oauth2/grant";
-    private static final String URL_POST_ARTICLES = "https://emma.pixnet.cc/blog/articles";
 
     private OAuthVersion ver = OAuthVersion.VER_1;
 
@@ -43,8 +39,24 @@ public class OAuthHelper {
     private String timestamp = null;
     private String accessToken = null;
     private String token_secret = null;
-    public HttpRequestList list = new HttpRequestList();
-    private HttpHelper hh;
+
+    @Override
+    public String performRequest(Request request) {
+        switch (ver) {
+            case VER_1:
+                computeNoceAndTimestamp();
+                String signatrue = getSignatrue(HttpGet.METHOD_NAME, request.getUrl(), request.getParams());
+                String headerStr = getHeaderString(signatrue);
+                List<NameValuePair> headers = getHeader(headerStr);
+
+                request.setHeaders(headers);
+                break;
+            case VER_2:
+                break;
+            default:
+        }
+        return super.performRequest(request);
+    }
 
     public static enum OAuthVersion {
         VER_1,
@@ -69,12 +81,15 @@ public class OAuthHelper {
     public boolean xAuthLogin(String userName, String passwd, String accessTokenUrl) {
         if (accessToken != null) return true;
 
-        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("x_auth_mode", "client_auth"));
         params.add(new BasicNameValuePair("x_auth_password", passwd));
         params.add(new BasicNameValuePair("x_auth_username", userName));
 
-        String res = post(accessTokenUrl, params);
+        Request request=new Request(accessTokenUrl);
+        request.setMethod(Request.Method.POST);
+        request.setParams(params);
+        String res=super.performRequest(request);
 
         HashMap<String, String> resParams = HttpHelper.parseParamsByResponse(res);
         String token = resParams.get("oauth_token");
@@ -117,23 +132,25 @@ public class OAuthHelper {
                 + "&client_secret=" + client_secret;
     }
 
-
     /**
      * @param code Code from RequestUrl
      * @return Set code and Get AccessToken
      */
     public String getAccessToken(String code) {
-        final String incode = code;
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("grant_type", "authorization_code"));
-        params.add(new BasicNameValuePair("code", incode));
+        params.add(new BasicNameValuePair("code", code));
         params.add(new BasicNameValuePair("redirect_uri", redirect_uri));
         params.add(new BasicNameValuePair("client_id", client_id));
         params.add(new BasicNameValuePair("client_secret", client_secret));
-        String response = new HttpHelper().get(URL_GRANT, params);
+
+        Request request=new Request(URL_GRANT);
+        request.setParams(params);
+        String response=super.performRequest(request);
+
         try {
             JSONObject obj = new JSONObject(response);
-            access_token = (String) obj.get("access_token");
+            access_token = obj.getString("access_token");
         } catch (JSONException e) {
             access_token = "Code error";
         }
@@ -145,127 +162,14 @@ public class OAuthHelper {
         timestamp = getTimeStamp();
     }
 
-    /**
-     * get without parameters
-     *
-     * @param url
-     * @return
-     */
-    public String get(String url) {
-        return get(url, null);
-    }
-
-    /**
-     * perform http get method with OAuth
-     *
-     * @param url
-     * @param params
-     * @return
-     */
-    public String get(String url, ArrayList<NameValuePair> params) {
-        switch (ver) {
-            case VER_1:
-                computeNoceAndTimestamp();
-                String signatrue = getSignatrue(HttpGet.METHOD_NAME, url, params);
-                String headerStr = getHeaderString(signatrue);
-                Header[] headers = getHeader(headerStr);
-                return getHttpHelper().get(url, params, headers);
-            case VER_2:
-                hh = new HttpHelper();
-                hh.timeout_connection = 10000;
-                hh.timeout_socket = 30000;
-                int num;
-                while ((num = list.addRequest(hh)) == -1) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                    }
-                }
-                String response = hh.get(url, params);
-                list.removeRequest(num);
-                return response;
-            default:
-                return null;
-        }
-    }
-
-    /**
-     * perform http post method with OAuth
-     *
-     * @param url
-     * @param params
-     * @return
-     */
-    public String post(String url, ArrayList<NameValuePair> params) {
-        switch (ver) {
-            case VER_1:
-                computeNoceAndTimestamp();
-                String signatrue = getSignatrue(HttpPost.METHOD_NAME, url, params);
-                String headerStr = getHeaderString(signatrue);
-                Header[] headers = getHeader(headerStr);
-                return getHttpHelper().post(url, params, headers);
-            case VER_2:
-                hh = new HttpHelper();
-                hh.timeout_connection = 10000;
-                hh.timeout_socket = 30000;
-                int num;
-                while ((num = list.addRequest(hh)) == -1) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                    }
-                }
-                String response = hh.post(url, params);
-                list.removeRequest(num);
-                return response;
-            default:
-                return null;
-        }
-    }
-
-    /**
-     * perform http delete method with OAuth
-     *
-     * @param url
-     * @param params
-     * @return
-     */
-    public String delete(String url, ArrayList<NameValuePair> params) {
-        switch (ver) {
-            case VER_1:
-                computeNoceAndTimestamp();
-                String signatrue = getSignatrue(HttpDelete.METHOD_NAME, url, params);
-                String headerStr = getHeaderString(signatrue);
-                Header[] headers = getHeader(headerStr);
-                return getHttpHelper().delete(url, params, headers);
-            case VER_2:
-                hh = new HttpHelper();
-                hh.timeout_connection = 10000;
-                hh.timeout_socket = 30000;
-                int num;
-                while ((num = list.addRequest(hh)) == -1) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                    }
-                }
-                String response = hh.delete(url, params, null);
-                list.removeRequest(num);
-                return response;
-            default:
-                return null;
-        }
-    }
-
-    private Header[] getHeader(String headerStr) {
-        Header[] headers = {
-                new BasicHeader("Authorization", headerStr)
-                , new BasicHeader("Content-Type", "application/x-www-form-urlencoded")
-        };
+    private List<NameValuePair> getHeader(String headerStr) {
+        List<NameValuePair> headers=new ArrayList<NameValuePair>();
+        headers.add(new BasicNameValuePair("Authorization", headerStr));
+        headers.add(new BasicNameValuePair("Content-Type", "application/x-www-form-urlencoded"));
         return headers;
     }
 
-    private String getSignatrue(String method, String url, ArrayList<NameValuePair> params) {
+    private String getSignatrue(String method, String url, List<NameValuePair> params) {
         String paraStr = getParamsString(params);
 //		Helper.log(paraStr);
         String baseStr = getBaseString(method, url, paraStr);
@@ -274,8 +178,8 @@ public class OAuthHelper {
         return computeShaHash(baseStr, secret);
     }
 
-    private String getParamsString(ArrayList<NameValuePair> params) {
-        ArrayList<String> paraList = getBasicOAuthParameters();
+    private String getParamsString(List<NameValuePair> params) {
+        List<String> paraList = getBasicOAuthParameters();
         if (params != null) {
             for (NameValuePair item : params) {
                 paraList.add(item.getName() + "=" + HttpHelper.encodeUrl(item.getValue()));
@@ -318,7 +222,7 @@ public class OAuthHelper {
         return headerStr;
     }
 
-    private String formatParameterString(ArrayList<String> params) {
+    private String formatParameterString(List<String> params) {
         String paraStr = "";
 
         Collections.sort(params);
@@ -368,17 +272,5 @@ public class OAuthHelper {
         long seconds = (long) (System.currentTimeMillis() / 1000d);
         String secondsString = String.valueOf(seconds);
         return secondsString;
-    }
-
-    private HttpHelper getHttpHelper() {
-        if (hh == null)
-            hh = new HttpHelper();
-        return hh;
-    }
-
-    public void cancel() {
-        if (hh != null) {
-            hh.cancel();
-        }
     }
 }
