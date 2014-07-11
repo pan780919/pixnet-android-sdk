@@ -1,1 +1,1 @@
-include ':pixnet-sdk', ':app'
+include ':pixnet-sdk'

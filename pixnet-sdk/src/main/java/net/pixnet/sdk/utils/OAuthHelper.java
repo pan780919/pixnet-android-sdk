@@ -1,6 +1,5 @@
 package net.pixnet.sdk.utils;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.webkit.JavascriptInterface;
@@ -112,6 +111,20 @@ public class OAuthHelper extends HttpHelper {
     public void setTokenAndSecret(String token, String secret) {
         accessToken = token;
         token_secret = secret;
+    }
+
+    public String getUrlForOauth1Request(){
+        Request request = new Request(URL_OAUTH1_REQUEST);
+        request.setMethod(Request.Method.GET);
+        String authUrl = performRequest(request);
+
+        HashMap<String, String> map=parseParamsByResponse(authUrl);
+        access_token=map.get("oauth_token");
+        token_secret=map.get("oauth_token_secret");
+        String url=map.get("request_auth_url");
+        url=HttpHelper.decodeUrl(url);
+
+        return url;
     }
 
     public void login(final WebView wv, final Request.RequestCallback callback) {

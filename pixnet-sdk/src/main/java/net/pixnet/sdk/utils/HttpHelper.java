@@ -35,6 +35,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
@@ -227,6 +228,23 @@ public class HttpHelper implements HttpConnectionTool {
         String str;
         try {
             str = URLEncoder.encode(url, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            str = url;
+        }
+        return str;
+    }
+
+    /**
+     * url decode by utf-8
+     *
+     * @param url
+     * @return decoded url
+     */
+    public static String decodeUrl(String url){
+        String str;
+        try {
+            str = URLDecoder.decode(url, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             str = url;
