@@ -1,5 +1,6 @@
 package net.pixnet.sdk.utils;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.webkit.JavascriptInterface;
@@ -143,7 +144,6 @@ public class OAuthHelper extends HttpHelper {
                 wv.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
                 wv.setWebViewClient(new WebViewClient() {
                     public void onPageFinished(WebView view, String url) {
-                        System.out.println(url);
                         wv.loadUrl("javascript:window.HTMLOUT.showHTML" +
                                 "(document.getElementById('oauth_verifier').innerHTML);");
                     }
