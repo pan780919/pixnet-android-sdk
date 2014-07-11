@@ -1,6 +1,8 @@
 package net.pixnet.sdk.utils;
 
+import android.os.AsyncTask;
 import android.util.Base64;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -32,7 +34,6 @@ public class OAuthHelper extends HttpHelper {
     private static final String URL_AUTH = "https://emma.pixnet.cc/oauth2/authorize";
     private static final String URL_GRANT = "https://emma.pixnet.cc/oauth2/grant";
     private static final String URL_OAUTH1_REQUEST = "http://emma.pixnet.cc/oauth/request_token";
-    private static final String URL_OAUTH1_AUTH = "http://emma.pixnet.cc/oauth/authorize";
     private static final String URL_OAUTH1_ACCESS = "http://emma.pixnet.cc/oauth/access_token";
     private OAuthVersion ver = OAuthVersion.VER_1;
 
@@ -46,8 +47,6 @@ public class OAuthHelper extends HttpHelper {
     private String timestamp = null;
     private String accessToken = null;
     private String token_secret = null;
-    private String oauth_token;
-    private String oauth_token_secret;
 
     @Override
     public String performRequest(Request request) {
@@ -57,7 +56,6 @@ public class OAuthHelper extends HttpHelper {
                 String signatrue = getSignatrue(HttpGet.METHOD_NAME, request.getUrl(), request.getParams());
                 String headerStr = getHeaderString(signatrue);
                 List<NameValuePair> headers = getHeader(headerStr);
-
                 request.setHeaders(headers);
                 break;
             case VER_2:
@@ -115,41 +113,78 @@ public class OAuthHelper extends HttpHelper {
         token_secret = secret;
     }
 
-    public boolean login(final WebView wv) {
+    public void login(final WebView wv, final Request.RequestCallback callback) {
         //request
-        Request request = new Request(URL_OAUTH1_REQUEST);
-        request.setMethod(Request.Method.GET);
-        try {
-            String authUrl = performRequest(request);
-            String[] reqToken = authUrl.split("&");
-            oauth_token = reqToken[0].replace("oauth_token=", "");
-            oauth_token_secret = reqToken[1].replace("oauth_token_secret=", "");
-            reqToken[4] = URLDecoder.decode(reqToken[4], "utf-8");
-            String[] token = reqToken[4].split("request_auth_url=");
-            System.out.println(token[1]);
-            WebSettings settings = wv.getSettings();
-            settings.setSupportZoom(true);
-            settings.setBuiltInZoomControls(true);
-            settings.setJavaScriptEnabled(true);
-            wv.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
-            wv.setWebViewClient(new WebViewClient() {
-                public void onPageFinished(WebView view, String url) {
-                    System.out.println(url);
-                    wv.loadUrl("javascript:window.HTMLOUT.showHTML" +
-                            "(document.getElementById('oauth_verifier').innerHTML);");
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                Request request = new Request(URL_OAUTH1_REQUEST);
+                request.setMethod(Request.Method.GET);
+                try {
+                    String authUrl = performRequest(request);
+                    String[] reqToken = authUrl.split("&");
+                    accessToken = reqToken[0].replace("oauth_token=", "");
+                    token_secret = reqToken[1].replace("oauth_token_secret=", "");
+                    reqToken[4] = URLDecoder.decode(reqToken[4], "utf-8");
+                    String[] token = reqToken[4].split("request_auth_url=");
+                    return token[1];
+                } catch (UnsupportedEncodingException e) {
+                    return null;
                 }
-            });
-            wv.loadUrl(token[1]);
-        } catch (UnsupportedEncodingException e) {
+            }
+            //Authorize
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                WebSettings settings = wv.getSettings();
+                settings.setSupportZoom(true);
+                settings.setBuiltInZoomControls(true);
+                settings.setJavaScriptEnabled(true);
+                wv.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
+                wv.setWebViewClient(new WebViewClient() {
+                    public void onPageFinished(WebView view, String url) {
+                        System.out.println(url);
+                        wv.loadUrl("javascript:window.HTMLOUT.showHTML" +
+                                "(document.getElementById('oauth_verifier').innerHTML);");
+                    }
+                });
+                wv.loadUrl(s);
+            }
 
-        }
-        return false;
+            class MyJavaScriptInterface {
+                @JavascriptInterface
+                public void showHTML(String html) {
+                    if (html.length() == 6) {
+                        access(html, callback);
+                    }
+                }
+            }
+        }.execute();
     }
-
-    class MyJavaScriptInterface {
-        public void showHTML(String html) {
-            System.out.println(html);
-        }
+    //access
+    public void access(final String verifier, final Request.RequestCallback callback) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                Request access = new Request(URL_OAUTH1_ACCESS);
+                access.setMethod(Request.Method.GET);
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("oauth_verifier", verifier));
+                params.add(new BasicNameValuePair("oauth_callback", "oob"));
+                access.setParams(params);
+                return performRequest(access);
+            }
+            //set Tokens
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                String[] oauthTokens = s.split("&");
+                accessToken = oauthTokens[0].replace("oauth_token=", "");
+                token_secret = oauthTokens[1].replace("oauth_token_secret=", "");
+                //login done , call callback
+                callback.onResponse("");
+            }
+        }.execute();
     }
 
     /**
