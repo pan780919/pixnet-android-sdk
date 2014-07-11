@@ -1,6 +1,9 @@
 package net.pixnet.sdk.utils;
 
 import android.util.Base64;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
@@ -8,6 +11,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +31,9 @@ public class OAuthHelper extends HttpHelper {
     private static final String SIGNATRUE_METHOD = "HMAC-SHA1";
     private static final String URL_AUTH = "https://emma.pixnet.cc/oauth2/authorize";
     private static final String URL_GRANT = "https://emma.pixnet.cc/oauth2/grant";
-
+    private static final String URL_OAUTH1_REQUEST = "http://emma.pixnet.cc/oauth/request_token";
+    private static final String URL_OAUTH1_AUTH = "http://emma.pixnet.cc/oauth/authorize";
+    private static final String URL_OAUTH1_ACCESS = "http://emma.pixnet.cc/oauth/access_token";
     private OAuthVersion ver = OAuthVersion.VER_1;
 
     private String access_token = "";
@@ -39,6 +46,8 @@ public class OAuthHelper extends HttpHelper {
     private String timestamp = null;
     private String accessToken = null;
     private String token_secret = null;
+    private String oauth_token;
+    private String oauth_token_secret;
 
     @Override
     public String performRequest(Request request) {
@@ -86,10 +95,10 @@ public class OAuthHelper extends HttpHelper {
         params.add(new BasicNameValuePair("x_auth_password", passwd));
         params.add(new BasicNameValuePair("x_auth_username", userName));
 
-        Request request=new Request(accessTokenUrl);
+        Request request = new Request(accessTokenUrl);
         request.setMethod(Request.Method.POST);
         request.setParams(params);
-        String res=super.performRequest(request);
+        String res = super.performRequest(request);
 
         HashMap<String, String> resParams = HttpHelper.parseParamsByResponse(res);
         String token = resParams.get("oauth_token");
@@ -104,6 +113,43 @@ public class OAuthHelper extends HttpHelper {
     public void setTokenAndSecret(String token, String secret) {
         accessToken = token;
         token_secret = secret;
+    }
+
+    public boolean login(final WebView wv) {
+        //request
+        Request request = new Request(URL_OAUTH1_REQUEST);
+        request.setMethod(Request.Method.GET);
+        try {
+            String authUrl = performRequest(request);
+            String[] reqToken = authUrl.split("&");
+            oauth_token = reqToken[0].replace("oauth_token=", "");
+            oauth_token_secret = reqToken[1].replace("oauth_token_secret=", "");
+            reqToken[4] = URLDecoder.decode(reqToken[4], "utf-8");
+            String[] token = reqToken[4].split("request_auth_url=");
+            System.out.println(token[1]);
+            WebSettings settings = wv.getSettings();
+            settings.setSupportZoom(true);
+            settings.setBuiltInZoomControls(true);
+            settings.setJavaScriptEnabled(true);
+            wv.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
+            wv.setWebViewClient(new WebViewClient() {
+                public void onPageFinished(WebView view, String url) {
+                    System.out.println(url);
+                    wv.loadUrl("javascript:window.HTMLOUT.showHTML" +
+                            "(document.getElementById('oauth_verifier').innerHTML);");
+                }
+            });
+            wv.loadUrl(token[1]);
+        } catch (UnsupportedEncodingException e) {
+
+        }
+        return false;
+    }
+
+    class MyJavaScriptInterface {
+        public void showHTML(String html) {
+            System.out.println(html);
+        }
     }
 
     /**
@@ -144,9 +190,9 @@ public class OAuthHelper extends HttpHelper {
         params.add(new BasicNameValuePair("client_id", client_id));
         params.add(new BasicNameValuePair("client_secret", client_secret));
 
-        Request request=new Request(URL_GRANT);
+        Request request = new Request(URL_GRANT);
         request.setParams(params);
-        String response=super.performRequest(request);
+        String response = super.performRequest(request);
 
         try {
             JSONObject obj = new JSONObject(response);
@@ -163,7 +209,7 @@ public class OAuthHelper extends HttpHelper {
     }
 
     private List<NameValuePair> getHeader(String headerStr) {
-        List<NameValuePair> headers=new ArrayList<NameValuePair>();
+        List<NameValuePair> headers = new ArrayList<NameValuePair>();
         headers.add(new BasicNameValuePair("Authorization", headerStr));
         headers.add(new BasicNameValuePair("Content-Type", "application/x-www-form-urlencoded"));
         return headers;
