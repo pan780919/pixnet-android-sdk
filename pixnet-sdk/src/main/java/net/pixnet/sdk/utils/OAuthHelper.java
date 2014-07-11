@@ -13,8 +13,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -107,7 +105,9 @@ public class OAuthHelper extends HttpHelper {
             return true;
         } else return false;
     }
-
+    public void setRedirect_uri(String url){
+        redirect_uri=url;
+    }
     public void setTokenAndSecret(String token, String secret) {
         accessToken = token;
         token_secret = secret;
@@ -123,7 +123,6 @@ public class OAuthHelper extends HttpHelper {
         token_secret=map.get("oauth_token_secret");
         String url=map.get("request_auth_url");
         url=HttpHelper.decodeUrl(url);
-
         return url;
     }
 
@@ -134,17 +133,13 @@ public class OAuthHelper extends HttpHelper {
             protected String doInBackground(Void... voids) {
                 Request request = new Request(URL_OAUTH1_REQUEST);
                 request.setMethod(Request.Method.GET);
-                try {
-                    String authUrl = performRequest(request);
-                    String[] reqToken = authUrl.split("&");
-                    accessToken = reqToken[0].replace("oauth_token=", "");
-                    token_secret = reqToken[1].replace("oauth_token_secret=", "");
-                    reqToken[4] = URLDecoder.decode(reqToken[4], "utf-8");
-                    String[] token = reqToken[4].split("request_auth_url=");
-                    return token[1];
-                } catch (UnsupportedEncodingException e) {
-                    return null;
-                }
+                String authUrl = performRequest(request);
+                HashMap<String, String> map=parseParamsByResponse(authUrl);
+                accessToken=map.get("oauth_token");
+                token_secret=map.get("oauth_token_secret");
+                String url=map.get("xoauth_request_auth_url");
+                url=HttpHelper.decodeUrl(url);
+                    return url;
             }
             //Authorize
             @Override
@@ -199,6 +194,37 @@ public class OAuthHelper extends HttpHelper {
             }
         }.execute();
     }
+    public void login2(final WebView wv, final Request.RequestCallback callback){
+        WebSettings settings = wv.getSettings();
+        settings.setSupportZoom(true);
+        settings.setBuiltInZoomControls(true);
+        settings.setJavaScriptEnabled(true);
+        wv.setWebViewClient(new WebViewClient() {
+            public void onPageFinished(WebView view, String url) {
+                if(wv.getUrl().contains("code=")) {
+                    String code = wv.getUrl().replace(redirect_uri,"").replace("/?code=","");
+                    access2(code,callback);
+                }
+            }
+        });
+        wv.loadUrl(getRequestUrl());
+    }
+    public void access2(final String code, final Request.RequestCallback callback){
+        new AsyncTask<Void,Void,String>(){
+            @Override
+            protected String doInBackground(Void... voids) {
+                return getAccessToken(code);
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                access_token=s;
+                callback.onResponse(access_token);
+            }
+        }.execute();
+    }
+
 
     /**
      * The url that can auth and return the code for access token
