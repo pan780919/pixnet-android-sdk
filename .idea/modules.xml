@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/pixnet-android-sdk.iml" filepath="$PROJECT_DIR$/pixnet-android-sdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/pixnet-sdk/pixnet-sdk.iml" filepath="$PROJECT_DIR$/pixnet-sdk/pixnet-sdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test/test.iml" filepath="$PROJECT_DIR$/test/test.iml" />
     </modules>
   </component>
 </project>

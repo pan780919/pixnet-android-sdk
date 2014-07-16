@@ -113,20 +113,6 @@ public class OAuthHelper extends HttpHelper {
         token_secret = secret;
     }
 
-    public String getUrlForOauth1Request(){
-        Request request = new Request(URL_OAUTH1_REQUEST);
-        request.setMethod(Request.Method.GET);
-        String authUrl = performRequest(request);
-
-        HashMap<String, String> map=parseParamsByResponse(authUrl);
-        access_token=map.get("oauth_token");
-        token_secret=map.get("oauth_token_secret");
-        String url=map.get("request_auth_url");
-        url=HttpHelper.decodeUrl(url);
-
-        return url;
-    }
-
     public void login(final WebView wv, final Request.RequestCallback callback) {
         //request
         new AsyncTask<Void, Void, String>() {
@@ -194,7 +180,7 @@ public class OAuthHelper extends HttpHelper {
                 String[] oauthTokens = s.split("&");
                 accessToken = oauthTokens[0].replace("oauth_token=", "");
                 token_secret = oauthTokens[1].replace("oauth_token_secret=", "");
-                //login done , call callback
+                //oAuth1Login done , call callback
                 callback.onResponse("");
             }
         }.execute();

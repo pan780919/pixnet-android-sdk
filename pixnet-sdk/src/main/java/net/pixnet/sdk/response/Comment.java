@@ -45,7 +45,7 @@ public class Comment extends BasicResponse{
      */
     public String created_at;
     /**
-     * Comment author login type
+     * Comment author oAuth1Login type
      */
     public String author_login_type;
     /**

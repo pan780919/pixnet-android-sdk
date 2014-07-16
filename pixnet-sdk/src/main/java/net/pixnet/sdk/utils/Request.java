@@ -54,6 +54,10 @@ public class Request {
         return params;
     }
 
+    /**
+     * set http method, default is GET
+     * @param method
+     */
     public void setMethod(Method method) {
         this.method = method;
     }
@@ -70,4 +74,3 @@ public class Request {
         return headers;
     }
 }
-
