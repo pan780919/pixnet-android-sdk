@@ -21,4 +21,5 @@ public class ArticleList extends BasicResponse {
      * current page
      */
     public int page;
+
 }
