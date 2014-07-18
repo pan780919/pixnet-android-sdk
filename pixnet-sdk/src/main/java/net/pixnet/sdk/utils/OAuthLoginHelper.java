@@ -84,10 +84,11 @@ public class OAuthLoginHelper {
         webView.setWebViewClient(new WebViewClient() {
             @JavascriptInterface
             public void onPageFinished(WebView view, String url) {
-                webView.loadUrl("javascript:window.HTMLOUT.showHTML" +
-                        "(document.getElementById('oauth_verifier').innerHTML);");
+                webView.loadUrl("javascript:try{window.HTMLOUT.showHTML" +
+                        "(document.getElementById('oauth_verifier').innerHTML);}catch(err){}");
             }
         });
+        accessUrl=accessUrl.replace("https","http");
         webView.loadUrl(accessUrl);
 
         if(listener!=null)
