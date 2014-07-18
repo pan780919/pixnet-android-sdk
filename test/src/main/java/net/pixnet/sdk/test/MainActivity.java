@@ -17,9 +17,9 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btn= (Button) findViewById(android.R.id.button1);
-        final TextView txt1= (TextView) findViewById(android.R.id.text1);
-        final TextView txt2= (TextView) findViewById(android.R.id.text2);
+        Button btn = (Button) findViewById(android.R.id.button1);
+        final TextView txt1 = (TextView) findViewById(android.R.id.text1);
+        final TextView txt2 = (TextView) findViewById(android.R.id.text2);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,6 +35,7 @@ public class MainActivity extends ActionBarActivity {
                     }
                 });
             }
+
         });
 
     }

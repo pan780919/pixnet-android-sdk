@@ -109,6 +109,7 @@ public class RequestController {
         }
 
         protected void onPostExecute(String response) {
+            taskList.remove(this);
             onResponse(request, response);
         }
     }

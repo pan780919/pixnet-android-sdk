@@ -62,7 +62,6 @@ public class OAuthLoginHelper {
                 oauthSecret=map.get("oauth_token_secret");
                 String url=map.get("xoauth_request_auth_url");
                 accessUrl=HttpHelper.decodeUrl(url);
-
                 if(listener!=null)
                     listener.onRequestUrlGot();
 
@@ -83,6 +82,7 @@ public class OAuthLoginHelper {
         settings.setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
         webView.setWebViewClient(new WebViewClient() {
+            @JavascriptInterface
             public void onPageFinished(WebView view, String url) {
                 webView.loadUrl("javascript:window.HTMLOUT.showHTML" +
                         "(document.getElementById('oauth_verifier').innerHTML);");
