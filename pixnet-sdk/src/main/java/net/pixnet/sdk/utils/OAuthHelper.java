@@ -10,8 +10,7 @@ import android.webkit.WebViewClient;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
-import org.json.JSONObject;
+
 
 import java.security.Key;
 import java.util.ArrayList;

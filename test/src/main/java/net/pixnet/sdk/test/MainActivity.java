@@ -1,19 +1,17 @@
 package net.pixnet.sdk.test;
 
-import android.app.AlertDialog;
+
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.webkit.WebView;
+
 import android.widget.Button;
 import android.widget.TextView;
-import android.content.Context;
+
 import net.pixnet.sdk.PIXNET;
-import net.pixnet.sdk.utils.OAuthHelper;
-import net.pixnet.sdk.utils.Request;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -32,13 +30,13 @@ public class MainActivity extends ActionBarActivity {
                 txt1.setText("");
                 txt2.setText("");
                     PIXNET.oAuth2Login(MainActivity.this, new PIXNET.OnAccessTokenGotListener() {
-                    @Override
-                    public void onAccessTokenGot(String token, String secret) {
-                        txt1.setText(token);
-                        txt2.setText(secret);
+                        @Override
+                        public void onAccessTokenGot(String token, String secret) {
+                            txt1.setText(token);
+                            txt2.setText(secret);
 
-                    }
-                },"http://oob");
+                        }
+                    }, "http://oob");
             }
         });
 
