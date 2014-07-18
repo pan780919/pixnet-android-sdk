@@ -6,7 +6,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_login">登入PIXNET</string>
-    <string name="consumer_key">e6a0fa232cc4da68ae21b727b772229e</string>
-    <string name="consumer_secret">fac5c7f719feef5eea37449b1fc6b2ad</string>
+    <string name="consumer_key">empty</string>
+    <string name="consumer_secret">empty</string>
 
 </resources>
