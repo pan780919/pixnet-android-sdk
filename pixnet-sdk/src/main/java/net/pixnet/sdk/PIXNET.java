@@ -10,7 +10,10 @@ import net.pixnet.sdk.utils.OAuthHelper;
 import net.pixnet.sdk.utils.OAuthLoginHelper;
 import net.pixnet.sdk.utils.Request;
 
-import java.util.ArrayList;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
 
 public class PIXNET {
     public static void oAuth2Login(final Context context, final OnAccessTokenGotListener listener,String redirectUrl){
@@ -22,11 +25,17 @@ public class PIXNET {
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
         OAuthHelper oh = new OAuthHelper(OAuthHelper.OAuthVersion.VER_2,context.getString(R.string.consumer_key),context.getString(R.string.consumer_secret));
         oh.setRedirect_uri(redirectUrl);
-        oh.login2(webView,new Request.RequestCallback() {
+        oh.login2(webView, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                listener.onAccessTokenGot(response,"OAuth2");
                 dialog.dismiss();
+                try {
+                    JSONObject job = new JSONObject(response);
+                    listener.onAccessTokenGot(job.getString("access_token"), "OAuth2");
+                }catch(JSONException e){
+
+                }
+
             }
         });
     }

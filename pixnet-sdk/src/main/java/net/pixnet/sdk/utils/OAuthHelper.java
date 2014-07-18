@@ -210,17 +210,11 @@ public class OAuthHelper extends HttpHelper {
         wv.loadUrl(getRequestUrl());
     }
     public void access2(final String code, final Request.RequestCallback callback){
-        new AsyncTask<Void,Void,String>(){
+        new AsyncTask<Void,Void,Void>(){
             @Override
-            protected String doInBackground(Void... voids) {
-                return getAccessToken(code);
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                access_token=s;
-                callback.onResponse(access_token);
+            protected Void doInBackground(Void... voids) {
+                 getAccessToken(code,callback);
+                return null;
             }
         }.execute();
     }
@@ -256,7 +250,8 @@ public class OAuthHelper extends HttpHelper {
      * @param code Code from RequestUrl
      * @return Set code and Get AccessToken
      */
-    public String getAccessToken(String code) {
+    public void getAccessToken(String code,final Request.RequestCallback callback) {
+        RequestController rc = RequestController.getInstance();
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("grant_type", "authorization_code"));
         params.add(new BasicNameValuePair("code", code));
@@ -266,17 +261,9 @@ public class OAuthHelper extends HttpHelper {
 
         Request request = new Request(URL_GRANT);
         request.setParams(params);
-        String response = super.performRequest(request);
-
-        try {
-            JSONObject obj = new JSONObject(response);
-            access_token = obj.getString("access_token");
-        } catch (JSONException e) {
-            access_token = "Code error";
-        }
-        return access_token;
+        request.setCallback(callback);
+        rc.addRequest(request);
     }
-
     private void computeNoceAndTimestamp() {
         nonce = getNonce();
         timestamp = getTimeStamp();
