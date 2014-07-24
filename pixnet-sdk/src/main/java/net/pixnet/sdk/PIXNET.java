@@ -6,46 +6,52 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 
 import net.pixnet.sdk.utils.Helper;
-import net.pixnet.sdk.utils.OAuthHelper;
 import net.pixnet.sdk.utils.OAuthLoginHelper;
-import net.pixnet.sdk.utils.Request;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-
 
 public class PIXNET {
-    public static void oAuth2Login(final Context context, final OnAccessTokenGotListener listener,String redirectUrl){
+    private static final String URL_OAUTH2_AUTH = "https://emma.pixnet.cc/oauth2/authorize";
+    private static final String URL_OAUTH2_GRANT = "https://emma.pixnet.cc/oauth2/grant";
+    private static final String URL_OAUTH1_REQUEST = "http://emma.pixnet.cc/oauth/request_token";
+    private static final String URL_OAUTH1_ACCESS = "http://emma.pixnet.cc/oauth/access_token";
+
+    public static void oAuth2Login(final Context context, final OnAccessTokenGotListener listener){
         WebView webView = new WebView(context);
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(webView)
                 .create();
         dialog.show();
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-        OAuthHelper oh = new OAuthHelper(OAuthHelper.OAuthVersion.VER_2,context.getString(R.string.consumer_key),context.getString(R.string.consumer_secret));
-        oh.setRedirect_uri(redirectUrl);
-        oh.login2(webView, new Request.RequestCallback() {
-            @Override
-            public void onResponse(String response) {
-                dialog.dismiss();
-                try {
-                    JSONObject job = new JSONObject(response);
-                    listener.onAccessTokenGot(job.getString("access_token"), "OAuth2");
-                }catch(JSONException e){
 
-                }
+        OAuthLoginHelper helper=OAuthLoginHelper.newAoth2LoginHelper(context.getString(R.string.consumer_key), context.getString(R.string.consumer_secret), URL_OAUTH2_AUTH, URL_OAUTH2_GRANT);
+        helper.setOAuthLoginListener(new OAuthLoginHelper.OAuthLoginListener() {
+            @Override
+            public void onRequestUrlGot() {
 
             }
+
+            @Override
+            public void onVerify() {
+
+            }
+
+            @Override
+            public void onAccessTokenGot(String token, String secret) {
+                dialog.dismiss();
+                listener.onAccessTokenGot(token,secret);
+            }
         });
+        helper.loginByOauth2(webView);
     }
+
     public static void oAuth1Login(final Context context, final OnAccessTokenGotListener listener){
         WebView webView=new WebView(context);
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(webView)
                 .create();
+        dialog.show();
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
-        OAuthLoginHelper loginHelper=new OAuthLoginHelper(context.getString(R.string.consumer_key), context.getString(R.string.consumer_secret));
+        OAuthLoginHelper loginHelper=OAuthLoginHelper.newAoth1LoginHelper(context.getString(R.string.consumer_key), context.getString(R.string.consumer_secret), URL_OAUTH1_REQUEST, URL_OAUTH1_ACCESS);
         loginHelper.setOAuthLoginListener(new OAuthLoginHelper.OAuthLoginListener() {
             @Override
             public void onRequestUrlGot() {
@@ -58,17 +64,12 @@ public class PIXNET {
             }
 
             @Override
-            public void onAccessTokenGot(String token, String secret) {
-                Helper.log("onAccessTokenGot");
+            public void onAccessTokenGot(String token, String secret){
                 listener.onAccessTokenGot(token, secret);
                 dialog.dismiss();
             }
         });
-
-        dialog.show();
-        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-
-        loginHelper.login(webView);
+        loginHelper.loginByOauth1(webView);
     }
 
     public interface OnAccessTokenGotListener{

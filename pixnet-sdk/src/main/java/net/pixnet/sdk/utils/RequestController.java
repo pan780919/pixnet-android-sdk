@@ -57,7 +57,7 @@ public class RequestController {
 
     private HttpConnectionTool getHttpConnectionTool(){
         if(httpConn==null){
-            httpConn = new OAuthHelper(OAuthHelper.OAuthVersion.VER_2, client_id, client_secret);
+            httpConn = new HttpHelper();
         }
         return httpConn;
     }

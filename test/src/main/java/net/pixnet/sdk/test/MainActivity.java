@@ -20,26 +20,40 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btn = (Button) findViewById(android.R.id.button1);
+        Button btn1 = (Button) findViewById(android.R.id.button1);
+        Button btn2 = (Button) findViewById(android.R.id.button2);
         final TextView txt1 = (TextView) findViewById(android.R.id.text1);
         final TextView txt2 = (TextView) findViewById(android.R.id.text2);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 txt1.setText("");
                 txt2.setText("");
-                    PIXNET.oAuth2Login(MainActivity.this, new PIXNET.OnAccessTokenGotListener() {
-                        @Override
-                        public void onAccessTokenGot(String token, String secret) {
-                            txt1.setText(token);
-                            txt2.setText(secret);
-
-                        }
-                    }, "http://oob");
+                PIXNET.oAuth1Login(MainActivity.this, new PIXNET.OnAccessTokenGotListener() {
+                    @Override
+                    public void onAccessTokenGot(String token, String secret) {
+                        txt1.setText(token);
+                        txt2.setText(secret);
+                    }
+                });
             }
         });
 
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txt1.setText("");
+                txt2.setText("");
+                PIXNET.oAuth2Login(MainActivity.this, new PIXNET.OnAccessTokenGotListener() {
+                    @Override
+                    public void onAccessTokenGot(String token, String secret) {
+                        txt1.setText(token);
+                        txt2.setText(secret);
+                    }
+                });
+            }
+        });
     }
 
     @Override

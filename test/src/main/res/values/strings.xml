@@ -4,6 +4,7 @@
     <string name="app_name">Test</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    <string name="consumer_key">9dbcbcc2cea3c164dcadf1099598376a</string>
+    <string name="consumer_secret">3a827e53a15f57d2aeed61b33f0d5933</string>
 
 </resources>
