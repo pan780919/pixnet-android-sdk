@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import net.pixnet.sdk.PIXNET;
+import net.pixnet.sdk.utils.Blog;
+import net.pixnet.sdk.utils.Request;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -24,7 +26,6 @@ public class MainActivity extends ActionBarActivity {
         Button btn2 = (Button) findViewById(android.R.id.button2);
         final TextView txt1 = (TextView) findViewById(android.R.id.text1);
         final TextView txt2 = (TextView) findViewById(android.R.id.text2);
-
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +55,7 @@ public class MainActivity extends ActionBarActivity {
                 });
             }
         });
+
     }
 
     @Override
