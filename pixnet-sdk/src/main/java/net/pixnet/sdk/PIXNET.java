@@ -36,6 +36,7 @@ public class PIXNET {
 
             @Override
             public void onAccessTokenGot(String token, String secret) {
+                Helper.log("onAccessTokenGot");
                 if(dialog.isShowing())
                     dialog.dismiss();
                 listener.onAccessTokenGot(token,secret);

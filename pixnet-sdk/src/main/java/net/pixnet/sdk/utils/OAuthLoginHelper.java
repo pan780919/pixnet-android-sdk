@@ -90,14 +90,13 @@ public class OAuthLoginHelper {
     public void loginByOauth2(WebView view){
         webView=view;
         WebSettings settings = webView.getSettings();
-        settings.setSupportZoom(true);
-        settings.setBuiltInZoomControls(true);
         settings.setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 if (url.contains("code=")) {
+                    webView.setWebViewClient(null);
                     String code = url.replace(redirect_uri, "").replace("/?code=", "");
                     if(listener!=null){
                         listener.onRequestUrlGot();
@@ -193,7 +192,6 @@ public class OAuthLoginHelper {
                         "(document.getElementById('oauth_verifier').innerHTML);}catch(err){}");
             }
         });
-        Helper.log(accessUrl);
         accessUrl=accessUrl.replace("https","http");
         webView.loadUrl(accessUrl);
 
@@ -205,21 +203,18 @@ public class OAuthLoginHelper {
 
         @JavascriptInterface
         public void showHTML(String html) {
-            Helper.log("showHTML");
             if (html.length() == 6) {
                 access(html);
             }
         }
 
         public void access(final String verifier) {
-            Helper.log("access");
             OAuthHelper oauthHelper= getOAuthHelper(OAuthHelper.OAuthVersion.VER_1);
             oauthHelper.setTokenAndSecret(oauthToken, oauthSecret);
             RequestController rc=RequestController.getInstance();
             rc.setHttpConnectionTool(oauthHelper);
 
             Request r=new Request(oauth1Url_access);
-            Helper.log("oauth1Url_access:"+oauth1Url_access);
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("oauth_verifier", verifier));
             r.setParams(params);
