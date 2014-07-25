@@ -1,5 +1,6 @@
 package net.pixnet.sdk.utils;
 
+import android.graphics.Bitmap;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -93,9 +94,14 @@ public class OAuthLoginHelper {
         settings.setBuiltInZoomControls(true);
         settings.setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
-            public void onPageFinished(WebView view, String url) {
-                if (webView.getUrl().contains("code=")) {
-                    String code = webView.getUrl().replace(redirect_uri, "").replace("/?code=", "");
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                if (url.contains("code=")) {
+                    String code = url.replace(redirect_uri, "").replace("/?code=", "");
+                    if(listener!=null){
+                        listener.onRequestUrlGot();
+                    }
                     getOauth2AccessToken(code);
                 }
             }

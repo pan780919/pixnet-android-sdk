@@ -26,7 +26,7 @@ public class PIXNET {
         helper.setOAuthLoginListener(new OAuthLoginHelper.OAuthLoginListener() {
             @Override
             public void onRequestUrlGot() {
-
+                dialog.dismiss();
             }
 
             @Override
@@ -36,7 +36,8 @@ public class PIXNET {
 
             @Override
             public void onAccessTokenGot(String token, String secret) {
-                dialog.dismiss();
+                if(dialog.isShowing())
+                    dialog.dismiss();
                 listener.onAccessTokenGot(token,secret);
             }
         });
