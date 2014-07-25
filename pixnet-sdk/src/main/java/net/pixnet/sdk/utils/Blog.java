@@ -23,7 +23,7 @@ public class Blog {
             params.add(new BasicNameValuePair("blog_password", blog_password));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/categories");
+        Request request = new Request("https://emma.pixnet.cc/blog/categories");
         request.setParams(params);
         request.setCallback(callback);
 
@@ -42,7 +42,7 @@ public class Blog {
             params.add(new BasicNameValuePair("include_thumbs", include_thumbs));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/site_categories");
+        Request request = new Request("https://emma.pixnet.cc/blog/site_categories");
         request.setParams(params);
         request.setCallback(callback);
 
@@ -72,7 +72,7 @@ public class Blog {
             params.add(new BasicNameValuePair("site_category_done", site_category_done));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/categories");
+        Request request = new Request("https://emma.pixnet.cc/blog/categories");
         request.setMethod(Request.Method.POST);
         request.setParams(params);
         request.setCallback(callback);
@@ -105,7 +105,7 @@ public class Blog {
             params.add(new BasicNameValuePair("site_category_done", site_category_done));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/categories/" + id);
+        Request request = new Request("https://emma.pixnet.cc/blog/categories/" + id);
         request.setMethod(Request.Method.POST);
         request.setParams(params);
         request.setCallback(callback);
@@ -123,7 +123,7 @@ public class Blog {
             params.add(new BasicNameValuePair("type", type));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/categories/" + id);
+        Request request = new Request("https://emma.pixnet.cc/blog/categories/" + id);
         request.setMethod(Request.Method.DELETE);
         request.setParams(params);
         request.setCallback(callback);
@@ -139,7 +139,7 @@ public class Blog {
             params.add(new BasicNameValuePair("format", format));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/categories/position");
+        Request request = new Request("https://emma.pixnet.cc/blog/categories/position");
         request.setMethod(Request.Method.POST);
         request.setParams(params);
         request.setCallback(callback);
@@ -175,7 +175,7 @@ public class Blog {
             params.add(new BasicNameValuePair("trim_user", trim_user));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/articles");
+        Request request = new Request("https://emma.pixnet.cc/blog/articles");
         request.setParams(params);
         request.setCallback(callback);
 
@@ -195,7 +195,7 @@ public class Blog {
             params.add(new BasicNameValuePair("article_password", article_password));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/articles/" + id);
+        Request request = new Request("https://emma.pixnet.cc/blog/articles/" + id);
         request.setParams(params);
         request.setCallback(callback);
 
@@ -215,7 +215,7 @@ public class Blog {
             params.add(new BasicNameValuePair("limit", limit));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/articles/" + id + "/related");
+        Request request = new Request("https://emma.pixnet.cc/blog/articles/" + id + "/related");
         request.setParams(params);
         request.setCallback(callback);
 
@@ -250,7 +250,7 @@ public class Blog {
             params.add(new BasicNameValuePair("per_page", per_page));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/comments");
+        Request request = new Request("https://emma.pixnet.cc/blog/comments");
         request.setParams(params);
         request.setCallback(callback);
 
@@ -311,7 +311,7 @@ public class Blog {
             params.add(new BasicNameValuePair("notify_facebook", notify_facebook));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/articles");
+        Request request = new Request("https://emma.pixnet.cc/blog/articles");
         request.setMethod(Request.Method.POST);
         request.setParams(params);
         request.setCallback(callback);
@@ -377,7 +377,7 @@ public class Blog {
             params.add(new BasicNameValuePair("notify_facebook", notify_facebook));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/articles/" + id);
+        Request request = new Request("https://emma.pixnet.cc/blog/articles/" + id);
         request.setMethod(Request.Method.POST);
         request.setParams(params);
         request.setCallback(callback);
@@ -392,7 +392,7 @@ public class Blog {
             params.add(new BasicNameValuePair("format", format));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/articles/" + id);
+        Request request = new Request("https://emma.pixnet.cc/blog/articles/" + id);
         request.setMethod(Request.Method.DELETE);
         request.setParams(params);
         request.setCallback(callback);
@@ -416,7 +416,7 @@ public class Blog {
             params.add(new BasicNameValuePair("trim_user", trim_user));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/articles/latest");
+        Request request = new Request("https://emma.pixnet.cc/blog/articles/latest");
         request.setParams(params);
         request.setCallback(callback);
 
@@ -439,7 +439,7 @@ public class Blog {
             params.add(new BasicNameValuePair("trim_user", trim_user));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/articles/hot");
+        Request request = new Request("https://emma.pixnet.cc/blog/articles/hot");
         request.setParams(params);
         request.setCallback(callback);
 
@@ -466,7 +466,7 @@ public class Blog {
             params.add(new BasicNameValuePair("per_page", per_page));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/articles/search");
+        Request request = new Request("https://emma.pixnet.cc/blog/articles/search");
         request.setParams(params);
         request.setCallback(callback);
 
@@ -501,7 +501,7 @@ public class Blog {
             params.add(new BasicNameValuePair("per_page", per_page));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/comments");
+        Request request = new Request("https://emma.pixnet.cc/blog/comments");
         request.setParams(params);
         request.setCallback(callback);
 
@@ -539,7 +539,7 @@ public class Blog {
             params.add(new BasicNameValuePair("article_password", article_password));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/comments");
+        Request request = new Request("https://emma.pixnet.cc/blog/comments");
         request.setMethod(Request.Method.POST);
         request.setParams(params);
         request.setCallback(callback);
@@ -554,7 +554,7 @@ public class Blog {
             params.add(new BasicNameValuePair("format", format));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/comments/" + id);
+        Request request = new Request("https://emma.pixnet.cc/blog/comments/" + id);
         request.setParams(params);
         request.setCallback(callback);
 
@@ -566,7 +566,7 @@ public class Blog {
         params.add(new BasicNameValuePair("access_token", access_token));
         params.add(new BasicNameValuePair("body", body));
 
-        Request request = new Request("http://emma.pixnet.cc/blog/comments/" + id + "/reply");
+        Request request = new Request("https://emma.pixnet.cc/blog/comments/" + id + "/reply");
         request.setMethod(Request.Method.POST);
         request.setParams(params);
         request.setCallback(callback);
@@ -582,9 +582,9 @@ public class Blog {
         }
         String url;
         if (visible) {
-            url = "http://emma.pixnet.cc/blog/comments/" + id + "/open";
+            url = "https://emma.pixnet.cc/blog/comments/" + id + "/open";
         } else {
-            url = "http://emma.pixnet.cc/blog/comments/" + id + "/close";
+            url = "https://emma.pixnet.cc/blog/comments/" + id + "/close";
         }
 
         Request request = new Request(url);
@@ -602,7 +602,7 @@ public class Blog {
             params.add(new BasicNameValuePair("format", format));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/comments/" + id);
+        Request request = new Request("https://emma.pixnet.cc/blog/comments/" + id);
         request.setMethod(Request.Method.DELETE);
         request.setParams(params);
         request.setCallback(callback);
@@ -617,7 +617,7 @@ public class Blog {
             params.add(new BasicNameValuePair("format", format));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/comments/latest");
+        Request request = new Request("https://emma.pixnet.cc/blog/comments/latest");
         request.setParams(params);
         request.setCallback(callback);
 
@@ -631,7 +631,7 @@ public class Blog {
             params.add(new BasicNameValuePair("format", format));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/comments/" + id + "/mark_spam");
+        Request request = new Request("https://emma.pixnet.cc/blog/comments/" + id + "/mark_spam");
         request.setMethod(Request.Method.POST);
         request.setParams(params);
         request.setCallback(callback);
@@ -646,7 +646,7 @@ public class Blog {
             params.add(new BasicNameValuePair("format", format));
         }
 
-        Request request = new Request("http://emma.pixnet.cc/blog/comments/" + id + "/mark_ham");
+        Request request = new Request("https://emma.pixnet.cc/blog/comments/" + id + "/mark_ham");
         request.setMethod(Request.Method.POST);
         request.setParams(params);
         request.setCallback(callback);
@@ -658,7 +658,7 @@ public class Blog {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("user", user));
 
-        Request request = new Request("http://emma.pixnet.cc/blog");
+        Request request = new Request("https://emma.pixnet.cc/blog");
         request.setParams(params);
         request.setCallback(callback);
 
