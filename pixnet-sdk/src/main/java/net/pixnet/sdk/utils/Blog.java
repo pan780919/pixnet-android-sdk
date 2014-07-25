@@ -67,7 +67,76 @@ public class Blog {
 
         rc.addRequest(request);
     }
+    public void getArticleListByLatest(String user,String format,String blog_password,String limit,String trim_user,Request.RequestCallback callback){
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", user));
+        if (format != null) {
+            params.add(new BasicNameValuePair("format", format));
+        }
+        if (blog_password != null) {
+            params.add(new BasicNameValuePair("blog_password", blog_password));
+        }
+        if (limit != null) {
+            params.add(new BasicNameValuePair("limit", limit));
+        }
+        if (trim_user != null) {
+            params.add(new BasicNameValuePair("trim_user", trim_user));
+        }
 
+        Request request = new Request("http://emma.pixnet.cc/blog/articles/latest");
+        request.setParams(params);
+        request.setCallback(callback);
+
+        rc.addRequest(request);
+    }
+    public void getArticleListByHot(String user,String format,String blog_password,String limit,String trim_user,Request.RequestCallback callback){
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", user));
+        if (format != null) {
+            params.add(new BasicNameValuePair("format", format));
+        }
+        if (blog_password != null) {
+            params.add(new BasicNameValuePair("blog_password", blog_password));
+        }
+        if (limit != null) {
+            params.add(new BasicNameValuePair("limit", limit));
+        }
+        if (trim_user != null) {
+            params.add(new BasicNameValuePair("trim_user", trim_user));
+        }
+
+        Request request = new Request("http://emma.pixnet.cc/blog/articles/hot");
+        request.setParams(params);
+        request.setCallback(callback);
+
+        rc.addRequest(request);
+    }
+    public void searchArticleList(String key,String user,String format,String site,String type,String page,String per_page,Request.RequestCallback callback){
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("key", key));
+        params.add(new BasicNameValuePair("user", user));
+        if (format != null) {
+            params.add(new BasicNameValuePair("format", format));
+        }
+        if (site != null) {
+            params.add(new BasicNameValuePair("site", site));
+        }
+        if (type != null) {
+            params.add(new BasicNameValuePair("type", type));
+        }
+        if (page != null) {
+            params.add(new BasicNameValuePair("page", page));
+        }
+        if (per_page != null) {
+            params.add(new BasicNameValuePair("per_page", per_page));
+        }
+
+        Request request = new Request("http://emma.pixnet.cc/blog/articles/search");
+        request.setParams(params);
+        request.setCallback(callback);
+
+        rc.addRequest(request);
+    }
     public void getBlogInfo(String user, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("user", user));
