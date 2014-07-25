@@ -1,7 +1,7 @@
 package net.pixnet.sdk.utils;
 
 import android.graphics.Bitmap;
-import android.webkit.JavascriptInterface;
+import android.net.Uri;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -95,9 +95,10 @@ public class OAuthLoginHelper {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                if (url.contains("code=")) {
+                Uri uri=Uri.parse(url);
+                String code=uri.getQueryParameter("code");
+                if (code!=null) {
                     webView.setWebViewClient(null);
-                    String code = url.replace(redirect_uri, "").replace("/?code=", "");
                     if(listener!=null){
                         listener.onRequestUrlGot();
                     }
@@ -184,60 +185,53 @@ public class OAuthLoginHelper {
         settings.setSupportZoom(true);
         settings.setBuiltInZoomControls(true);
         settings.setJavaScriptEnabled(true);
-        webView.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
         webView.setWebViewClient(new WebViewClient() {
-            @JavascriptInterface
-            public void onPageFinished(WebView view, String url) {
-                webView.loadUrl("javascript:try{window.HTMLOUT.showHTML" +
-                        "(document.getElementById('oauth_verifier').innerHTML);}catch(err){}");
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                Uri uri=Uri.parse(url);
+                String verifier=uri.getQueryParameter("oauth_verifier");
+                if(verifier!=null){
+                    webView.setWebViewClient(null);
+                    getOauth1AccessToken(verifier);
+                }
             }
         });
-        accessUrl=accessUrl.replace("https","http");
         webView.loadUrl(accessUrl);
-
         if(listener!=null)
             listener.onVerify();
     }
 
-    class MyJavaScriptInterface {
+    public void getOauth1AccessToken(String verifier) {
+        OAuthHelper oauthHelper= getOAuthHelper(OAuthHelper.OAuthVersion.VER_1);
+        oauthHelper.setTokenAndSecret(oauthToken, oauthSecret);
 
-        @JavascriptInterface
-        public void showHTML(String html) {
-            if (html.length() == 6) {
-                access(html);
+        RequestController rc=RequestController.getInstance();
+        rc.setHttpConnectionTool(oauthHelper);
+
+        Request r=new Request(oauth1Url_access);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("oauth_verifier", verifier));
+        r.setParams(params);
+        r.setCallback(new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                HashMap<String, String> map = HttpHelper.parseParamsByResponse(response);
+                access_token = map.get("oauth_token");
+                token_secret = map.get("oauth_token_secret");
+
+                if (listener != null)
+                    listener.onAccessTokenGot(access_token, token_secret);
             }
-        }
+        });
 
-        public void access(final String verifier) {
-            OAuthHelper oauthHelper= getOAuthHelper(OAuthHelper.OAuthVersion.VER_1);
-            oauthHelper.setTokenAndSecret(oauthToken, oauthSecret);
-            RequestController rc=RequestController.getInstance();
-            rc.setHttpConnectionTool(oauthHelper);
-
-            Request r=new Request(oauth1Url_access);
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("oauth_verifier", verifier));
-            r.setParams(params);
-            r.setCallback(new Request.RequestCallback() {
-                @Override
-                public void onResponse(String response) {
-                    HashMap<String, String> map = HttpHelper.parseParamsByResponse(response);
-                    access_token = map.get("oauth_token");
-                    token_secret = map.get("oauth_token_secret");
-
-                    if (listener != null)
-                        listener.onAccessTokenGot(access_token, token_secret);
-                }
-            });
-
-            rc.addRequest(r);
-        }
+        rc.addRequest(r);
     }
 
     private String redirect_uri="http://oob";
 
     /**
-     * The url that can auth and return the code for access token
+     * The url that can auth and return the code for getOauth1AccessToken token
      *
      * @return formatted request url
      */
