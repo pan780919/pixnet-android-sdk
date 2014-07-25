@@ -48,11 +48,11 @@ public class HttpHelper implements HttpConnectionTool {
     /**
      * default connection timeout
      */
-    public static final int DEF_TIMEOUT_CONNECTION = 3000;
+    public static final int DEF_TIMEOUT_CONNECTION = 5000;
     /**
      * default socket timeout
      */
-    public static final int DEF_TIMEOUT_SOCKET = 5000;
+    public static final int DEF_TIMEOUT_SOCKET = 10000;
 
     public int timeout_connection = DEF_TIMEOUT_CONNECTION;
     public int timeout_socket = DEF_TIMEOUT_SOCKET;
