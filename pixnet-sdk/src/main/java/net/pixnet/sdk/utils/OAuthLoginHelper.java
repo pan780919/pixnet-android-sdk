@@ -6,8 +6,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import net.pixnet.sdk.PIXNET;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -16,6 +14,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import net.pixnet.sdk.utils.OAuthConnectionTool.OAuthVersion;
 
 public class OAuthLoginHelper {
 
@@ -33,30 +33,34 @@ public class OAuthLoginHelper {
     private OAuthLoginListener listener;
     private WebView webView;
     private String accessUrl;
+    private String redirect_uri="http://oob";
 
-    public static OAuthLoginHelper newAoth1LoginHelper(String consumerKey, String consumerSecret, String requestUrl, String accessUrl){
+    public static OAuthLoginHelper newAoth1LoginHelper(String consumerKey, String consumerSecret, String requestUrl, String accessUrl, OAuthLoginListener listener){
         OAuthLoginHelper helper=new OAuthLoginHelper();
         helper.key =consumerKey;
         helper.secret =consumerSecret;
         helper.oauth1Url_request=requestUrl;
         helper.oauth1Url_access=accessUrl;
+        helper.listener=listener;
         return helper;
     }
 
-    public static OAuthLoginHelper newAoth2LoginHelper(String clientId, String clientSecret, String authUrl, String grantUrl){
+    public static OAuthLoginHelper newAoth2LoginHelper(String clientId, String clientSecret, String authUrl, String grantUrl, String redirectUri, OAuthLoginListener listener){
         OAuthLoginHelper helper=new OAuthLoginHelper();
         helper.key =clientId;
         helper.secret =clientSecret;
         helper.oauth2Url_auth=authUrl;
         helper.oauth2Url_grant=grantUrl;
+        helper.setRedirectUri(redirectUri);
+        helper.listener=listener;
         return helper;
     }
 
-    public void setOAuthLoginListener(OAuthLoginListener listener){
-        this.listener=listener;
+    public void setRedirectUri(String uri){
+        redirect_uri=uri;
     }
 
-    public void loginByXauth(String userName, String passwd, String accessTokenUrl, final PIXNET.OnAccessTokenGotListener listener) {
+    public void loginByXauth(String userName, String passwd, String accessTokenUrl, final OAuthLoginListener listener) {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("x_auth_mode", "client_auth"));
         params.add(new BasicNameValuePair("x_auth_password", passwd));
@@ -68,20 +72,16 @@ public class OAuthLoginHelper {
         request.setCallback(new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                HashMap<String, String> resParams = HttpHelper.parseParamsByResponse(response);
+                HashMap<String, String> resParams = HttpConnectionTool.parseParamsByResponse(response);
                 String token = resParams.get("oauth_token");
                 String secret = resParams.get("oauth_token_secret");
                 listener.onAccessTokenGot(token, secret);
             }
         });
         RequestController rc = RequestController.getInstance();
+        rc.setHttpConnectionTool(getOAuthConnectionTool(OAuthVersion.VER_1));
         rc.addRequest(request);
     }
-
-    public void loginByOauth1(){
-        loginByOauth1(null);
-    }
-
     public void loginByOauth1(WebView view){
         webView=view;
         getUrlForOauth1Request();
@@ -93,20 +93,115 @@ public class OAuthLoginHelper {
         settings.setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Uri uri=Uri.parse(url);
-                String code=uri.getQueryParameter("code");
-                if (code!=null) {
-                    webView.setWebViewClient(null);
-                    if(listener!=null){
-                        listener.onRequestUrlGot();
-                    }
-                    getOauth2AccessToken(code);
+                String error=uri.getQueryParameter("error");
+                if(error!=null){
+                    listener.onError(error);
+                    return true;
                 }
+                if(url.startsWith(redirect_uri)){
+                    String code=uri.getQueryParameter("code");
+                    if (code!=null) {
+                        webView.setWebViewClient(null);
+                        listener.onRequestUrlGot();
+                        getOauth2AccessToken(code);
+                    }
+                    return true;
+                }
+                return super.shouldOverrideUrlLoading(view, url);
             }
         });
         webView.loadUrl(getOauth2RequestUrl());
+    }
+
+    public void getUrlForOauth1Request(){
+        Request request = new Request(oauth1Url_request);
+        request.setCallback(new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                HashMap<String, String> map= HttpConnectionTool.parseParamsByResponse(response);
+                oauthToken=map.get("oauth_token");
+                oauthSecret=map.get("oauth_token_secret");
+                String url=map.get("xoauth_request_auth_url");
+                accessUrl= HttpConnectionTool.decodeUrl(url);
+                listener.onRequestUrlGot();
+
+                if(webView!=null){
+                    oauth1Verify();
+                }
+            }
+        });
+
+        RequestController rc=RequestController.getInstance();
+        rc.setHttpConnectionTool(getOAuthConnectionTool(OAuthVersion.VER_1));
+        rc.addRequest(request);
+    }
+
+    public void oauth1Verify(){
+        if(accessUrl==null || webView==null)
+            return;
+        WebSettings settings = webView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Helper.log("shouldOverrideUrlLoading");
+                Helper.log(url);
+                Uri uri=Uri.parse(url);
+                String error=uri.getQueryParameter("error");
+                if(error!=null){
+                    listener.onError(error);
+                    return true;
+                }
+                if(url.startsWith(redirect_uri)){
+                    String verifier = uri.getQueryParameter("oauth_verifier");
+                    if (verifier!=null) {
+                        webView.setWebViewClient(null);
+                        getOauth1AccessToken(verifier);
+                    }
+                    return true;
+                }
+
+                return super.shouldOverrideUrlLoading(view, url);
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                Uri uri = Uri.parse(url);
+                String verifier = uri.getQueryParameter("oauth_verifier");
+                if (verifier != null) {
+                    webView.setWebViewClient(null);
+                    getOauth1AccessToken(verifier);
+                }
+            }
+        });
+        webView.loadUrl(accessUrl);
+        listener.onVerify();
+    }
+
+    public void getOauth1AccessToken(String verifier) {
+        OAuthConnectionTool oauthHelper= getOAuthConnectionTool(OAuthVersion.VER_1);
+        oauthHelper.setTokenAndSecret(oauthToken, oauthSecret);
+
+        Request r=new Request(oauth1Url_access);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("oauth_verifier", verifier));
+        r.setParams(params);
+        r.setCallback(new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                HashMap<String, String> map = HttpConnectionTool.parseParamsByResponse(response);
+                access_token = map.get("oauth_token");
+                token_secret = map.get("oauth_token_secret");
+                listener.onAccessTokenGot(access_token, token_secret);
+            }
+        });
+
+        RequestController rc=RequestController.getInstance();
+        rc.setHttpConnectionTool(oauthHelper);
+        rc.addRequest(r);
     }
 
     /**
@@ -128,107 +223,32 @@ public class OAuthLoginHelper {
             public void onResponse(String response) {
                 try {
                     JSONObject job = new JSONObject(response);
-                    if(listener!=null)
-                        listener.onAccessTokenGot(job.getString("access_token"), "OAuth2");
+                    listener.onAccessTokenGot(job.getString("access_token"), "OAuth2");
                 }catch(JSONException e){
                     e.printStackTrace();
+                    listener.onError(e.getMessage());
                 }
             }
         });
         RequestController rc = RequestController.getInstance();
+        rc.setHttpConnectionTool(getOAuthConnectionTool(OAuthVersion.VER_2));
         rc.addRequest(request);
     }
 
-    private OAuthHelper getOAuthHelper(OAuthHelper.OAuthVersion version) {
-        OAuthHelper oAuthHelper;
+    private OAuthConnectionTool getOAuthConnectionTool(OAuthVersion version) {
+        OAuthConnectionTool tool;
         switch (version){
             case VER_1:
-                oAuthHelper=OAuthHelper.newOaut1hHelper(key, secret);
+                tool=OAuthConnectionTool.newOaut1hHelper(key, secret);
                 break;
             case VER_2:
-                oAuthHelper=OAuthHelper.newOauth2Helper(key, secret);
+                tool=OAuthConnectionTool.newOauth2Helper(key, secret);
                 break;
             default:
-                oAuthHelper=null;
+                tool=null;
         }
-        return oAuthHelper;
+        return tool;
     }
-
-    public void getUrlForOauth1Request(){
-        RequestController rc=RequestController.getInstance();
-        rc.setHttpConnectionTool(getOAuthHelper(OAuthHelper.OAuthVersion.VER_1));
-
-        Request request = new Request(oauth1Url_request);
-        request.setCallback(new Request.RequestCallback() {
-            @Override
-            public void onResponse(String response) {
-                HashMap<String, String> map=HttpHelper.parseParamsByResponse(response);
-                oauthToken=map.get("oauth_token");
-                oauthSecret=map.get("oauth_token_secret");
-                String url=map.get("xoauth_request_auth_url");
-                accessUrl=HttpHelper.decodeUrl(url);
-                if(listener!=null)
-                    listener.onRequestUrlGot();
-
-                if(webView!=null){
-                    oauth1Verify();
-                }
-            }
-        });
-        rc.addRequest(request);
-    }
-
-    public void oauth1Verify(){
-        if(accessUrl==null || webView==null)
-            return;
-        WebSettings settings = webView.getSettings();
-        settings.setSupportZoom(true);
-        settings.setBuiltInZoomControls(true);
-        settings.setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                Uri uri=Uri.parse(url);
-                String verifier=uri.getQueryParameter("oauth_verifier");
-                if(verifier!=null){
-                    webView.setWebViewClient(null);
-                    getOauth1AccessToken(verifier);
-                }
-            }
-        });
-        webView.loadUrl(accessUrl);
-        if(listener!=null)
-            listener.onVerify();
-    }
-
-    public void getOauth1AccessToken(String verifier) {
-        OAuthHelper oauthHelper= getOAuthHelper(OAuthHelper.OAuthVersion.VER_1);
-        oauthHelper.setTokenAndSecret(oauthToken, oauthSecret);
-
-        RequestController rc=RequestController.getInstance();
-        rc.setHttpConnectionTool(oauthHelper);
-
-        Request r=new Request(oauth1Url_access);
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("oauth_verifier", verifier));
-        r.setParams(params);
-        r.setCallback(new Request.RequestCallback() {
-            @Override
-            public void onResponse(String response) {
-                HashMap<String, String> map = HttpHelper.parseParamsByResponse(response);
-                access_token = map.get("oauth_token");
-                token_secret = map.get("oauth_token_secret");
-
-                if (listener != null)
-                    listener.onAccessTokenGot(access_token, token_secret);
-            }
-        });
-
-        rc.addRequest(r);
-    }
-
-    private String redirect_uri="http://oob";
 
     /**
      * The url that can auth and return the code for getOauth1AccessToken token
@@ -246,5 +266,6 @@ public class OAuthLoginHelper {
         void onRequestUrlGot();
         void onVerify();
         void onAccessTokenGot(String token, String secret);
+        void onError(String msg);
     }
 }

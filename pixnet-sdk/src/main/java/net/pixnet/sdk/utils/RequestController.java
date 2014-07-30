@@ -57,7 +57,7 @@ public class RequestController {
 
     private HttpConnectionTool getHttpConnectionTool(){
         if(httpConn==null){
-            httpConn = new HttpHelper();
+            httpConn = new HttpConnectionTool();
         }
         return httpConn;
     }

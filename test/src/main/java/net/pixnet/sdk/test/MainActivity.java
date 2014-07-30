@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.utils.Blog;
+import net.pixnet.sdk.utils.Helper;
 import net.pixnet.sdk.utils.Request;
 
 
@@ -37,6 +38,11 @@ public class MainActivity extends ActionBarActivity {
                         txt1.setText(token);
                         txt2.setText(secret);
                     }
+
+                    @Override
+                    public void onError(String msg) {
+                        Helper.toast(MainActivity.this, msg);
+                    }
                 });
             }
         });
@@ -51,6 +57,11 @@ public class MainActivity extends ActionBarActivity {
                     public void onAccessTokenGot(String token, String secret) {
                         txt1.setText(token);
                         txt2.setText(secret);
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        Helper.toast(MainActivity.this, msg);
                     }
                 });
             }

@@ -6,7 +6,7 @@ import android.util.SparseArray;
  * A SparseArray stored HttpRequests and control amount of requests
  */
 public class HttpRequestList {
-    SparseArray<HttpHelper> map = new SparseArray<HttpHelper>();
+    SparseArray<HttpConnectionTool> map = new SparseArray<HttpConnectionTool>();
     private int count = 0;
     private int limit = 3;
 
@@ -25,7 +25,7 @@ public class HttpRequestList {
      * @param request Http_request
      * @return the position of the request
      */
-    public int addRequest(HttpHelper request) {
+    public int addRequest(HttpConnectionTool request) {
         if (map.size() < limit) {
             map.put(count, request);
             count++;
@@ -50,7 +50,7 @@ public class HttpRequestList {
      */
     public void cancelRequest(int key) {
         try {
-            HttpHelper hh = map.get(key, null);
+            HttpConnectionTool hh = map.get(key, null);
             if (hh != null)
                 hh.cancel();
         } catch (Exception e) {
