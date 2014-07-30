@@ -1,7 +1,7 @@
 package net.pixnet.sdk.utils;
 
-import android.graphics.Bitmap;
 import android.net.Uri;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -143,11 +143,10 @@ public class OAuthLoginHelper {
             return;
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
+        webView.addJavascriptInterface(new Jsi(), "android");
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Helper.log("shouldOverrideUrlLoading");
-                Helper.log(url);
                 Uri uri=Uri.parse(url);
                 String error=uri.getQueryParameter("error");
                 if(error!=null){
@@ -162,23 +161,25 @@ public class OAuthLoginHelper {
                     }
                     return true;
                 }
-
                 return super.shouldOverrideUrlLoading(view, url);
             }
 
             @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                Uri uri = Uri.parse(url);
-                String verifier = uri.getQueryParameter("oauth_verifier");
-                if (verifier != null) {
-                    webView.setWebViewClient(null);
-                    getOauth1AccessToken(verifier);
-                }
+            public void onPageFinished(WebView view, String url) {
+                webView.loadUrl("javascript:window.android.access(document.getElementById('oauth_verifier').innerHTML);");
             }
         });
         webView.loadUrl(accessUrl);
         listener.onVerify();
+    }
+
+    public class Jsi{
+        @SuppressWarnings("unused")
+        @JavascriptInterface
+        public void access(String verifier){
+            getOauth1AccessToken(verifier);
+            webView.setWebViewClient(null);
+        }
     }
 
     public void getOauth1AccessToken(String verifier) {

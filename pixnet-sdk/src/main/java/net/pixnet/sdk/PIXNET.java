@@ -7,6 +7,7 @@ import android.webkit.WebView;
 
 import net.pixnet.sdk.utils.Helper;
 import net.pixnet.sdk.utils.OAuthLoginHelper;
+import net.pixnet.sdk.utils.OAuthConnectionTool.OAuthVersion;
 
 public class PIXNET {
     private static final String URL_OAUTH2_AUTH = "https://emma.pixnet.cc/oauth2/authorize";
@@ -35,6 +36,7 @@ public class PIXNET {
             public void onAccessTokenGot(String token, String secret){
                 listener.onAccessTokenGot(token, secret);
                 dialog.dismiss();
+                setOAuthVersion(context, OAuthVersion.VER_1);
             }
 
             @Override
@@ -70,6 +72,7 @@ public class PIXNET {
             public void onAccessTokenGot(String token, String secret) {
                 dialog.dismiss();
                 listener.onAccessTokenGot(token, secret);
+                setOAuthVersion(context, OAuthVersion.VER_2);
             }
 
             @Override
@@ -83,6 +86,15 @@ public class PIXNET {
 
     private static String getRedirectUri(String clientId) {
         return "pixnetapi-"+clientId+"://callback";
+    }
+
+    public static OAuthVersion getOAuthVersion(Context c){
+        return Helper.getPrefInt(c, "oauthVer", 2)==1?
+                OAuthVersion.VER_1 : OAuthVersion.VER_2;
+    }
+
+    public static void setOAuthVersion(Context c, OAuthVersion ver){
+        Helper.putPrefInt(c, "oauthVer", ver==OAuthVersion.VER_1?1:2);
     }
 
     public interface OnAccessTokenGotListener{
