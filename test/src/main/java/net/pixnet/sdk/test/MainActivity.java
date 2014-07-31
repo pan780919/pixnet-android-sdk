@@ -13,7 +13,9 @@ import android.widget.TextView;
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.utils.Blog;
 import net.pixnet.sdk.utils.Helper;
+import net.pixnet.sdk.utils.OAuthConnectionTool;
 import net.pixnet.sdk.utils.Request;
+import net.pixnet.sdk.utils.RequestController;
 
 
 public class MainActivity extends ActionBarActivity {

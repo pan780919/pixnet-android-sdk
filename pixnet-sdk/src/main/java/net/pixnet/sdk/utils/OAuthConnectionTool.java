@@ -3,7 +3,9 @@ package net.pixnet.sdk.utils;
 import android.util.Base64;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.security.Key;
@@ -74,7 +76,15 @@ public class OAuthConnectionTool
         switch (ver) {
             case VER_1:
                 computeNoceAndTimestamp();
-                String signatrue = getSignatrue(HttpGet.METHOD_NAME, request.getUrl(), request.getParams());
+                String method = HttpGet.METHOD_NAME;
+                if(request.getMethod() == Request.Method.GET){
+                    method = HttpGet.METHOD_NAME;
+                }else if(request.getMethod() == Request.Method.POST){
+                    method = HttpPost.METHOD_NAME;
+                }else if(request.getMethod() == Request.Method.DELETE){
+                    method = HttpDelete.METHOD_NAME;
+                }
+                String signatrue = getSignatrue(method, request.getUrl(), request.getParams());
                 String headerStr = getHeaderString(signatrue);
                 List<NameValuePair> headers = getHeader(headerStr);
                 request.setHeaders(headers);
@@ -138,7 +148,6 @@ public class OAuthConnectionTool
         String baseStr = method
                 + "&" + HttpConnectionTool.encodeUrl(url)
                 + "&" + HttpConnectionTool.encodeUrl(paraStr);
-
         return baseStr;
     }
 
