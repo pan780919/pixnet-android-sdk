@@ -118,9 +118,11 @@ public class OAuthConnectionTool
         List<String> paraList = getBasicOAuthParameters();
         if (params != null) {
             for (NameValuePair item : params) {
-                paraList.add(item.getName() + "=" + HttpConnectionTool.encodeUrl(item.getValue()));
+                System.out.println(HttpConnectionTool.encodeUrl(item.getValue()));
+                paraList.add(item.getName() + "=" + HttpConnectionTool.encodeUrl(item.getValue()).replace("+","%20"));
             }
         }
+        System.out.println(paraList);
         return formatParameterString(paraList);
     }
 
@@ -140,6 +142,7 @@ public class OAuthConnectionTool
         String baseStr = method
                 + "&" + HttpConnectionTool.encodeUrl(url)
                 + "&" + HttpConnectionTool.encodeUrl(paraStr);
+        System.out.println(baseStr);
         return baseStr;
     }
 
@@ -165,7 +168,7 @@ public class OAuthConnectionTool
             if (paraStr.length() > 0) paraStr += "&";
             paraStr += str;
         }
-
+        System.out.println(paraStr);
         return paraStr;
     }
 

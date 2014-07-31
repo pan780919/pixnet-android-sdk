@@ -1,6 +1,13 @@
 package net.pixnet.sdk.response;
 
-public class Location{
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class Location {
+    Location(String response) {
+        formatJson(response);
+    }
+
     /**
      * Location latitude
      */
@@ -9,4 +16,18 @@ public class Location{
      * Location longitude
      */
     public double longitude;
+
+    private void formatJson(String response) {
+        try {
+            JSONObject obj = new JSONObject(response);
+            if (obj.has("latitude")) {
+                latitude = obj.getDouble("latitude");
+            }
+            if (obj.has("longitude")) {
+                longitude = obj.getDouble("longitude");
+            }
+        } catch (JSONException e) {
+
+        }
+    }
 }

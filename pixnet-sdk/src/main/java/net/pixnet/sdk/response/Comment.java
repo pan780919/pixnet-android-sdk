@@ -134,6 +134,9 @@ public class Comment extends BasicResponse {
             if (obj.has("article")) {
                 article = new Article(obj.getString("article"));
             }
+            if(obj.has("element")){
+                element = new Element(obj.getString("element"));
+            }
         } catch (JSONException e) {
 
         }
