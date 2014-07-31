@@ -39,6 +39,19 @@ public class MainActivity extends ActionBarActivity {
                     public void onAccessTokenGot(String token, String secret) {
                         txt1.setText(token);
                         txt2.setText(secret);
+                        Blog blog = new Blog(MainActivity.this);
+                        blog.setBlogInfo("Koi'sBlog",null,null,null,new Request.RequestCallback() {
+                            @Override
+                            public void onResponse(String response) {
+                                System.out.println(response);
+                            }
+                        });
+                        blog.addArticle("安安","快成功囉",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,new Request.RequestCallback() {
+                            @Override
+                            public void onResponse(String response) {
+                                System.out.println(response);
+                            }
+                        });
                     }
 
                     @Override
