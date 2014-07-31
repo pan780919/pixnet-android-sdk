@@ -47,6 +47,7 @@ public class ArticleList extends BasicResponse {
                 page = obj.getInt("page");
             }
             if(obj.has("articles")){
+                articles = new ArrayList<Article>();
                 JSONArray ja = obj.getJSONArray("articles");
                 for(int i =0;i<ja.length();i++){
                     articles.add(i,new Article(ja.getString(i)));

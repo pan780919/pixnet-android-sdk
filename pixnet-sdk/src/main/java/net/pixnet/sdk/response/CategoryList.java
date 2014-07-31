@@ -2,6 +2,7 @@ package net.pixnet.sdk.response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -19,11 +20,20 @@ public class CategoryList extends BasicResponse {
     public ArrayList<Category> Categories;
 
     void formatJson(String response) {
-        Categories = new ArrayList<Category>();
         try {
-            JSONArray ja = new JSONArray(response);
-            for (int i = 0; i < ja.length(); i++) {
-                Categories.add(new Category(ja.getString(i)));
+            JSONObject obj = new JSONObject(response);
+            if (obj.has("message")) {
+                message = obj.getString("message");
+            }
+            if (obj.has("error")) {
+                error = obj.getString("error");
+            }
+            if(obj.has("categories")) {
+                Categories = new ArrayList<Category>();
+                JSONArray ja = new JSONArray(obj.getString("categories"));
+                for (int i = 0; i < ja.length(); i++) {
+                    Categories.add(new Category(ja.getString(i)));
+                }
             }
         } catch (JSONException e) {
 

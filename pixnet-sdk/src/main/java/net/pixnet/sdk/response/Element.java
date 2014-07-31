@@ -114,6 +114,12 @@ public class Element extends BasicResponse {
     private void formatJson(String response) {
         try {
             JSONObject obj = new JSONObject(response);
+            if (obj.has("message")) {
+                message = obj.getString("message");
+            }
+            if (obj.has("error")) {
+                error = obj.getString("error");
+            }
             if (obj.has("id")) {
                 id = obj.getString("id");
             }
