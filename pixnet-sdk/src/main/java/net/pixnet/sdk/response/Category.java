@@ -8,7 +8,7 @@ import org.json.JSONObject;
  * Response for Category
  */
 public class Category extends BasicResponse{
-    Category(String response){ formatJson(response);}
+    public Category(String response){ formatJson(response);}
     /**
      * Category id
      */

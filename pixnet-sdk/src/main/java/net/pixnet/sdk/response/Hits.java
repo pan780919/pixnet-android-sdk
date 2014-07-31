@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Hits {
-    Hits(String response){
+    public Hits(String response){
         formatJson(response);
     }
     /**

@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Comments list
  */
 public class CommentList extends BasicResponse{
-    CommentList(String response){
+    public CommentList(String response){
         formatJson(response);
     }
     /**

@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Thumb{
-    Thumb(String response){
+    public Thumb(String response){
         formatJson(response);
     }
     /**

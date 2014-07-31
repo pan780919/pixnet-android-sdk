@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * ArticleList
  */
 public class ArticleList extends BasicResponse {
-    ArticleList(String response){
+    public ArticleList(String response){
         formatJson(response);
     }
     /**

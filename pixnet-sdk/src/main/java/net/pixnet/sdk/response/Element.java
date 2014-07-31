@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Element
  */
 public class Element extends BasicResponse {
-    Element(String response) {
+    public Element(String response) {
         formatJson(response);
     }
 

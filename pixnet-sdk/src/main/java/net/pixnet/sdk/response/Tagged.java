@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Tagged{
-    Tagged(String response){
+    public Tagged(String response){
         formatJson(response);
     }
     /**

@@ -7,7 +7,7 @@ import org.json.JSONObject;
  * Blog info
  */
 public class BlogInfo extends BasicResponse{
-    BlogInfo(String response){
+    public BlogInfo(String response){
         formatJson(response);
     }
     /**
@@ -34,7 +34,7 @@ public class BlogInfo extends BasicResponse{
      * Blog visited counts
      */
     public Hits hits;
-    public void formatJson(String response) {
+    private void formatJson(String response) {
         try {
             JSONObject obj = new JSONObject(response);
             if (obj.has("message")) {

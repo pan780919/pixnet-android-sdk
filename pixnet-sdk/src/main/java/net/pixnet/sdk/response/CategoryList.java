@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Categories List
  */
 public class CategoryList extends BasicResponse {
-    CategoryList(String response) {
+    public CategoryList(String response) {
         formatJson(response);
     }
 

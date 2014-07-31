@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import net.pixnet.sdk.PIXNET;
+import net.pixnet.sdk.response.BlogInfo;
+import net.pixnet.sdk.response.Category;
+import net.pixnet.sdk.response.CategoryList;
 import net.pixnet.sdk.utils.Blog;
 import net.pixnet.sdk.utils.Helper;
 import net.pixnet.sdk.utils.OAuthConnectionTool;
@@ -40,10 +43,14 @@ public class MainActivity extends ActionBarActivity {
                         txt1.setText(token);
                         txt2.setText(secret);
                         Blog blog = new Blog(MainActivity.this);
-                        blog.setBlogInfo("Koi  ++Blog",null,null,null,new Request.RequestCallback() {
+                        blog.updateCategory("2754009",null, "Ok...", null, null, null, null, null, new Request.RequestCallback() {
                             @Override
                             public void onResponse(String response) {
-                                System.out.println(response);
+                                Category c = new Category(response);
+                                System.out.println(c.message);
+                                if(c.name!=null){
+                                    System.out.println(c.name);
+                                }
                             }
                         });
                     }

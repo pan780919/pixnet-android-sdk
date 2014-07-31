@@ -7,7 +7,7 @@ import org.json.JSONObject;
  * Element dimension
  */
 public class Dimension{
-    Dimension(String response){
+    public Dimension(String response){
         formatJson(response);
     }
     /**

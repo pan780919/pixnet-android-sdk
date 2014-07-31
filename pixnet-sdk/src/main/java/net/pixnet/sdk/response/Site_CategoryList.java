@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Site_CategoryList extends BasicResponse {
-    Site_CategoryList(String response) {
+    public Site_CategoryList(String response) {
         formatJson(response);
     }
 

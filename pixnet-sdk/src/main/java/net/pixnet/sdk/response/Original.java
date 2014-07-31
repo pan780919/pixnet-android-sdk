@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Original{
-    Original(String response){
+    public Original(String response){
         formatJson(response);
     }
     /**

@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Reply{
-    Reply(String response){formatJson(response);}
+    public Reply(String response){formatJson(response);}
     /**
      * Reply body
      */

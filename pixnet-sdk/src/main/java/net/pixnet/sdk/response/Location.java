@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Location {
-    Location(String response) {
+    public Location(String response) {
         formatJson(response);
     }
 

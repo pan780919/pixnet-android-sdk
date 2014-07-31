@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Face {
-    Face(String response) {
+    public Face(String response) {
         formatJson(response);
     }
 

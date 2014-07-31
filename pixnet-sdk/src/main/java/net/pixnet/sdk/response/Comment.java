@@ -7,7 +7,7 @@ import org.json.JSONObject;
  * Response for comment
  */
 public class Comment extends BasicResponse {
-    Comment(String response) {
+    public Comment(String response) {
         formatJson(response);
     }
 
