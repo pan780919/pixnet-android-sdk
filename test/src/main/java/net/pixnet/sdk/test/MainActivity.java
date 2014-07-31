@@ -13,7 +13,9 @@ import android.widget.TextView;
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.utils.Blog;
 import net.pixnet.sdk.utils.Helper;
+import net.pixnet.sdk.utils.OAuthConnectionTool;
 import net.pixnet.sdk.utils.Request;
+import net.pixnet.sdk.utils.RequestController;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -37,6 +39,17 @@ public class MainActivity extends ActionBarActivity {
                     public void onAccessTokenGot(String token, String secret) {
                         txt1.setText(token);
                         txt2.setText(secret);
+                        RequestController rc = RequestController.getInstance();
+                        OAuthConnectionTool tool = new OAuthConnectionTool().newOaut1hHelper(MainActivity.this.getString(R.string.consumer_key),MainActivity.this.getString(R.string.consumer_secret));
+                        tool.setTokenAndSecret(token,secret);
+                        rc.setHttpConnectionTool(tool);
+                        Blog blog = new Blog();
+                        blog.setBlogInfo(null,"Koi's",null,null,null,new Request.RequestCallback() {
+                            @Override
+                            public void onResponse(String response) {
+                                System.out.println(response);
+                            }
+                        });
                     }
 
                     @Override

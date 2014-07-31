@@ -1,5 +1,10 @@
 package net.pixnet.sdk.utils;
 
+import android.content.Context;
+
+import net.pixnet.sdk.PIXNET;
+import net.pixnet.sdk.R;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -667,7 +672,9 @@ public class Blog {
 
     public void setBlogInfo(String access_token, String name, String description, String keyword, String site_category_id, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", access_token));
+        if (access_token != null) {
+            params.add(new BasicNameValuePair("access_token", access_token));
+        }
         if (name != null) {
             params.add(new BasicNameValuePair("name", name));
         }
