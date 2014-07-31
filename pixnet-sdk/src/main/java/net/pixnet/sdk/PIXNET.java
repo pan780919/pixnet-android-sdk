@@ -86,6 +86,11 @@ public class PIXNET {
         helper.loginByOauth2(webView);
     }
 
+    public static void logout(Context c){
+       Helper.putPrefString(c, "accessSecret", null);
+        Helper.putPrefString(c, "accessToken", null);
+    }
+
     private static String getRedirectUri(String clientId) {
         return "pixnetapi-"+clientId+"://callback";
     }

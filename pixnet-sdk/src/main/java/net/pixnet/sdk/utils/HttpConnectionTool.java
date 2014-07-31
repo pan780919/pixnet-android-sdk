@@ -232,6 +232,7 @@ public class HttpConnectionTool implements ConnectionTool {
             e.printStackTrace();
             str = url;
         }
+        str=str.replace("+", "%20");
         return str;
     }
 
