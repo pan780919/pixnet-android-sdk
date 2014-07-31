@@ -76,15 +76,7 @@ public class OAuthConnectionTool
         switch (ver) {
             case VER_1:
                 computeNoceAndTimestamp();
-                String method = HttpGet.METHOD_NAME;
-                if(request.getMethod() == Request.Method.GET){
-                    method = HttpGet.METHOD_NAME;
-                }else if(request.getMethod() == Request.Method.POST){
-                    method = HttpPost.METHOD_NAME;
-                }else if(request.getMethod() == Request.Method.DELETE){
-                    method = HttpDelete.METHOD_NAME;
-                }
-                String signatrue = getSignatrue(method, request.getUrl(), request.getParams());
+                String signatrue = getSignatrue(request.getMethod().name(), request.getUrl(), request.getParams());
                 String headerStr = getHeaderString(signatrue);
                 List<NameValuePair> headers = getHeader(headerStr);
                 request.setHeaders(headers);

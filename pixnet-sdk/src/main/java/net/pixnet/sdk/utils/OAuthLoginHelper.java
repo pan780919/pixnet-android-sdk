@@ -177,8 +177,8 @@ public class OAuthLoginHelper {
         @SuppressWarnings("unused")
         @JavascriptInterface
         public void access(String verifier){
-            getOauth1AccessToken(verifier);
-            webView.setWebViewClient(null);
+            if(verifier.length()==6)
+                getOauth1AccessToken(verifier);
         }
     }
 
