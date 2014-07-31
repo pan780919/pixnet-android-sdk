@@ -7,8 +7,24 @@ import org.json.JSONObject;
  * Image info
  */
 public class Image {
-    public Image(JSONObject imageobj){
+    public Image(String response){
+        formatJson(response);
+    }
+    /**
+     * Image url
+     */
+    public String url;
+    /**
+     * Image width
+     */
+    public String width;
+    /**
+     * Image height
+     */
+    public String height;
+    private void formatJson(String response){
         try {
+            JSONObject imageobj  = new JSONObject(response);
             if (imageobj.has("url")) {
                 url =  imageobj.getString("url");
             }
@@ -23,16 +39,4 @@ public class Image {
             e.printStackTrace();
         }
     }
-    /**
-     * Image url
-     */
-    public String url;
-    /**
-     * Image width
-     */
-    public String width;
-    /**
-     * Image height
-     */
-    public String height;
 }

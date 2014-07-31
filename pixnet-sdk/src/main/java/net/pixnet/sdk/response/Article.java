@@ -133,8 +133,7 @@ public class Article extends BasicResponse {
                     JSONArray taglist = article.getJSONArray("tags");
                     tags = new ArrayList<Tag>();
                     for (int i = 0; i < taglist.length(); i++) {
-                        JSONObject tagObject = taglist.getJSONObject(i);
-                        tags.add(new Tag(tagObject));
+                        tags.add(new Tag(taglist.getString(i)));
                     }
                 }
                 if (article.has("is_top")) {
@@ -153,10 +152,10 @@ public class Article extends BasicResponse {
                     thumb = article.getString("thumb");
                 }
                 if (article.has("info")) {
-                    info = new Info(article.getJSONObject("info"));
+                    info = new Info(article.getString("info"));
                 }
                 if (article.has("user")) {
-                    user = new User(article.getJSONObject("user"));
+                    user = new User(article.getString("user"));
                 }
                 if (article.has("body")) {
                     body = article.getString("body");
@@ -165,8 +164,7 @@ public class Article extends BasicResponse {
                     JSONArray imagelist = article.getJSONArray("images");
                     images = new ArrayList<Image>();
                     for (int i = 0; i < imagelist.length(); i++) {
-                        JSONObject imageObject = imagelist.getJSONObject(i);
-                        images.add(new Image(imageObject));
+                        images.add(new Image(imagelist.getString(i)));
                     }
                 }
             }

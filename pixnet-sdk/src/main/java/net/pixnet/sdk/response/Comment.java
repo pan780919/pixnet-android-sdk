@@ -126,7 +126,7 @@ public class Comment extends BasicResponse {
                 client_ip = obj.getString("client_ip");
             }
             if (obj.has("user")) {
-                user = new User(obj.getJSONObject("user"));
+                user = new User(obj.getString("user"));
             }
             if (obj.has("reply")) {
                 reply = new Reply(obj.getString("reply"));

@@ -148,7 +148,7 @@ public class Element extends BasicResponse {
                 uploaded_at = obj.getString("uploaded_at");
             }
             if (obj.has("user")) {
-                user = new User(obj.getJSONObject("user"));
+                user = new User(obj.getString("user"));
             }
             if (obj.has("location")) {
                 location = new Location(obj.getString("location"));
@@ -157,7 +157,7 @@ public class Element extends BasicResponse {
                 tags = new ArrayList<Tag>();
                 JSONArray atags = obj.getJSONArray("tags");
                 for(int i =0;i<atags.length();i++){
-                    tags.add(new Tag(atags.getJSONObject(i)));
+                    tags.add(new Tag(atags.getString(i)));
                 }
             }
             if (obj.has("description")) {
