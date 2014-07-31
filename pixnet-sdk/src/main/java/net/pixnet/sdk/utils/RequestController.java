@@ -21,7 +21,7 @@ public class RequestController {
 
     private Queue<Request> requestQueue;
     private List<Worker> taskList;
-    private HttpConnectionTool httpConn;
+    private ConnectionTool httpConn;
 
     /**
      * constructor
@@ -51,7 +51,7 @@ public class RequestController {
         this.taskLimit = taskLimit;
     }
 
-    public void setHttpConnectionTool(HttpConnectionTool tool){
+    public void setHttpConnectionTool(ConnectionTool tool){
         httpConn=tool;
     }
 
@@ -59,7 +59,7 @@ public class RequestController {
         if(httpConn==null){
             httpConn = new HttpConnectionTool();
         }
-        return httpConn;
+        return (HttpConnectionTool) httpConn;
     }
 
     private int getTaskSize(){

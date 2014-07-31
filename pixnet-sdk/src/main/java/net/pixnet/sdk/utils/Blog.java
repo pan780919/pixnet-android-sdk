@@ -13,6 +13,16 @@ public class Blog {
 
     public Blog() {
         rc = RequestController.getInstance();
+        OAuthConnectionTool.OAuthVersion ver=PIXNET.getOAuthVersion(null);
+        OAuthConnectionTool tool;
+        if(ver== OAuthConnectionTool.OAuthVersion.VER_1){
+            tool=OAuthConnectionTool.newOaut1ConnectionTool("", "");
+            tool.setAccessTokenAndSecret(PIXNET.getOauthAccessToken(null), PIXNET.getOauthAccessSecret(null));
+        }
+        else{
+            tool=OAuthConnectionTool.newOauth2ConnectionTool();
+            tool.setAccessToken(PIXNET.getOauthAccessToken(null));
+        }
     }
 
     public void getBlogCategorieList(String user, String format, String blog_password, Request.RequestCallback callback) {
@@ -53,7 +63,7 @@ public class Blog {
 
     public void addCategory(String access_token, String name, String format, String type, String description, String show_index, String site_category_id, String site_category_done, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", access_token));
+//        params.add(new BasicNameValuePair("access_token", access_token));
         params.add(new BasicNameValuePair("name", name));
         if (format != null) {
             params.add(new BasicNameValuePair("format", format));

@@ -79,7 +79,7 @@ public class OAuthLoginHelper {
             }
         });
         RequestController rc = RequestController.getInstance();
-        rc.setHttpConnectionTool(getOAuthConnectionTool(OAuthVersion.VER_1));
+        rc.setHttpConnectionTool(getConnectionTool(OAuthVersion.VER_1));
         rc.addRequest(request);
     }
     public void loginByOauth1(WebView view){
@@ -134,7 +134,7 @@ public class OAuthLoginHelper {
         });
 
         RequestController rc=RequestController.getInstance();
-        rc.setHttpConnectionTool(getOAuthConnectionTool(OAuthVersion.VER_1));
+        rc.setHttpConnectionTool(getConnectionTool(OAuthVersion.VER_1));
         rc.addRequest(request);
     }
 
@@ -183,7 +183,7 @@ public class OAuthLoginHelper {
     }
 
     public void getOauth1AccessToken(String verifier) {
-        OAuthConnectionTool oauthHelper= getOAuthConnectionTool(OAuthVersion.VER_1);
+        OAuthConnectionTool oauthHelper= (OAuthConnectionTool) getConnectionTool(OAuthVersion.VER_1);
         oauthHelper.setAccessTokenAndSecret(oauthToken, oauthSecret);
 
         Request r=new Request(oauth1Url_access);
@@ -232,18 +232,18 @@ public class OAuthLoginHelper {
             }
         });
         RequestController rc = RequestController.getInstance();
-        rc.setHttpConnectionTool(getOAuthConnectionTool(OAuthVersion.VER_2));
+        rc.setHttpConnectionTool(getConnectionTool(OAuthVersion.VER_2));
         rc.addRequest(request);
     }
 
-    private OAuthConnectionTool getOAuthConnectionTool(OAuthVersion version) {
-        OAuthConnectionTool tool;
+    private ConnectionTool getConnectionTool(OAuthVersion version) {
+        ConnectionTool tool;
         switch (version){
             case VER_1:
                 tool=OAuthConnectionTool.newOaut1ConnectionTool(key, secret);
                 break;
             case VER_2:
-                tool=OAuthConnectionTool.newOauth2ConnectionTool();
+                tool=new HttpConnectionTool();
                 break;
             default:
                 tool=null;
