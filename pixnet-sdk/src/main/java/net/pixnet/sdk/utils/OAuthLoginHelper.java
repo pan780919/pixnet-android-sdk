@@ -184,7 +184,7 @@ public class OAuthLoginHelper {
 
     public void getOauth1AccessToken(String verifier) {
         OAuthConnectionTool oauthHelper= getOAuthConnectionTool(OAuthVersion.VER_1);
-        oauthHelper.setTokenAndSecret(oauthToken, oauthSecret);
+        oauthHelper.setAccessTokenAndSecret(oauthToken, oauthSecret);
 
         Request r=new Request(oauth1Url_access);
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -240,10 +240,10 @@ public class OAuthLoginHelper {
         OAuthConnectionTool tool;
         switch (version){
             case VER_1:
-                tool=OAuthConnectionTool.newOaut1hHelper(key, secret);
+                tool=OAuthConnectionTool.newOaut1ConnectionTool(key, secret);
                 break;
             case VER_2:
-                tool=OAuthConnectionTool.newOauth2Helper(key, secret);
+                tool=OAuthConnectionTool.newOauth2ConnectionTool();
                 break;
             default:
                 tool=null;

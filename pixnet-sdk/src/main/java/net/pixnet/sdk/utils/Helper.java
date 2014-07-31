@@ -20,7 +20,7 @@ public class Helper {
 		if(DEBUG)
 			Log.d("DEBUG", msg);
 	}
-	
+
 	public static void putPrefString(Context c, String key, String value){
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
 		sp.edit()
