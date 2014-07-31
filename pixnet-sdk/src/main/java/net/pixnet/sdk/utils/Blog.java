@@ -1,9 +1,10 @@
 package net.pixnet.sdk.utils;
 
-import android.content.Context;
 
+import android.content.Context;
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.R;
+import net.pixnet.sdk.PIXNET;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
