@@ -1,5 +1,9 @@
 package net.pixnet.sdk.utils;
 
+
+import android.content.Context;
+import net.pixnet.sdk.PIXNET;
+import net.pixnet.sdk.R;
 import net.pixnet.sdk.PIXNET;
 
 import org.apache.http.NameValuePair;
@@ -11,18 +15,19 @@ public class Blog {
 
     private RequestController rc;
 
-    public Blog() {
+    public Blog(Context c) {
         rc = RequestController.getInstance();
-        OAuthConnectionTool.OAuthVersion ver= PIXNET.getOAuthVersion(null);
+        OAuthConnectionTool.OAuthVersion ver=PIXNET.getOAuthVersion(c);
         OAuthConnectionTool tool;
         if(ver== OAuthConnectionTool.OAuthVersion.VER_1){
-            tool=OAuthConnectionTool.newOaut1ConnectionTool("", "");
-            tool.setAccessTokenAndSecret(PIXNET.getOauthAccessToken(null), PIXNET.getOauthAccessSecret(null));
+            tool=OAuthConnectionTool.newOaut1ConnectionTool(c.getString(R.string.consumer_key), c.getString(R.string.consumer_secret));
+            tool.setAccessTokenAndSecret(PIXNET.getOauthAccessToken(c), PIXNET.getOauthAccessSecret(c));
         }
         else{
             tool=OAuthConnectionTool.newOauth2ConnectionTool();
-            tool.setAccessToken(PIXNET.getOauthAccessToken(null));
+            tool.setAccessToken(PIXNET.getOauthAccessToken(c));
         }
+        rc.setHttpConnectionTool(tool);
     }
 
     public void getBlogCategorieList(String user, String format, String blog_password, Request.RequestCallback callback) {
@@ -61,9 +66,8 @@ public class Blog {
         rc.addRequest(request);
     }
 
-    public void addCategory(String access_token, String name, String format, String type, String description, String show_index, String site_category_id, String site_category_done, Request.RequestCallback callback) {
+    public void addCategory(String name, String format, String type, String description, String show_index, String site_category_id, String site_category_done, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-//        params.add(new BasicNameValuePair("access_token", access_token));
         params.add(new BasicNameValuePair("name", name));
         if (format != null) {
             params.add(new BasicNameValuePair("format", format));
@@ -92,9 +96,8 @@ public class Blog {
         rc.addRequest(request);
     }
 
-    public void updateCategory(String access_token, String id, String format, String name, String type, String description, String show_index, String site_category_id, String site_category_done, Request.RequestCallback callback) {
+    public void updateCategory(String id, String format, String name, String type, String description, String show_index, String site_category_id, String site_category_done, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", access_token));
         if (format != null) {
             params.add(new BasicNameValuePair("format", format));
         }
@@ -125,9 +128,8 @@ public class Blog {
         rc.addRequest(request);
     }
 
-    public void removeCategory(String access_token, String id, String format, String type, Request.RequestCallback callback) {
+    public void removeCategory(String id, String format, String type, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", access_token));
         if (format != null) {
             params.add(new BasicNameValuePair("format", format));
         }
@@ -143,9 +145,8 @@ public class Blog {
         rc.addRequest(request);
     }
 
-    public void sortCategorieList(String access_token, String ids, String format, Request.RequestCallback callback) {
+    public void sortCategorieList(String ids, String format, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", access_token));
         params.add(new BasicNameValuePair("ids", ids));
         if (format != null) {
             params.add(new BasicNameValuePair("format", format));
@@ -269,9 +270,8 @@ public class Blog {
         rc.addRequest(request);
     }
 
-    public void addArticle(String access_token, String title, String body, String format, String status, String public_at, String category_id, String site_category_id, String use_nl2br, String comment_perm, String comment_hidden, String tags, String thumb, String trackback, String password, String password_hint, String friend_group_ids, String notify_twitter, String notify_facebook, Request.RequestCallback callback) {
+    public void addArticle(String title, String body, String format, String status, String public_at, String category_id, String site_category_id, String use_nl2br, String comment_perm, String comment_hidden, String tags, String thumb, String trackback, String password, String password_hint, String friend_group_ids, String notify_twitter, String notify_facebook, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", access_token));
         params.add(new BasicNameValuePair("title", title));
         params.add(new BasicNameValuePair("body", body));
         if (format != null) {
@@ -331,9 +331,8 @@ public class Blog {
         rc.addRequest(request);
     }
 
-    public void updateArticle(String access_token, String id, String format, String title, String body, String status, String public_at, String category_id, String site_category_id, String use_nl2br, String comment_perm, String comment_hidden, String tags, String thumb, String trackback, String password, String password_hint, String friend_group_ids, String notify_twitter, String notify_facebook, Request.RequestCallback callback) {
+    public void updateArticle(String id, String format, String title, String body, String status, String public_at, String category_id, String site_category_id, String use_nl2br, String comment_perm, String comment_hidden, String tags, String thumb, String trackback, String password, String password_hint, String friend_group_ids, String notify_twitter, String notify_facebook, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", access_token));
         if (format != null) {
             params.add(new BasicNameValuePair("format", format));
         }
@@ -397,9 +396,8 @@ public class Blog {
         rc.addRequest(request);
     }
 
-    public void removeArticle(String access_token, String id, String format, Request.RequestCallback callback) {
+    public void removeArticle(String id, String format, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", access_token));
         if (format != null) {
             params.add(new BasicNameValuePair("format", format));
         }
@@ -520,9 +518,8 @@ public class Blog {
         rc.addRequest(request);
     }
 
-    public void addComment(String access_token, String article_id, String body, String user, String format, String author, String title, String url, String is_open, String email, String blog_password, String article_password, Request.RequestCallback callback) {
+    public void addComment(String article_id, String body, String user, String format, String author, String title, String url, String is_open, String email, String blog_password, String article_password, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", access_token));
         params.add(new BasicNameValuePair("article_id", article_id));
         params.add(new BasicNameValuePair("body", body));
         params.add(new BasicNameValuePair("user", user));
@@ -573,9 +570,8 @@ public class Blog {
         rc.addRequest(request);
     }
 
-    public void replyComment(String access_token, String id, String body, Request.RequestCallback callback) {
+    public void replyComment(String id, String body, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", access_token));
         params.add(new BasicNameValuePair("body", body));
 
         Request request = new Request("https://emma.pixnet.cc/blog/comments/" + id + "/reply");
@@ -586,9 +582,8 @@ public class Blog {
         rc.addRequest(request);
     }
 
-    public void setCommentVisibility(String access_token, String id, boolean visible, String format, Request.RequestCallback callback) {
+    public void setCommentVisibility(String id, boolean visible, String format, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", access_token));
         if (format != null) {
             params.add(new BasicNameValuePair("format", format));
         }
@@ -607,9 +602,8 @@ public class Blog {
         rc.addRequest(request);
     }
 
-    public void removeComment(String access_token, String id, String format, Request.RequestCallback callback) {
+    public void removeComment(String id, String format, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", access_token));
         if (format != null) {
             params.add(new BasicNameValuePair("format", format));
         }
@@ -636,9 +630,8 @@ public class Blog {
         rc.addRequest(request);
     }
 
-    public void markCommentIsSpam(String access_token, String id, String format, Request.RequestCallback callback) {
+    public void markCommentIsSpam(String id, String format, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", access_token));
         if (format != null) {
             params.add(new BasicNameValuePair("format", format));
         }
@@ -651,9 +644,8 @@ public class Blog {
         rc.addRequest(request);
     }
 
-    public void markCommentIsHam(String access_token, String id, String format, Request.RequestCallback callback) {
+    public void markCommentIsHam(String id, String format, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("access_token", access_token));
         if (format != null) {
             params.add(new BasicNameValuePair("format", format));
         }
@@ -677,11 +669,8 @@ public class Blog {
         rc.addRequest(request);
     }
 
-    public void setBlogInfo(String access_token, String name, String description, String keyword, String site_category_id, Request.RequestCallback callback) {
+    public void setBlogInfo(String name, String description, String keyword, String site_category_id, Request.RequestCallback callback) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        if (access_token != null) {
-            params.add(new BasicNameValuePair("access_token", access_token));
-        }
         if (name != null) {
             params.add(new BasicNameValuePair("name", name));
         }
