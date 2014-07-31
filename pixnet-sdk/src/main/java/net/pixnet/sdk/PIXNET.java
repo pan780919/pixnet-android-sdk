@@ -97,6 +97,19 @@ public class PIXNET {
         Helper.putPrefInt(c, "oauthVer", ver==OAuthVersion.VER_1?1:2);
     }
 
+    public static void setOauth1AccessTokenAndSecret(Context c, String token, String secret){
+        Helper.putPrefString(c, "accessToken", token);
+        Helper.putPrefString(c, "accessSecret", secret);
+    }
+
+    public static String getOauth1AccessToken(Context c){
+        return Helper.getPrefString(c, "accessToken", null);
+    }
+
+    public static String getOauth1AccessSecret(Context c){
+        return Helper.getPrefString(c, "accessSecret", null);
+    }
+
     public interface OnAccessTokenGotListener{
         void onAccessTokenGot(String token, String secret);
         void onError(String msg);

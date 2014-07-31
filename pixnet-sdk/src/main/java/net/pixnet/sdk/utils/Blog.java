@@ -1,5 +1,7 @@
 package net.pixnet.sdk.utils;
 
+import net.pixnet.sdk.PIXNET;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -11,6 +13,11 @@ public class Blog {
 
     public Blog() {
         rc = RequestController.getInstance();
+        OAuthConnectionTool.OAuthVersion ver= PIXNET.getOAuthVersion(null);
+        OAuthConnectionTool tool;
+        if(ver== OAuthConnectionTool.OAuthVersion.VER_1){
+            tool=OAuthConnectionTool.newOauth2Helper();
+        }
     }
 
     public void getBlogCategorieList(String user, String format, String blog_password, Request.RequestCallback callback) {
