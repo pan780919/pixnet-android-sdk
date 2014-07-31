@@ -36,7 +36,8 @@ public class PIXNET {
             public void onAccessTokenGot(String token, String secret){
                 listener.onAccessTokenGot(token, secret);
                 dialog.dismiss();
-                setOAuthVersion(context, OAuthVersion.VER_1);
+                setOauthVersion(context, OAuthVersion.VER_1);
+                setOauthAccessTokenAndSecret(context, token, secret);
             }
 
             @Override
@@ -72,7 +73,8 @@ public class PIXNET {
             public void onAccessTokenGot(String token, String secret) {
                 dialog.dismiss();
                 listener.onAccessTokenGot(token, secret);
-                setOAuthVersion(context, OAuthVersion.VER_2);
+                setOauthVersion(context, OAuthVersion.VER_2);
+                setOauthAccessToken(context, token);
             }
 
             @Override
@@ -93,20 +95,24 @@ public class PIXNET {
                 OAuthVersion.VER_1 : OAuthVersion.VER_2;
     }
 
-    public static void setOAuthVersion(Context c, OAuthVersion ver){
+    public static void setOauthVersion(Context c, OAuthVersion ver){
         Helper.putPrefInt(c, "oauthVer", ver==OAuthVersion.VER_1?1:2);
     }
 
-    public static void setOauth1AccessTokenAndSecret(Context c, String token, String secret){
-        Helper.putPrefString(c, "accessToken", token);
+    public static void setOauthAccessTokenAndSecret(Context c, String token, String secret){
+        setOauthAccessToken(c, token);
         Helper.putPrefString(c, "accessSecret", secret);
     }
 
-    public static String getOauth1AccessToken(Context c){
+    public static void setOauthAccessToken(Context c, String token){
+        Helper.putPrefString(c, "accessToken", token);
+    }
+
+    public static String getOauthAccessToken(Context c){
         return Helper.getPrefString(c, "accessToken", null);
     }
 
-    public static String getOauth1AccessSecret(Context c){
+    public static String getOauthAccessSecret(Context c){
         return Helper.getPrefString(c, "accessSecret", null);
     }
 

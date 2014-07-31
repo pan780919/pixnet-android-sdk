@@ -42,29 +42,29 @@ public class OAuthConnectionTool
      * @param consumerSecret
      * @return OAuthHelepr for 1.0
      */
-    public static OAuthConnectionTool newOaut1hHelper(String consumerKey, String consumerSecret){
-        OAuthConnectionTool helper=new OAuthConnectionTool();
-        helper.ver=OAuthVersion.VER_1;
-        helper.key=consumerKey;
-        helper.secret=consumerSecret;
-        return helper;
+    public static OAuthConnectionTool newOaut1ConnectionTool(String consumerKey, String consumerSecret){
+        OAuthConnectionTool tool=new OAuthConnectionTool();
+        tool.ver=OAuthVersion.VER_1;
+        tool.key=consumerKey;
+        tool.secret=consumerSecret;
+        return tool;
     }
 
     /**
      * new helper for OAuth2
-     * @param client_id
-     * @param client_secret
      * @return OAuthConnectionTool 2.0
      */
-    public static OAuthConnectionTool newOauth2Helper(String client_id, String client_secret){
-        OAuthConnectionTool helper=new OAuthConnectionTool();
-        helper.ver=OAuthVersion.VER_2;
-        helper.key=client_id;
-        helper.secret=client_secret;
-        return helper;
+    public static OAuthConnectionTool newOauth2ConnectionTool(){
+        OAuthConnectionTool tool=new OAuthConnectionTool();
+        tool.ver=OAuthVersion.VER_2;
+        return tool;
     }
 
-    public void setTokenAndSecret(String token, String secret) {
+    public void setAccessToken(String token){
+        accessToken=token;
+    }
+
+    public void setAccessTokenAndSecret(String token, String secret) {
         accessToken = token;
         tokenSecret = secret;
     }
@@ -80,6 +80,11 @@ public class OAuthConnectionTool
                 request.setHeaders(headers);
                 break;
             case VER_2:
+                ArrayList<NameValuePair> params=(ArrayList<NameValuePair>)request.getParams();
+                if(params==null)
+                    params=new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("access_token", key));
+                request.setParams(params);
                 break;
             default:
         }
