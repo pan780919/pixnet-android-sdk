@@ -13,11 +13,8 @@ import java.util.Queue;
 public class RequestController {
 
     private static RequestController INSTANCE;
-
     private static final int DEF_TASK_LIMIT = 3;
-
     private int taskLimit = DEF_TASK_LIMIT;
-    private String client_id, client_secret;
 
     private Queue<Request> requestQueue;
     private List<Worker> taskList;
@@ -37,11 +34,6 @@ public class RequestController {
     private RequestController(){
         requestQueue = new LinkedList<Request>();
         taskList = new ArrayList<Worker>();
-    }
-
-    public void setIdAndSecret(String client_id, String client_secret){
-        this.client_id=client_id;
-        this.client_secret=client_secret;
     }
 
     /**

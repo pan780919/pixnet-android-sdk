@@ -5,6 +5,8 @@ import android.content.Context;
 import android.view.WindowManager;
 import android.webkit.WebView;
 
+import net.pixnet.sdk.proxy.DataProxy;
+import net.pixnet.sdk.utils.Album;
 import net.pixnet.sdk.utils.Helper;
 import net.pixnet.sdk.utils.OAuthLoginHelper;
 import net.pixnet.sdk.utils.OAuthConnectionTool.OAuthVersion;
@@ -15,6 +17,13 @@ public class PIXNET {
     private static final String URL_OAUTH1_REQUEST = "http://emma.pixnet.cc/oauth/request_token";
     private static final String URL_OAUTH1_ACCESS = "http://emma.pixnet.cc/oauth/access_token";
 
+    public static Album newAlbum(Context c, DataProxy.DataProxyListener listener){
+        Album album=new Album();
+        album.setContext(c);
+        album.setListener(listener);
+        return album;
+    }
+
     public static void oAuth1Login(final Context context, final OnAccessTokenGotListener listener){
         WebView webView=new WebView(context);
         final AlertDialog dialog = new AlertDialog.Builder(context)
@@ -23,7 +32,7 @@ public class PIXNET {
         dialog.show();
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
-        OAuthLoginHelper loginHelper=OAuthLoginHelper.newAoth1LoginHelper(context.getString(R.string.consumer_key), context.getString(R.string.consumer_secret), URL_OAUTH1_REQUEST, URL_OAUTH1_ACCESS, new OAuthLoginHelper.OAuthLoginListener() {
+        OAuthLoginHelper loginHelper=OAuthLoginHelper.newAoth1LoginHelper(getConsumerKey(context), getConsumerSecret(context), URL_OAUTH1_REQUEST, URL_OAUTH1_ACCESS, new OAuthLoginHelper.OAuthLoginListener() {
             @Override
             public void onRequestUrlGot() {
             }
@@ -57,8 +66,8 @@ public class PIXNET {
         dialog.show();
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
-        String clientId=context.getString(R.string.consumer_key);
-        OAuthLoginHelper helper=OAuthLoginHelper.newAoth2LoginHelper(clientId, context.getString(R.string.consumer_secret), URL_OAUTH2_AUTH, URL_OAUTH2_GRANT, getRedirectUri(clientId), new OAuthLoginHelper.OAuthLoginListener() {
+        String clientId=getConsumerKey(context);
+        OAuthLoginHelper helper=OAuthLoginHelper.newAoth2LoginHelper(clientId, getConsumerSecret(context), URL_OAUTH2_AUTH, URL_OAUTH2_GRANT, getRedirectUri(clientId), new OAuthLoginHelper.OAuthLoginListener() {
             @Override
             public void onRequestUrlGot() {
                 dialog.dismiss();
@@ -113,12 +122,26 @@ public class PIXNET {
         Helper.putPrefString(c, "accessToken", token);
     }
 
+    public static String getConsumerKey(Context c){
+        return c.getString(R.string.consumer_key);
+    }
+
+    public static String getConsumerSecret(Context c) {
+        return c.getString(R.string.consumer_secret);
+    }
+
     public static String getOauthAccessToken(Context c){
         return Helper.getPrefString(c, "accessToken", null);
     }
 
     public static String getOauthAccessSecret(Context c){
         return Helper.getPrefString(c, "accessSecret", null);
+    }
+
+    public static boolean isLogin(Context c){
+        if(getOauthAccessToken(c)==null)
+            return false;
+        else return true;
     }
 
     public interface OnAccessTokenGotListener{

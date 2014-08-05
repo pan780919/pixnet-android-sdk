@@ -6,5 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="consumer_key">46857444204aa2ce0cb8c9666a8eadae</string>
     <string name="consumer_secret">dfa46d6dc4acfc8a25046fffcc5d9b14</string>
+    <string name="title_item_list">Items</string>
+    <string name="title_item_detail">Item Detail</string>
 
 </resources>
