@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Group list
  */
-public class GroupList extends BasicResponse{
+public class GroupList extends BaseListResponse{
     /**
      * Total counts of group
      */
@@ -22,4 +22,8 @@ public class GroupList extends BasicResponse{
      * Group list
      */
     public ArrayList<Group> friend_groups;
+
+    public GroupList(String str) {
+        super(str);
+    }
 }

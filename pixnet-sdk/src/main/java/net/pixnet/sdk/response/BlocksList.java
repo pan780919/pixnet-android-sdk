@@ -9,33 +9,27 @@ import java.util.ArrayList;
 /**
  * Blocks list
  */
-public class BlocksList extends BasicResponse {
-    public BlocksList(String response) {
-        formatJson(response);
-    }
+public class BlocksList extends BaseListResponse {
 
     /**
      * Blocks
      */
     public ArrayList<Blocks> blocks;
 
-    private void formatJson(String response) {
-        try {
-            JSONObject obj = new JSONObject(response);
-            if (obj.has("message")) {
-                message = obj.getString("message");
+    public BlocksList(String str) {
+        super(str);
+    }
+
+    @Override
+    protected JSONObject parseJSON(JSONObject jo) throws JSONException {
+        JSONObject obj = super.parseJSON(jo);
+        if (obj.has("blocks")) {
+            blocks = new ArrayList<Blocks>();
+            JSONArray aobj = obj.getJSONArray("blocks");
+            for (int i = 0; i < aobj.length(); i++) {
+                blocks.add(new Blocks(aobj.getString(i)));
             }
-            if (obj.has("error")) {
-                error = obj.getString("error");
-            }
-            if (obj.has("blocks")) {
-                blocks = new ArrayList<Blocks>();
-                JSONArray aobj = obj.getJSONArray("blocks");
-                for (int i = 0; i < aobj.length(); i++) {
-                    blocks.add(new Blocks(aobj.getString(i)));
-                }
-            }
-        } catch (JSONException e) {
         }
+        return obj;
     }
 }

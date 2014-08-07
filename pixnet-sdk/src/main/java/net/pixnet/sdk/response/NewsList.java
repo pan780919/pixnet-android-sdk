@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * NewsList
  */
-public class NewsList extends BasicResponse{
+public class NewsList extends BaseListResponse{
     /**
      * News list
      */
@@ -14,4 +14,8 @@ public class NewsList extends BasicResponse{
      * next_before_time
      */
     public String next_before_time;
+
+    public NewsList(String str) {
+        super(str);
+    }
 }

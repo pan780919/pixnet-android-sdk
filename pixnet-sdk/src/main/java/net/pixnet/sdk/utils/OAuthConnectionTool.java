@@ -85,7 +85,7 @@ public class OAuthConnectionTool
                 ArrayList<NameValuePair> params=(ArrayList<NameValuePair>)request.getParams();
                 if(params==null)
                     params=new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("access_token", key));
+                params.add(new BasicNameValuePair("access_token", accessToken));
                 request.setParams(params);
                 break;
             default:

@@ -7,6 +7,14 @@ import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.utils.ConnectionTool;
 import net.pixnet.sdk.utils.HttpConnectionTool;
 import net.pixnet.sdk.utils.OAuthConnectionTool;
+import net.pixnet.sdk.utils.Request;
+import net.pixnet.sdk.utils.Request.Method;
+import net.pixnet.sdk.utils.Request.RequestCallback;
+import net.pixnet.sdk.utils.RequestController;
+
+import org.apache.http.NameValuePair;
+
+import java.util.List;
 
 public abstract class DataProxy {
 
@@ -21,8 +29,9 @@ public abstract class DataProxy {
         this.listener=listener;
     }
 
-    protected ConnectionTool getConnectionTool(boolean authentication){
-        if(authentication){
+    protected ConnectionTool getConnectionTool(){
+        boolean isLogin=PIXNET.isLogin(c);
+        if(isLogin){
             OAuthConnectionTool tool;
             switch (PIXNET.getOAuthVersion(c)){
                 case VER_1:
@@ -40,6 +49,32 @@ public abstract class DataProxy {
         else{
             return new HttpConnectionTool();
         }
+    }
+
+    protected void performAPIRequest(boolean authentication, String url, RequestCallback callback){
+        performAPIRequest(authentication, url, callback, null);
+    }
+    protected void performAPIRequest(boolean authentication, String url, RequestCallback callback, List<NameValuePair> params){
+        performAPIRequest(authentication, url, Method.GET, callback, params);
+    }
+    protected void performAPIRequest(boolean authentication, String url, Method method, RequestCallback callback, List<NameValuePair> params){
+        if(authentication){
+            boolean isLogin=PIXNET.isLogin(c);
+            if(!isLogin){
+                listener.onError(Error.LOGIN_NEED);
+                return;
+            }
+        }
+
+        Request r=new Request(url);
+        r.setMethod(method);
+        if(params!=null)
+            r.setParams(params);
+        r.setCallback(callback);
+
+        RequestController rc=RequestController.getInstance();
+        rc.setHttpConnectionTool(getConnectionTool());
+        rc.addRequest(r);
     }
 
     public interface DataProxyListener{

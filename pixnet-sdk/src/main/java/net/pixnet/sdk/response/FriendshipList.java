@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * FriendshipList
  */
-public class FriendshipList extends BasicResponse{
+public class FriendshipList extends BaseListResponse{
     /**
      * List of friends
      */
@@ -18,4 +18,8 @@ public class FriendshipList extends BasicResponse{
      * next_cursor
      */
     public int next_cursor;
+
+    public FriendshipList(String str) {
+        super(str);
+    }
 }

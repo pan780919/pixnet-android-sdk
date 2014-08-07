@@ -9,34 +9,37 @@ import java.util.ArrayList;
 /**
  * Categories List
  */
-public class CategoryList extends BasicResponse {
-    public CategoryList(String response) {
-        formatJson(response);
-    }
+public class CategoryList extends BaseListResponse {
 
     /**
      * List of categories
      */
     public ArrayList<Category> Categories;
 
-    void formatJson(String response) {
-        try {
-            JSONObject obj = new JSONObject(response);
-            if (obj.has("message")) {
-                message = obj.getString("message");
-            }
-            if (obj.has("error")) {
-                error = obj.getString("error");
-            }
-            if(obj.has("categories")) {
-                Categories = new ArrayList<Category>();
-                JSONArray ja = new JSONArray(obj.getString("categories"));
-                for (int i = 0; i < ja.length(); i++) {
-                    Categories.add(new Category(ja.getString(i)));
-                }
-            }
-        } catch (JSONException e) {
+    public CategoryList(String str) {
+        super(str);
+    }
 
+    public CategoryList(JSONObject jo) {
+        super(jo);
+    }
+
+    @Override
+    protected JSONObject parseJSON(JSONObject jo) throws JSONException {
+        JSONObject obj = super.parseJSON(jo);
+        if (obj.has("message")) {
+            message = obj.getString("message");
         }
+        if (obj.has("error")) {
+            error = obj.getString("error");
+        }
+        if(obj.has("categories")) {
+            Categories = new ArrayList<Category>();
+            JSONArray ja = new JSONArray(obj.getString("categories"));
+            for (int i = 0; i < ja.length(); i++) {
+                Categories.add(new Category(ja.getJSONObject(i)));
+            }
+        }
+        return obj;
     }
 }

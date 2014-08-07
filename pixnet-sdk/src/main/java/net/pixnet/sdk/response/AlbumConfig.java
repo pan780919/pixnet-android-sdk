@@ -28,4 +28,8 @@ public class AlbumConfig extends BasicResponse{
      * User used quota
      */
     public String user_used_quota;
+
+    public AlbumConfig(String str) {
+        super(str);
+    }
 }

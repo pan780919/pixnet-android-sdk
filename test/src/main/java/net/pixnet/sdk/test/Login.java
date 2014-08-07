@@ -12,21 +12,19 @@ import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.utils.Helper;
 
-public class Album extends ItemDetailFragment {
+public class Login extends ItemDetailFragment {
 
     private static enum Apis{
-        MAIN,
-        SETFOLDERS,
-        SORT_SETFOLDERS,
-        SETS,
-        SET
+        LOGIN_1,
+        LOGIN_2,
+        LOGOUT
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final Apis[] data=Apis.values();
+        final String[] data={"oauth 1.0 login", "oauth 2.0 login", "logout"};
 
         setListAdapter(new BaseAdapter() {
             @Override
@@ -36,7 +34,7 @@ public class Album extends ItemDetailFragment {
 
             @Override
             public String getItem(int position) {
-                return data[position].name();
+                return data[position];
             }
 
             @Override
@@ -70,35 +68,36 @@ public class Album extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                net.pixnet.sdk.utils.Album album=PIXNET.newAlbum(getActivity(), new DataProxy.DataProxyListener() {
+
+                switch (Apis.values()[position]){
+                    case LOGIN_1:
+                        PIXNET.oAuth1Login(getActivity(), new PIXNET.OnAccessTokenGotListener() {
                             @Override
-                            public void onError(String msg) {
-                                Helper.log("error:"+msg);
+                            public void onAccessTokenGot(String token, String secret) {
+                                Helper.log("onAccessTokenGot:"+token);
                             }
 
                             @Override
-                            public void onDataResponse(BasicResponse response) {
-                                Helper.log("onDataResponse");
+                            public void onError(String msg) {
+                                Helper.toast(getActivity(), msg);
                             }
                         });
-                album.setDefaultUserName("emmademo");
-                album.setDefaultPerPage(2);
-                album.setDefaultTrimUser(true);
-                switch (Apis.values()[position]){
-                    case MAIN:
-                        album.getMain();
                         break;
-                    case SETFOLDERS:
-                        album.getSetAndFolderList();
+                    case LOGIN_2:
+                        PIXNET.oAuth2Login(getActivity(), new PIXNET.OnAccessTokenGotListener() {
+                            @Override
+                            public void onAccessTokenGot(String token, String secret) {
+                                Helper.log("onAccessTokenGot:"+token);
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                Helper.toast(getActivity(), msg);
+                            }
+                        });
                         break;
-                    case SORT_SETFOLDERS:
-                        album.sortSetAndFolderList("");
-                        break;
-                    case SETS:
-                        album.getSetList();
-                        break;
-                    case SET:
-                        album.getSet("34260");
+                    case LOGOUT:
+                        PIXNET.setOauthAccessTokenAndSecret(getActivity(), null, null);
                         break;
                     default:
                 }
@@ -106,4 +105,5 @@ public class Album extends ItemDetailFragment {
             }
         });
     }
+
 }

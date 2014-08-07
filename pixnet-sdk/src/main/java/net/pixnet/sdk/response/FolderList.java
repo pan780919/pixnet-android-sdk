@@ -2,7 +2,7 @@ package net.pixnet.sdk.response;
 
 import java.util.ArrayList;
 
-public class FolderList extends BasicResponse{
+public class FolderList extends BaseListResponse{
     /**
      * Folders counts
      */
@@ -19,4 +19,8 @@ public class FolderList extends BasicResponse{
      * Folder list
      */
     public ArrayList<Folder> folders;
+
+    public FolderList(String str) {
+        super(str);
+    }
 }

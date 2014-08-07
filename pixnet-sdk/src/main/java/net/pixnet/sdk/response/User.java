@@ -6,10 +6,7 @@ import org.json.JSONObject;
 /**
  * User info
  */
-public class User {
-    public User(String response){
-        formatJson(response);
-    }
+public class User extends BasicResponse {
     /**
      * User name
      */
@@ -38,34 +35,35 @@ public class User {
      * User has ad or not
      */
     public boolean has_ad;
-    private void formatJson(String response){
-        try {
-            JSONObject userobj = new JSONObject(response);
-            if (userobj.has("name")) {
-                name = userobj.getString("name");
-            }
-            if (userobj.has("display_name")) {
-                display_name = userobj.getString("display_name");
-            }
-            if (userobj.has("avatar")) {
-                avatar = userobj.getString("avatar");
-            }
-            if (userobj.has("cavatar")) {
-                cavatar = userobj.getString("cavatar");
-            }
-            if (userobj.has("link")) {
-                link = userobj.getString("link");
-            }
-            if (userobj.has("is_vip")) {
-                is_vip = userobj.getBoolean("is_vip");
-            }
-            if (userobj.has("has_ad")) {
-                has_ad = userobj.getBoolean("has_ad");
-            }
 
-        }catch(JSONException e)
-        {
-            e.printStackTrace();
+    public User(JSONObject jo) {
+        super(jo);
+    }
+
+    @Override
+    protected JSONObject parseJSON(JSONObject jo) throws JSONException {
+        jo = super.parseJSON(jo);
+        if (jo.has("name")) {
+            name = jo.getString("name");
         }
+        if (jo.has("display_name")) {
+            display_name = jo.getString("display_name");
+        }
+        if (jo.has("avatar")) {
+            avatar = jo.getString("avatar");
+        }
+        if (jo.has("cavatar")) {
+            cavatar = jo.getString("cavatar");
+        }
+        if (jo.has("link")) {
+            link = jo.getString("link");
+        }
+        if (jo.has("is_vip")) {
+            is_vip = jo.getBoolean("is_vip");
+        }
+        if (jo.has("has_ad")) {
+            has_ad = jo.getBoolean("has_ad");
+        }
+        return jo;
     }
 }

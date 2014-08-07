@@ -7,9 +7,6 @@ import org.json.JSONObject;
  * Response for comment
  */
 public class Comment extends BasicResponse {
-    public Comment(String response) {
-        formatJson(response);
-    }
 
     /**
      * Comment id
@@ -80,65 +77,67 @@ public class Comment extends BasicResponse {
      */
     public Element element;
 
-    public void formatJson(String response) {
-        try {
-            JSONObject obj = new JSONObject(response);
-            if (obj.has("message")) {
-                message = obj.getString("message");
-            }
-            if (obj.has("error")) {
-                error = obj.getString("error");
-            }
-            if (obj.has("id")) {
-                id = obj.getString("id");
-            }
-            if (obj.has("title")) {
-                title = obj.getString("title");
-            }
-            if (obj.has("body")) {
-                body = obj.getString("body");
-            }
-            if (obj.has("email")) {
-                email = obj.getString("email");
-            }
-            if (obj.has("url")) {
-                url = obj.getString("url");
-            }
-            if (obj.has("author")) {
-                author = obj.getString("author");
-            }
-            if (obj.has("link")) {
-                link = obj.getString("link");
-            }
-            if (obj.has("is_open")) {
-                is_open = obj.getInt("is_open");
-            }
-            if (obj.has("is_spam")) {
-                is_spam = obj.getInt("is_spam");
-            }
-            if (obj.has("created_at")) {
-                created_at = obj.getString("created_at");
-            }
-            if (obj.has("author_login_type")) {
-                author_login_type = obj.getString("author_login_type");
-            }
-            if (obj.has("client_ip")) {
-                client_ip = obj.getString("client_ip");
-            }
-            if (obj.has("user")) {
-                user = new User(obj.getString("user"));
-            }
-            if (obj.has("reply")) {
-                reply = new Reply(obj.getString("reply"));
-            }
-            if (obj.has("article")) {
-                article = new Article(obj.getString("article"));
-            }
-            if(obj.has("element")){
-                element = new Element(obj.getString("element"));
-            }
-        } catch (JSONException e) {
+    public Comment(String str) {
+        super(str);
+    }
 
+    @Override
+    protected JSONObject parseJSON(JSONObject jo) throws JSONException {
+        JSONObject obj = super.parseJSON(jo);
+        if (obj.has("message")) {
+            message = obj.getString("message");
         }
+        if (obj.has("error")) {
+            error = obj.getString("error");
+        }
+        if (obj.has("id")) {
+            id = obj.getString("id");
+        }
+        if (obj.has("title")) {
+            title = obj.getString("title");
+        }
+        if (obj.has("body")) {
+            body = obj.getString("body");
+        }
+        if (obj.has("email")) {
+            email = obj.getString("email");
+        }
+        if (obj.has("url")) {
+            url = obj.getString("url");
+        }
+        if (obj.has("author")) {
+            author = obj.getString("author");
+        }
+        if (obj.has("link")) {
+            link = obj.getString("link");
+        }
+        if (obj.has("is_open")) {
+            is_open = obj.getInt("is_open");
+        }
+        if (obj.has("is_spam")) {
+            is_spam = obj.getInt("is_spam");
+        }
+        if (obj.has("created_at")) {
+            created_at = obj.getString("created_at");
+        }
+        if (obj.has("author_login_type")) {
+            author_login_type = obj.getString("author_login_type");
+        }
+        if (obj.has("client_ip")) {
+            client_ip = obj.getString("client_ip");
+        }
+        if (obj.has("user")) {
+            user = new User(obj.getJSONObject("user"));
+        }
+        if (obj.has("reply")) {
+            reply = new Reply(obj.getString("reply"));
+        }
+        if (obj.has("article")) {
+            article = new Article(obj.getString("article"));
+        }
+        if(obj.has("element")){
+            element = new Element(obj.getString("element"));
+        }
+        return obj;
     }
 }

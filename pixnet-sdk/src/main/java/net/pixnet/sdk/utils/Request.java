@@ -22,11 +22,7 @@ public class Request {
         DELETE
     }
 
-    public interface RequestCallback {
-        void onResponse(String response);
-    }
-
-    Request(String url){
+    public Request(String url){
         setUrl(url);
     }
 
@@ -72,5 +68,9 @@ public class Request {
 
     public List<NameValuePair> getHeaders() {
         return headers;
+    }
+
+    public interface RequestCallback {
+        void onResponse(String response);
     }
 }

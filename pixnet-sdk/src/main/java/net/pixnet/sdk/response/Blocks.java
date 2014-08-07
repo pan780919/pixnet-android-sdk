@@ -19,7 +19,7 @@ public class Blocks{
         try {
             JSONObject obj = new JSONObject(response);
             if(obj.has("user")){
-                user = new User(obj.getString("user"));
+                user = new User(obj.getJSONObject("user"));
             }
             if(obj.has("created_at")){
                 created_at = obj.getString("created_at");

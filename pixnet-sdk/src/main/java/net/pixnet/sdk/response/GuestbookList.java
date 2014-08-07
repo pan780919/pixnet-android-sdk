@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Guestbook list
  */
-public class GuestbookList extends BasicResponse{
+public class GuestbookList extends BaseListResponse{
     /**
      * Total counts of guestbook articles
      */
@@ -26,4 +26,8 @@ public class GuestbookList extends BasicResponse{
      * next_cursor
      */
     public String next_cursor;
+
+    public GuestbookList(String str) {
+        super(str);
+    }
 }

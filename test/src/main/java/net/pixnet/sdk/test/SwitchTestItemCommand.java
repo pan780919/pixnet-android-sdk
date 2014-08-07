@@ -5,10 +5,9 @@ import net.pixnet.sdk.test.dummy.TestList;
 public class SwitchTestItemCommand {
 
     public static ItemDetailFragment getTestItemFragment(TestList.ItemId id){
-        ItemDetailFragment f;
         switch (id){
             case LOGIN:
-                return null;
+                return new Login();
             case BLOG:
                 return null;
             case ALBUM:

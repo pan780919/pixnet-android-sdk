@@ -1,38 +1,82 @@
 package net.pixnet.sdk.utils;
 
-import net.pixnet.sdk.PIXNET;
-import net.pixnet.sdk.proxy.*;
+import android.text.TextUtils;
+import android.widget.ListAdapter;
+
+import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.proxy.Error;
-import net.pixnet.sdk.response.BasicResponse;
+import net.pixnet.sdk.response.ElementList;
+import net.pixnet.sdk.response.Set;
+import net.pixnet.sdk.response.SetAndFolderList;
+import net.pixnet.sdk.response.SetList;
+import net.pixnet.sdk.utils.Request.Method;
+import net.pixnet.sdk.utils.Request.RequestCallback;
 
-public class Album extends DataProxy{
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
-    private static final String URL_MAIN="http://emma.pixnet.cc/album/main";
+import java.util.ArrayList;
+import java.util.List;
+
+public class Album extends DataProxy {
+
+    private static final String URL_MAIN="https://emma.pixnet.cc/album/main";
+    private static final String URL_SETFOLDERS="https://emma.pixnet.cc/album/setfolders";
+    private static final String URL_SORT_SETFOLDERS="https://emma.pixnet.cc/album/setfolders/position";
+    private static final String URL_SETS="https://emma.pixnet.cc/album/sets";
+    private static final String URL_SET="https://emma.pixnet.cc/album/sets/";
+    private static final String URL_ELEMENTS="https://emma.pixnet.cc/album/elements";
+
+    public static enum ElementType{
+        pic,
+        video,
+        audio
+    }
 
     /**
-     * 列出相簿主圖及相片牆
+     * 預設使用者名稱
+     */
+    private String defaultUserName="emmademo";
+    public String getDefaultUserName() {
+        return defaultUserName;
+    }
+    public void setDefaultUserName(String defaultUserName) {
+        this.defaultUserName = defaultUserName;
+    }
+
+    /**
+     * 預設每頁幾筆資料
+     */
+    private int defaultPerPage =20;
+    public int getDefaultPerPage() {
+        return defaultPerPage;
+    }
+    public void setDefaultPerPage(int defaultPerPage) {
+        this.defaultPerPage = defaultPerPage;
+    }
+
+    /**
+     * 預設是否每篇文章都要回傳作者資訊, 如果設定為 true, 則就不回傳
+     */
+    private boolean defaultTrimUser = false;
+    public boolean isDefaultTrimUser() {
+        return defaultTrimUser;
+    }
+    public void setDefaultTrimUser(boolean defaultTrimUser) {
+        this.defaultTrimUser = defaultTrimUser;
+    }
+
+    /**
+     * 列出相簿主圖及相片牆, 需要認證
      */
     public void getMain(){
-        Helper.log("getMain");
-        boolean isLogin=PIXNET.isLogin(c);
-        if(!isLogin){
-            listener.onError(Error.LOGIN_NEED);
-            return;
-        }
-
-        Request r=new Request(URL_MAIN);
-        r.setCallback(new Request.RequestCallback() {
+        performAPIRequest(true, URL_MAIN, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
 //                BasicResponse res=new BasicResponse();
 //                listener.onDataResponse(res);
             }
         });
-
-        RequestController rc=RequestController.getInstance();
-        rc.setHttpConnectionTool(getConnectionTool(true));
-        rc.addRequest(r);
     }
 
     /**
@@ -41,9 +85,49 @@ public class Album extends DataProxy{
     public void getAlbumCategoryList(){}
 
     /**
-     * 相簿首頁 (與 http://:user.pixnet.net/album/list 同步)
+     * @see #getSetAndFolderList(String, int, int, boolean)
      */
-    public void getSetAndFolderList(){}
+    public void getSetAndFolderList(){
+        getSetAndFolderList(1);
+    }
+    /**
+     * @see #getSetAndFolderList(String, int, int, boolean)
+     */
+    public void getSetAndFolderList(int page){
+        getSetAndFolderList(defaultPerPage, page);
+    }
+    /**
+     * @see #getSetAndFolderList(String, int, int, boolean)
+     */
+    public void getSetAndFolderList(int perPage, int page){
+        getSetAndFolderList(defaultUserName, perPage, page, defaultTrimUser);
+    }
+    /**
+     * 相簿首頁 (與 http://:user.pixnet.net/album/list 同步)
+     * @param userName 指定要回傳的使用者資訊
+     * @param perPage 每頁幾筆
+     * @param page 頁數
+     * @param trimUser 是否每篇文章都要回傳作者資訊, 如果設定為 true, 則就不回傳.
+     */
+    public void getSetAndFolderList(String userName, int perPage, int page, boolean trimUser){
+        if(userName==null || TextUtils.isEmpty(userName)){
+            listener.onError(Error.MISS_PARAMETER+":userName");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", userName));
+        params.add(new BasicNameValuePair("per_page", String.valueOf(perPage)));
+        params.add(new BasicNameValuePair("page", String.valueOf(page)));
+        params.add(new BasicNameValuePair("trim_user", trimUser?"1":"0"));
+
+        performAPIRequest(false, URL_SETFOLDERS, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                SetAndFolderList res = new SetAndFolderList(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
+    }
 
     /**
      * 讀取個人相簿單一資料夾
@@ -56,14 +140,89 @@ public class Album extends DataProxy{
     public void getFolderList(){}
 
     /**
-     * 讀取個人相簿單一 Set
+     * @see #getSet(String, String, int, int)
      */
-    public void getSet(){}
+    public void getSet(String id){
+        getSet(id, 1);
+    }
+    /**
+     * @see #getSet(String, String, int, int)
+     */
+    public void getSet(String id, int page){
+        getSet(defaultUserName, id, defaultPerPage, page);
+    }
+    /**
+     * 讀取個人相簿單一 Set
+     * @param userName 指定要回傳的使用者資訊
+     * @param perPage 每頁幾筆
+     * @param page 頁數
+     */
+    public void getSet(String userName, String id, int perPage, int page){
+        if(userName==null || TextUtils.isEmpty(userName)){
+            listener.onError(Error.MISS_PARAMETER+":userName");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", userName));
+        params.add(new BasicNameValuePair("per_page", String.valueOf(perPage)));
+        params.add(new BasicNameValuePair("page", String.valueOf(page)));
+
+        performAPIRequest(false, URL_SET+id, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                Set res = new Set(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
+    }
 
     /**
-     * 列出相簿個人 Set 清單
+     * @see #getSetList(String, String, boolean, int, int)
      */
-    public void getSetList(){}
+    public void getSetList(){
+        getSetList(1);
+    }
+    /**
+     * @see #getSetList(String, String, boolean, int, int)
+     */
+    public void getSetList(int page){
+        getSetList(defaultPerPage, page);
+    }
+    /**
+     * @see #getSetList(String, String, boolean, int, int)
+     */
+    public void getSetList(int perPage, int page){
+        getSetList(defaultUserName, null, defaultTrimUser, perPage, page);
+    }
+    /**
+     * 列出相簿個人 Set 清單
+     * @param userName 指定要回傳的使用者資訊
+     * @param parentId 可以藉此指定拿到特定相簿資料夾底下的相簿
+     * @param trimUser 是否每篇文章都要回傳作者資訊, 如果設定為 true, 則就不回傳
+     * @param perPage 頁數
+     * @param page 每頁幾筆
+     */
+    public void getSetList(String userName, String parentId, boolean trimUser, int perPage, int page){
+        if(TextUtils.isEmpty(userName)){
+            listener.onError(Error.MISS_PARAMETER+":userName");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", userName));
+        if(!TextUtils.isEmpty(parentId))
+            params.add(new BasicNameValuePair("parent_id", parentId));
+        params.add(new BasicNameValuePair("trim_user", trimUser?"1":"0"));
+        params.add(new BasicNameValuePair("per_page", String.valueOf(perPage)));
+        params.add(new BasicNameValuePair("page", String.valueOf(page)));
+
+        performAPIRequest(false, URL_SETS, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                SetList res=new SetList(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
+    }
 
     /**
      * 列出相簿資料夾內的相簿 Set
@@ -86,9 +245,82 @@ public class Album extends DataProxy{
     public void getElementListByAlbum(){}
 
     /**
-     * 列出單一相簿 Set 的所有相片
+     * @see #getElementListBySet(String, String, net.pixnet.sdk.utils.Album.ElementType, int, int, String, boolean, boolean, boolean, int, int)
      */
-    public void getElementListBySet(){}
+    public void getElementListBySet(String setId){
+        getElementListBySet(setId, 1);
+    }
+    /**
+     * @see #getElementListBySet(String, String, net.pixnet.sdk.utils.Album.ElementType, int, int, String, boolean, boolean, boolean, int, int)
+     */
+    public void getElementListBySet(String setId, int page){
+        getElementListBySet(setId, defaultPerPage, page);
+    }
+    /**
+     * @see #getElementListBySet(String, String, net.pixnet.sdk.utils.Album.ElementType, int, int, String, boolean, boolean, boolean, int, int)
+     */
+    public void getElementListBySet(String setId, int perPage, int page){
+        getElementListBySet(setId, ElementType.pic, perPage, page);
+    }
+    /**
+     * @see #getElementListBySet(String, String, net.pixnet.sdk.utils.Album.ElementType, int, int, String, boolean, boolean, boolean, int, int)
+     */
+    public void getElementListBySet(String setId, ElementType type, int perPage, int page){
+        getElementListBySet(setId, type, perPage, page, false, defaultTrimUser);
+    }
+    /**
+     * @see #getElementListBySet(String, String, net.pixnet.sdk.utils.Album.ElementType, int, int, String, boolean, boolean, boolean, int, int)
+     */
+    public void getElementListBySet(String setId, ElementType type, int perPage, int page, boolean withDetail, boolean trimUser){
+        getElementListBySet(defaultUserName, setId, type, perPage, page, null, withDetail, trimUser, false, 0, 0);
+    }
+    /**
+     * 列出單一相簿 Set 的所有相片
+     * @param userName 指定要回傳的使用者資訊
+     * @param setId 相簿 id
+     * @param type 指定要回傳的類別. pic: 只顯示圖片; video: 只顯示影片; audio: 只顯示音樂
+     * @param perPage 每頁幾筆
+     * @param page 頁數
+     * @param password 相簿密碼，當使用者相簿設定為密碼相簿時使用
+     * @param withDetail 傳回詳細資訊，指定為1時將會回傳完整圖片資訊
+     * @param trimUser 不傳回相片擁有者資訊，指定為 true 時將不會回傳相片擁有者資訊
+     * @param useIframe 影音的外嵌 tag 使用 iframe 格式
+     * @param iframeWidth 影音的外嵌 iframe width
+     * @param iframeHeight 影音的外嵌 iframe height
+     */
+    public void getElementListBySet(String userName, String setId, ElementType type, int perPage, int page, String password, boolean withDetail, boolean trimUser, boolean useIframe, int iframeWidth, int iframeHeight){
+        if(TextUtils.isEmpty(userName)){
+            listener.onError(Error.MISS_PARAMETER+":userName");
+            return;
+        }
+        if(TextUtils.isEmpty(setId)){
+            listener.onError(Error.MISS_PARAMETER+":setId");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", userName));
+        params.add(new BasicNameValuePair("set_id", setId));
+        params.add(new BasicNameValuePair("type", type.name()));
+        params.add(new BasicNameValuePair("per_page", String.valueOf(perPage)));
+        params.add(new BasicNameValuePair("page", String.valueOf(page)));
+        if(!TextUtils.isEmpty(password))
+            params.add(new BasicNameValuePair("password", password));
+        params.add(new BasicNameValuePair("with_detail", withDetail?"1":"0"));
+        params.add(new BasicNameValuePair("trim_user", trimUser?"1":"0"));
+        params.add(new BasicNameValuePair("use_iframe", useIframe?"1":"0"));
+        if(iframeWidth>0)
+            params.add(new BasicNameValuePair("iframe_width", String.valueOf(iframeWidth)));
+        if(iframeHeight>0)
+            params.add(new BasicNameValuePair("iframe_height", String.valueOf(iframeHeight)));
+
+        performAPIRequest(false, URL_ELEMENTS, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                ElementList res=new ElementList(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
+    }
 
     /**
      * 列出附近的相簿圖片影片
@@ -206,9 +438,25 @@ public class Album extends DataProxy{
     public void removeFace(){}
 
     /**
-     * 修改相簿首頁排序
+     * 修改相簿首頁排序, 需要認證
+     * @param ids 相簿 id 順序，放在越前面的表示圖片的順序越優先。
      */
-    public void sortSetAndFolderList(){}
+    public void sortSetAndFolderList(String... ids){
+        if(ids==null || ids.length<1){
+            listener.onError(Error.MISS_PARAMETER+":ids");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("ids", ids.toString()));
+        performAPIRequest(true, URL_SORT_SETFOLDERS, Method.POST, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+//                BasicResponse res=new BasicResponse();
+//                listener.onDataResponse(res);
+            }
+        }, params);
+
+    }
 
     /**
      * 修改相簿 Set 排序

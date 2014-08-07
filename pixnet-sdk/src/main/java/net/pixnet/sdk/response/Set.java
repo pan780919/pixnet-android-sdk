@@ -1,24 +1,9 @@
 package net.pixnet.sdk.response;
 
-import java.util.ArrayList;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class Set extends BasicResponse{
-    /**
-     * Set id
-     */
-    public String id;
-    /**
-     * type:set
-     */
-    public String type;
-    /**
-     * Set title
-     */
-    public String title;
-    /**
-     * Set thumb url
-     */
-    public String thumb;
+public class Set extends AlbumContainer{
     /**
      * Set url
      */
@@ -36,51 +21,73 @@ public class Set extends BasicResponse{
      */
     public String category;
     /**
-     * Set tags
-     */
-    public ArrayList<Tag> tags;
-    /**
      * is lock right
      */
-    public String is_lockright;
+    public boolean is_lockright;
     /**
      *Set licence
      */
-    public Licence licence;
+    public License licence;
     /**
      * Show set can comment or not
      */
-    public String cancomment;
+    public boolean cancomment;
     /**
      * Set parent id
      */
     public String parent_id;
     /**
-     * Set position
-     */
-    public String position;
-    /**
-     * Set create time
-     */
-    public String created_at;
-    /**
      * Show this set is system set or not
      */
-    public String is_system_set;
+    public boolean is_system_set;
+    public Hits hits;
     /**
      * Total elements count
      */
-    public String total_elements;
-    /**
-     * Set owner info
-     */
-    public User user;
-    /**
-     * Set description
-     */
-    public String description;
+    public int total_elements;
+
     /**
      * Show elements in this set is taggable or not
      */
     public boolean is_taggable;
+
+    public Set(String str) {
+        super(str);
+    }
+
+    public Set(JSONObject jo){
+        super(jo);
+    }
+
+    @Override
+    protected JSONObject parseJSON(JSONObject jo) throws JSONException {
+        JSONObject json = super.parseJSON(jo);
+
+        if(json.has("link"))
+            link=jo.getString("link");
+        if(json.has("permission"))
+            permission =jo.getString("permission");
+        if(json.has("category_id"))
+            category_id=jo.getString("category_id");
+        if(json.has("category"))
+            category=jo.getString("category");
+        if(json.has("is_lockright"))
+            is_lockright=jo.getInt("is_lockright")==0?false:true;
+        if(json.has("lincense"))
+            licence=new License(jo.getJSONObject("lincense"));
+        if(json.has("cancomment"))
+            cancomment=jo.getInt("cancomment")==0?false:true;
+        if(json.has("parent_id"))
+            parent_id=jo.getString("parent_id");
+        if(json.has("is_system_set"))
+            is_system_set=jo.getBoolean("is_system_set");
+        if(json.has("hits"))
+            hits=new Hits(jo.getJSONObject("hits"));
+        if(json.has("total_elements"))
+            total_elements=jo.getInt("total_elements");
+        if(json.has("is_taggable"))
+            is_taggable=jo.getBoolean("is_taggable");
+
+        return json;
+    }
 }

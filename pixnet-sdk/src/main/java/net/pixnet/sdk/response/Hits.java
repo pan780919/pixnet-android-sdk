@@ -3,10 +3,7 @@ package net.pixnet.sdk.response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Hits {
-    public Hits(String response){
-        formatJson(response);
-    }
+public class Hits extends BasicResponse {
     /**
      * Total blog visits
      */
@@ -15,23 +12,28 @@ public class Hits {
      * Daily blog visits
      */
     public int daily;
+
     /**
      * Weekly blog visits
      */
     public int weekly;
-    public void formatJson(String response){
-        try {
-            JSONObject obj = new JSONObject(response);
-            if (obj.has("total")) {
-                total = obj.getInt("total");
-            }
-            if (obj.has("daily")) {
-                daily = obj.getInt("daily");
-            }
-            if (obj.has("weekly")) {
-                weekly = obj.getInt("weekly");
-            }
-        } catch (JSONException e) {
+
+    public Hits(JSONObject jo) {
+        super(jo);
+    }
+
+    @Override
+    protected JSONObject parseJSON(JSONObject jo) throws JSONException {
+        JSONObject obj = super.parseJSON(jo);
+        if (obj.has("total")) {
+            total = obj.getInt("total");
         }
+        if (obj.has("daily")) {
+            daily = obj.getInt("daily");
+        }
+        if (obj.has("weekly")) {
+            weekly = obj.getInt("weekly");
+        }
+        return obj;
     }
 }
