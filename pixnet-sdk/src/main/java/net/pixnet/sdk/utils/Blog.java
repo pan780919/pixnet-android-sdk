@@ -64,7 +64,7 @@ public class Blog extends DataProxy {
     }
 
     public void getBlogCategorieList() {
-        getBlogCategorieList(defaultUserName, null);
+        getBlogCategorieList(defaultUserName);
     }
 
     public void getBlogCategorieList(String user) {

@@ -38,18 +38,12 @@ public class GuestbookList extends BaseListResponse{
     }
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
         JSONObject obj = super.parseJSON(jo);
-        if(obj.has("total")){
-            total = obj.getInt("total");
-        }
         if(obj.has("articles")){
             JSONArray ja = obj.getJSONArray("articles");
             articles = new ArrayList<Article>();
             for(int i=0;i<ja.length();i++){
                 articles.add(new Article(ja.getString(i)));
             }
-        }
-        if(obj.has("per_page")){
-            per_page = obj.getInt("per_page");
         }
         if(obj.has("previous_cursor")){
             previous_cursor = obj.getInt("previous_cursor");
