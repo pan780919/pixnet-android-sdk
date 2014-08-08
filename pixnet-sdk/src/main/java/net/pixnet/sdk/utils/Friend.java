@@ -4,7 +4,11 @@ import android.text.TextUtils;
 
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
+import net.pixnet.sdk.response.FriendshipList;
 import net.pixnet.sdk.response.GroupList;
+import net.pixnet.sdk.response.News;
+import net.pixnet.sdk.response.SubscriptionList;
+import net.pixnet.sdk.response.Subscription_groupList;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -18,6 +22,8 @@ public class Friend extends DataProxy {
     private static final String URL_NEWS = "http://emma.pixnet.cc/friend/news";
     private static final String URL_GROUP = "http://emma.pixnet.cc/friend/groups";
     private static final String URL_FRIENDSHIP = "http://emma.pixnet.cc/friendships";
+    private static final String URL_SUBSCRIPTION = "http://emma.pixnet.cc/friend/subscriptions";
+    private static final String URL_SUBSCRIPTION_GROUP = "http://emma.pixnet.cc/friend/subscription_groups";
     /**
      * 預設使用者名稱
      */
@@ -68,7 +74,8 @@ public class Friend extends DataProxy {
         performAPIRequest(true, URL_NEWS, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-
+                News res = new News(response);
+                listener.onDataResponse(res);
             }
         }, params);
     }
@@ -137,63 +144,260 @@ public class Friend extends DataProxy {
         }, params);
     }
 
-    public void getFriendshipList() {
-
+    public void getFriendshipList(String cursor, String cursor_name, String bidirectional) {
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        if (!TextUtils.isEmpty(cursor))
+            params.add(new BasicNameValuePair("cursor", cursor));
+        if (!TextUtils.isEmpty(cursor_name))
+            params.add(new BasicNameValuePair("cursor_name", cursor_name));
+        if (!TextUtils.isEmpty(bidirectional))
+            params.add(new BasicNameValuePair("bidirectional", bidirectional));
+        performAPIRequest(true, URL_FRIENDSHIP, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                FriendshipList res = new FriendshipList(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
     }
 
-    public void addFriendship() {
-
+    public void addFriendship(String user_name) {
+        if (user_name == null || TextUtils.isEmpty(user_name)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user_name");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user_name", user_name));
+        performAPIRequest(true, URL_FRIENDSHIP, Request.Method.POST, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res = new BasicResponse(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
     }
 
-    public void removeFriendship() {
-
+    public void removeFriendship(String user_name) {
+        if (user_name == null || TextUtils.isEmpty(user_name)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user_name");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user_name", user_name));
+        performAPIRequest(true, URL_FRIENDSHIP + "/delete", Request.Method.DELETE, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res = new BasicResponse(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
     }
 
-    public void addFriendshipToGroup() {
-
+    public void addFriendshipToGroup(String user_name, String group_id) {
+        if (user_name == null || TextUtils.isEmpty(user_name)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user_name");
+            return;
+        }
+        if (group_id == null || TextUtils.isEmpty(group_id)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":group_id");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user_name", user_name));
+        params.add(new BasicNameValuePair("group_id", group_id));
+        performAPIRequest(true, URL_FRIENDSHIP + "/append_group", Request.Method.POST, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res = new BasicResponse(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
     }
 
-    public void removeFriendshipFromGroup() {
-
+    public void removeFriendshipFromGroup(String user_name, String group_id) {
+        if (user_name == null || TextUtils.isEmpty(user_name)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user_name");
+            return;
+        }
+        if (group_id == null || TextUtils.isEmpty(group_id)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":group_id");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user_name", user_name));
+        params.add(new BasicNameValuePair("group_id", group_id));
+        performAPIRequest(true, URL_FRIENDSHIP + "/remove_group", Request.Method.POST, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res = new BasicResponse(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
     }
 
-    public void getSubscribedFriendship() {
-
+    public void getSubscribedFriendship(int page, int per_page) {
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("page", String.valueOf(page)));
+        params.add(new BasicNameValuePair("per_page", String.valueOf(per_page)));
+        performAPIRequest(true, URL_SUBSCRIPTION, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                SubscriptionList res =new SubscriptionList(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
     }
 
-    public void addSubscription() {
-
+    public void addSubscription(String user, String group_id) {
+        if (user == null || TextUtils.isEmpty(user)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", user));
+        if (!TextUtils.isEmpty(group_id))
+            params.add(new BasicNameValuePair("group_id", group_id));
+        performAPIRequest(true, URL_SUBSCRIPTION, Request.Method.POST, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res = new BasicResponse(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
     }
 
-    public void removeSubscription() {
-
+    public void removeSubscription(String user) {
+        if (user == null || TextUtils.isEmpty(user)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", user));
+        performAPIRequest(true, URL_SUBSCRIPTION + "/" + user, Request.Method.DELETE, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res = new BasicResponse(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
     }
 
-    public void joinSubscriptionGroup() {
-
+    public void joinSubscriptionGroup(String user, String group_id) {
+        if (user == null || TextUtils.isEmpty(user)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            return;
+        }
+        if (group_id == null || TextUtils.isEmpty(group_id)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":group_id");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", user));
+        params.add(new BasicNameValuePair("group_id", group_id));
+        performAPIRequest(true, URL_SUBSCRIPTION + "/" + user + "/join_subscription_group", Request.Method.POST, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res = new BasicResponse(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
     }
 
-    public void leaveSubscriptionGroup() {
-
+    public void leaveSubscriptionGroup(String user, String group_id) {
+        if (user == null || TextUtils.isEmpty(user)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            return;
+        }
+        if (group_id == null || TextUtils.isEmpty(group_id)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":group_id");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", user));
+        params.add(new BasicNameValuePair("group_id", group_id));
+        performAPIRequest(true, URL_SUBSCRIPTION + "/" + user + "/leave_subscription_group", Request.Method.POST, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res = new BasicResponse(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
     }
 
     public void getSubscriptionGroupList() {
-
+        performAPIRequest(true, URL_SUBSCRIPTION_GROUP, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                Subscription_groupList res = new Subscription_groupList(response);
+                listener.onDataResponse(res);
+            }
+        });
     }
 
-    public void addSubscriptionGroup() {
-
+    public void addSubscriptionGroup(String name) {
+        if (name == null || TextUtils.isEmpty(name)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":name");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("name", name));
+        performAPIRequest(true, URL_SUBSCRIPTION_GROUP, Request.Method.POST, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res = new BasicResponse(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
     }
 
-    public void updateSubscriptionGroup() {
-
+    public void updateSubscriptionGroup(String name, String id) {
+        if (name == null || TextUtils.isEmpty(name)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":name");
+            return;
+        }
+        if (id == null || TextUtils.isEmpty(id)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("name", name));
+        performAPIRequest(true, URL_SUBSCRIPTION_GROUP + "/" + id, Request.Method.POST, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res = new BasicResponse(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
     }
 
-    public void removeSubscriptionGroup() {
-
+    public void removeSubscriptionGroup(String id) {
+        if (id == null || TextUtils.isEmpty(id)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        performAPIRequest(true, URL_SUBSCRIPTION_GROUP + "/" + id, Request.Method.DELETE, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res = new BasicResponse(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
     }
 
-    public void sortSubscriptionGroupList() {
-
+    public void sortSubscriptionGroupList(String ids) {
+        if (ids == null || TextUtils.isEmpty(ids)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":ids");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("ids", ids));
+        performAPIRequest(true, URL_SUBSCRIPTION_GROUP + "/position", Request.Method.POST, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res = new BasicResponse(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
     }
 }
