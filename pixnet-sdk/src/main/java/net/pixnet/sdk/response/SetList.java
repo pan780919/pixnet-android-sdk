@@ -25,18 +25,7 @@ public class SetList extends BaseListResponse{
                 return jo;
             sets=new ArrayList<Set>();
             while(i<len){
-                JSONObject item;
-                try {
-                    item=ja.getJSONObject(i);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    item=null;
-                }
-                if(item==null){
-                    i++;
-                    continue;
-                }
-                Set set=new Set(item);
+                Set set=new Set(ja.getJSONObject(i));
                 sets.add(set);
                 i++;
             }

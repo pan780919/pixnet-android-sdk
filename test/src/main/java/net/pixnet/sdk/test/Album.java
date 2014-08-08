@@ -19,7 +19,8 @@ public class Album extends ItemDetailFragment {
         SETFOLDERS,
         SORT_SETFOLDERS,
         SETS,
-        SET
+        SET,
+        TEST
     }
 
     @Override
@@ -99,6 +100,8 @@ public class Album extends ItemDetailFragment {
                         break;
                     case SET:
                         album.getSet("34260");
+                        break;
+                    case TEST:
                         break;
                     default:
                 }

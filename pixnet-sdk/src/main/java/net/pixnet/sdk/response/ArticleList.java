@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * ArticleList
  */
-public class ArticleList extends BasicResponse {
+public class ArticleList extends BaseListResponse {
     /**
      * Article list
      */
@@ -25,6 +25,14 @@ public class ArticleList extends BasicResponse {
      * current page
      */
     public int page;
+
+    public ArticleList(JSONObject jo) {
+        super(jo);
+    }
+
+    public ArticleList(String str) {
+        super(str);
+    }
 
     @Override
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
