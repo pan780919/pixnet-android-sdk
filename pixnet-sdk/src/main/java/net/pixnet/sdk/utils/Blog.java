@@ -368,9 +368,11 @@ public class Blog extends DataProxy {
             }
         }, params);
     }
-    public void addArticle(String title,String body){
-        addArticle(title,body,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+
+    public void addArticle(String title, String body) {
+        addArticle(title, body, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
+
     public void addArticle(String title, String body, String status, String public_at, String category_id, String site_category_id, String use_nl2br, String comment_perm, String comment_hidden, String tags, String thumb, String trackback, String password, String password_hint, String friend_group_ids, String notify_twitter, String notify_facebook) {
         if (title == null || TextUtils.isEmpty(title)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":title");
@@ -428,13 +430,13 @@ public class Blog extends DataProxy {
         if (!TextUtils.isEmpty(notify_facebook)) {
             params.add(new BasicNameValuePair("notify_facebook", notify_facebook));
         }
-        performAPIRequest(true,URL_ARTICLE, Request.Method.POST,new Request.RequestCallback() {
+        performAPIRequest(true, URL_ARTICLE, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 BasicResponse res = new BasicResponse(response);
                 listener.onDataResponse(res);
             }
-        },params);
+        }, params);
     }
 
     public void updateArticle(String id, String title, String body, String status, String public_at, String category_id, String site_category_id, String use_nl2br, String comment_perm, String comment_hidden, String tags, String thumb, String trackback, String password, String password_hint, String friend_group_ids, String notify_twitter, String notify_facebook) {
@@ -494,22 +496,208 @@ public class Blog extends DataProxy {
         if (!TextUtils.isEmpty(notify_facebook)) {
             params.add(new BasicNameValuePair("notify_facebook", notify_facebook));
         }
-        performAPIRequest(true,URL_ARTICLE+"/"+id, Request.Method.POST,new Request.RequestCallback() {
+        performAPIRequest(true, URL_ARTICLE + "/" + id, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 BasicResponse res = new BasicResponse(response);
                 listener.onDataResponse(res);
             }
-        },params);
+        }, params);
     }
 
     public void removeArticle(String id) {
         if (id == null || TextUtils.isEmpty(id)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        performAPIRequest(true, URL_ARTICLE + "/" + id, Request.Method.DELETE, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res = new BasicResponse(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
+    }
+
+    public void getArticleListByLatest() {
+        getArticleListByLatest(defaultUserName, null, null, defaultTrimUser);
+    }
+
+    public void getArticleListByLatest(String user, String blog_password, String limit, boolean trim_user) {
+        if (user == null || TextUtils.isEmpty(user)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        performAPIRequest(true,URL_ARTICLE+"/"+id, Request.Method.DELETE,new Request.RequestCallback() {
+        params.add(new BasicNameValuePair("user", user));
+        if (!TextUtils.isEmpty(blog_password)) {
+            params.add(new BasicNameValuePair("blog_password", blog_password));
+        }
+        if (!TextUtils.isEmpty(limit)) {
+            params.add(new BasicNameValuePair("limit", limit));
+        }
+        params.add(new BasicNameValuePair("trim_user", trim_user ? "1" : "0"));
+        performAPIRequest(false, URL_ARTICLE + "/latest", new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                ArticleList res = new ArticleList(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
+    }
+
+    public void getArticleListByHot() {
+        getArticleListByHot(defaultUserName, null, null, defaultTrimUser);
+    }
+
+    public void getArticleListByHot(String user, String blog_password, String limit, boolean trim_user) {
+        if (user == null || TextUtils.isEmpty(user)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", user));
+        if (!TextUtils.isEmpty(blog_password)) {
+            params.add(new BasicNameValuePair("blog_password", blog_password));
+        }
+        if (!TextUtils.isEmpty(limit)) {
+            params.add(new BasicNameValuePair("limit", limit));
+        }
+        params.add(new BasicNameValuePair("trim_user", trim_user ? "1" : "0"));
+        performAPIRequest(false, URL_ARTICLE + "/hot", new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                ArticleList res = new ArticleList(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
+    }
+
+    public void searchArticleList(String key) {
+        searchArticleList(key, 1);
+    }
+
+    public void searchArticleList(String key, int page) {
+        searchArticleList(key, defaultUserName, null, null, page, defaultPerPage);
+    }
+
+    public void searchArticleList(String key, String user, String site, String type, int page, int per_page) {
+        if (key == null || TextUtils.isEmpty(key)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":key");
+            return;
+        }
+        if (user == null || TextUtils.isEmpty(user)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("key", key));
+        params.add(new BasicNameValuePair("user", user));
+
+        if (!TextUtils.isEmpty(site)) {
+            params.add(new BasicNameValuePair("site", site));
+        }
+        if (!TextUtils.isEmpty(type)) {
+            params.add(new BasicNameValuePair("type", type));
+        }
+        params.add(new BasicNameValuePair("page", String.valueOf(page)));
+        params.add(new BasicNameValuePair("per_page", String.valueOf(per_page)));
+
+        performAPIRequest(false, URL_ARTICLE + "/search", new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                ArticleList res = new ArticleList(response);
+                listener.onDataResponse(res);
+            }
+        }, params);
+    }
+    public void getCommentList(){
+        getCommentList(null);
+    }
+    public void getCommentList(String article_id){
+        getCommentList(article_id,1);
+    }
+    public void getCommentList(String article_id,int page){
+        getCommentList(defaultUserName,article_id,null,null,null,null,page,defaultPerPage);
+    }
+    public void getCommentList(String user, String article_id, String blog_password, String article_password, String filter, String sort, int page, int per_page) {
+        if (user == null || TextUtils.isEmpty(user)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", user));
+        if (!TextUtils.isEmpty(article_id)) {
+            params.add(new BasicNameValuePair("article_id", article_id));
+        }
+        if (!TextUtils.isEmpty(blog_password)) {
+            params.add(new BasicNameValuePair("blog_password", blog_password));
+        }
+        if (!TextUtils.isEmpty(article_password)) {
+            params.add(new BasicNameValuePair("article_password", article_password));
+        }
+        if (!TextUtils.isEmpty(filter)) {
+            params.add(new BasicNameValuePair("filter", filter));
+        }
+        if (!TextUtils.isEmpty(sort)) {
+            params.add(new BasicNameValuePair("sort", sort));
+        }
+        params.add(new BasicNameValuePair("page", String.valueOf(page)));
+        params.add(new BasicNameValuePair("per_page", String.valueOf(per_page)));
+        performAPIRequest(false,URL_COMMENT,new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                CommentList res = new CommentList(response);
+                listener.onDataResponse(res);
+            }
+        },params);
+    }
+    public void addComment(String article_id,String body){
+        addComment(article_id,body,defaultUserName);
+    }
+    public void addComment(String article_id,String body,String user){
+        addComment(article_id,body,user,null,null,null,null,null,null,null);
+    }
+    public void addComment(String article_id, String body, String user, String author, String title, String url, String is_open, String email, String blog_password, String article_password) {
+        if (article_id == null || TextUtils.isEmpty(article_id)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":article_id");
+            return;
+        }
+        if (body == null || TextUtils.isEmpty(body)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":body");
+            return;
+        }
+        if (user == null || TextUtils.isEmpty(user)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("article_id", article_id));
+        params.add(new BasicNameValuePair("body", body));
+        params.add(new BasicNameValuePair("user", user));
+        if (!TextUtils.isEmpty(author)) {
+            params.add(new BasicNameValuePair("author", author));
+        }
+        if (!TextUtils.isEmpty(title)) {
+            params.add(new BasicNameValuePair("title", title));
+        }
+        if (!TextUtils.isEmpty(url)) {
+            params.add(new BasicNameValuePair("url", url));
+        }
+        if (!TextUtils.isEmpty(is_open)) {
+            params.add(new BasicNameValuePair("is_open", is_open));
+        }
+        if (!TextUtils.isEmpty(email)) {
+            params.add(new BasicNameValuePair("email", email));
+        }
+        if (!TextUtils.isEmpty(blog_password)) {
+            params.add(new BasicNameValuePair("blog_password", blog_password));
+        }
+        if (!TextUtils.isEmpty(article_password)) {
+            params.add(new BasicNameValuePair("article_password", article_password));
+        }
+        performAPIRequest(true,URL_COMMENT, Request.Method.POST,new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 BasicResponse res = new BasicResponse(response);
@@ -518,154 +706,10 @@ public class Blog extends DataProxy {
         },params);
     }
 
-    public void getArticleListByLatest(String user, String format, String blog_password, String limit, String trim_user, Request.RequestCallback callback) {
-        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("user", user));
-        if (format != null) {
-            params.add(new BasicNameValuePair("format", format));
-        }
-        if (blog_password != null) {
-            params.add(new BasicNameValuePair("blog_password", blog_password));
-        }
-        if (limit != null) {
-            params.add(new BasicNameValuePair("limit", limit));
-        }
-        if (trim_user != null) {
-            params.add(new BasicNameValuePair("trim_user", trim_user));
-        }
-
-        Request request = new Request("https://emma.pixnet.cc/blog/articles/latest");
-        request.setParams(params);
-        request.setCallback(callback);
-
-        rc.addRequest(request);
+    public void getComment(String id) {
+        getComment(id, defaultUserName);
     }
 
-    public void getArticleListByHot(String user, String format, String blog_password, String limit, String trim_user, Request.RequestCallback callback) {
-        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("user", user));
-        if (format != null) {
-            params.add(new BasicNameValuePair("format", format));
-        }
-        if (blog_password != null) {
-            params.add(new BasicNameValuePair("blog_password", blog_password));
-        }
-        if (limit != null) {
-            params.add(new BasicNameValuePair("limit", limit));
-        }
-        if (trim_user != null) {
-            params.add(new BasicNameValuePair("trim_user", trim_user));
-        }
-
-        Request request = new Request("https://emma.pixnet.cc/blog/articles/hot");
-        request.setParams(params);
-        request.setCallback(callback);
-
-        rc.addRequest(request);
-    }
-
-    public void searchArticleList(String key, String user, String format, String site, String type, String page, String per_page, Request.RequestCallback callback) {
-        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("key", key));
-        params.add(new BasicNameValuePair("user", user));
-        if (format != null) {
-            params.add(new BasicNameValuePair("format", format));
-        }
-        if (site != null) {
-            params.add(new BasicNameValuePair("site", site));
-        }
-        if (type != null) {
-            params.add(new BasicNameValuePair("type", type));
-        }
-        if (page != null) {
-            params.add(new BasicNameValuePair("page", page));
-        }
-        if (per_page != null) {
-            params.add(new BasicNameValuePair("per_page", per_page));
-        }
-
-        Request request = new Request("https://emma.pixnet.cc/blog/articles/search");
-        request.setParams(params);
-        request.setCallback(callback);
-
-        rc.addRequest(request);
-    }
-
-    public void getCommentList(String user, String format, String article_id, String blog_password, String article_password, String filter, String sort, String page, String per_page, Request.RequestCallback callback) {
-        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("user", user));
-        if (format != null) {
-            params.add(new BasicNameValuePair("format", format));
-        }
-        if (article_id != null) {
-            params.add(new BasicNameValuePair("article_id", article_id));
-        }
-        if (blog_password != null) {
-            params.add(new BasicNameValuePair("blog_password", blog_password));
-        }
-        if (article_password != null) {
-            params.add(new BasicNameValuePair("article_password", article_password));
-        }
-        if (filter != null) {
-            params.add(new BasicNameValuePair("filter", filter));
-        }
-        if (sort != null) {
-            params.add(new BasicNameValuePair("sort", sort));
-        }
-        if (page != null) {
-            params.add(new BasicNameValuePair("page", page));
-        }
-        if (per_page != null) {
-            params.add(new BasicNameValuePair("per_page", per_page));
-        }
-
-        Request request = new Request("https://emma.pixnet.cc/blog/comments");
-        request.setParams(params);
-        request.setCallback(callback);
-
-        rc.addRequest(request);
-    }
-
-    public void addComment(String article_id, String body, String user, String format, String author, String title, String url, String is_open, String email, String blog_password, String article_password, Request.RequestCallback callback) {
-        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("article_id", article_id));
-        params.add(new BasicNameValuePair("body", body));
-        params.add(new BasicNameValuePair("user", user));
-        if (format != null) {
-            params.add(new BasicNameValuePair("format", format));
-        }
-        if (author != null) {
-            params.add(new BasicNameValuePair("author", author));
-        }
-        if (title != null) {
-            params.add(new BasicNameValuePair("title", title));
-        }
-        if (url != null) {
-            params.add(new BasicNameValuePair("url", url));
-        }
-        if (is_open != null) {
-            params.add(new BasicNameValuePair("is_open", is_open));
-        }
-        if (email != null) {
-            params.add(new BasicNameValuePair("email", email));
-        }
-        if (blog_password != null) {
-            params.add(new BasicNameValuePair("blog_password", blog_password));
-        }
-        if (article_password != null) {
-            params.add(new BasicNameValuePair("article_password", article_password));
-        }
-
-        Request request = new Request("https://emma.pixnet.cc/blog/comments");
-        request.setMethod(Request.Method.POST);
-        request.setParams(params);
-        request.setCallback(callback);
-
-        rc.addRequest(request);
-    }
-    public void getComment(String id){
-        getComment(id,defaultUserName);
-    }
     public void getComment(String id, String user) {
         if (id == null || TextUtils.isEmpty(id)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
@@ -677,13 +721,13 @@ public class Blog extends DataProxy {
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("user", user));
-        performAPIRequest(false,URL_COMMENT+"/"+id,new Request.RequestCallback() {
+        performAPIRequest(false, URL_COMMENT + "/" + id, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 Comment res = new Comment(response);
                 listener.onDataResponse(res);
             }
-        },params);
+        }, params);
     }
 
     public void replyComment(String id, String body) {
@@ -697,13 +741,13 @@ public class Blog extends DataProxy {
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("body", body));
-        performAPIRequest(true,URL_COMMENT+"/" + id + "/reply", Request.Method.POST,new Request.RequestCallback() {
+        performAPIRequest(true, URL_COMMENT + "/" + id + "/reply", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 BasicResponse res = new BasicResponse(response);
                 listener.onDataResponse(res);
             }
-        },params);
+        }, params);
     }
 
     public void setCommentVisibility(String id, boolean visible) {
@@ -714,17 +758,17 @@ public class Blog extends DataProxy {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         String url;
         if (visible) {
-            url = URL_COMMENT+"/" + id + "/open";
+            url = URL_COMMENT + "/" + id + "/open";
         } else {
-            url = URL_COMMENT+"/" + id + "/close";
+            url = URL_COMMENT + "/" + id + "/close";
         }
-        performAPIRequest(true,url, Request.Method.POST,new Request.RequestCallback() {
+        performAPIRequest(true, url, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 BasicResponse res = new BasicResponse(response);
                 listener.onDataResponse(res);
             }
-        },params);
+        }, params);
     }
 
     public void removeComment(String id) {
@@ -733,17 +777,19 @@ public class Blog extends DataProxy {
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        performAPIRequest(true,URL_COMMENT+"/"+id, Request.Method.DELETE,new Request.RequestCallback() {
+        performAPIRequest(true, URL_COMMENT + "/" + id, Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 BasicResponse res = new BasicResponse(response);
                 listener.onDataResponse(res);
             }
-        },params);
+        }, params);
     }
-    public void getCommentListByLatest(){
+
+    public void getCommentListByLatest() {
         getCommentListByLatest(defaultUserName);
     }
+
     public void getCommentListByLatest(String user) {
         if (user == null || TextUtils.isEmpty(user)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
@@ -751,13 +797,13 @@ public class Blog extends DataProxy {
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("user", user));
-        performAPIRequest(false,URL_COMMENT+"/latest",new Request.RequestCallback() {
+        performAPIRequest(false, URL_COMMENT + "/latest", new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 CommentList res = new CommentList(response);
                 listener.onDataResponse(res);
             }
-        },params);
+        }, params);
     }
 
     public void markCommentIsSpam(String id) {
@@ -781,18 +827,19 @@ public class Blog extends DataProxy {
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        performAPIRequest(true,URL_COMMENT+"/" + id + "/mark_ham", Request.Method.POST,new Request.RequestCallback() {
+        performAPIRequest(true, URL_COMMENT + "/" + id + "/mark_ham", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 BasicResponse res = new BasicResponse(response);
                 listener.onDataResponse(res);
             }
-        },params);
+        }, params);
     }
 
-    public void getBlogInfo(){
+    public void getBlogInfo() {
         getBlogInfo(defaultUserName);
     }
+
     public void getBlogInfo(String user) {
         if (user == null || TextUtils.isEmpty(user)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
@@ -801,13 +848,13 @@ public class Blog extends DataProxy {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("user", user));
 
-        performAPIRequest(false,URL_BLOG,new Request.RequestCallback() {
+        performAPIRequest(false, URL_BLOG, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 BlogInfo res = new BlogInfo(response);
                 listener.onDataResponse(res);
             }
-        },params);
+        }, params);
     }
 
     public void setBlogInfo(String name, String description, String keyword, String site_category_id) {
@@ -824,12 +871,12 @@ public class Blog extends DataProxy {
         if (!TextUtils.isEmpty(site_category_id)) {
             params.add(new BasicNameValuePair("site_category_id", site_category_id));
         }
-        performAPIRequest(true,URL_BLOG, Request.Method.POST,new Request.RequestCallback() {
+        performAPIRequest(true, URL_BLOG, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 BasicResponse res = new BasicResponse(response);
                 listener.onDataResponse(res);
             }
-        },params);
+        }, params);
     }
 }
