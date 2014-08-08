@@ -92,6 +92,9 @@ public class Article extends BasicResponse {
      * Image list
      */
     public ArrayList<Image> images;
+    public String ip;
+    public String url;
+    public String email;
 
     public Article(JSONObject jo) {
         super(jo);
@@ -157,6 +160,15 @@ public class Article extends BasicResponse {
             }
             if (article.has("body")) {
                 body = article.getString("body");
+            }
+            if (article.has("ip")) {
+                ip = article.getString("ip");
+            }
+            if (article.has("url")) {
+                url = article.getString("url");
+            }
+            if (article.has("email")) {
+                email = article.getString("email");
             }
             if (article.has("images")) {
                 JSONArray imagelist = article.getJSONArray("images");
