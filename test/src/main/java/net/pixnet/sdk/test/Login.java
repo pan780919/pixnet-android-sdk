@@ -15,6 +15,7 @@ import net.pixnet.sdk.utils.Helper;
 public class Login extends ItemDetailFragment {
 
     private static enum Apis{
+        LOGIN_X,
         LOGIN_1,
         LOGIN_2,
         LOGOUT
@@ -24,17 +25,15 @@ public class Login extends ItemDetailFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final String[] data={"oauth 1.0 login", "oauth 2.0 login", "logout"};
-
         setListAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
-                return data.length;
+                return Apis.values().length;
             }
 
             @Override
             public String getItem(int position) {
-                return data[position];
+                return Apis.values()[position].name();
             }
 
             @Override
@@ -70,6 +69,19 @@ public class Login extends ItemDetailFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 switch (Apis.values()[position]){
+                    case LOGIN_X:
+                        PIXNET.xAuthLogin(getActivity(),new PIXNET.OnAccessTokenGotListener() {
+                            @Override
+                            public void onAccessTokenGot(String token, String secret) {
+                                Helper.log("onAccessTokenGot:"+token);
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                Helper.toast(getActivity(), msg);
+                            }
+                        }, "ben68", "121111");
+                        break;
                     case LOGIN_1:
                         PIXNET.oAuth1Login(getActivity(), new PIXNET.OnAccessTokenGotListener() {
                             @Override

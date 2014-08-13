@@ -92,6 +92,7 @@ public class Account extends ItemDetailFragment {
                         account.getAccountInfo(true, null, true, true, true);
                         break;
                     case updateAccountInfo:
+                        account.updateAccountInfo("1211", "UncleBen");
                         break;
                     case getMIBInfo:
                         break;

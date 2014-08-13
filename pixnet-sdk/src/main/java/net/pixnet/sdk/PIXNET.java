@@ -40,7 +40,7 @@ public class PIXNET {
         dialog.show();
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
-        OAuthLoginHelper loginHelper=OAuthLoginHelper.newAoth1LoginHelper(getConsumerKey(context), getConsumerSecret(context), URL_OAUTH1_REQUEST, URL_OAUTH1_ACCESS, new OAuthLoginHelper.OAuthLoginListener() {
+        OAuthLoginHelper loginHelper=OAuthLoginHelper.newAuth1LoginHelper(getConsumerKey(context), getConsumerSecret(context), URL_OAUTH1_REQUEST, URL_OAUTH1_ACCESS, new OAuthLoginHelper.OAuthLoginListener() {
             @Override
             public void onRequestUrlGot() {
             }
@@ -50,7 +50,7 @@ public class PIXNET {
             }
 
             @Override
-            public void onAccessTokenGot(String token, String secret){
+            public void onAccessTokenGot(String token, String secret) {
                 listener.onAccessTokenGot(token, secret);
                 dialog.dismiss();
                 setOauthVersion(context, OAuthVersion.VER_1);
@@ -75,7 +75,7 @@ public class PIXNET {
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
         String clientId=getConsumerKey(context);
-        OAuthLoginHelper helper=OAuthLoginHelper.newAoth2LoginHelper(clientId, getConsumerSecret(context), URL_OAUTH2_AUTH, URL_OAUTH2_GRANT, getRedirectUri(clientId), new OAuthLoginHelper.OAuthLoginListener() {
+        OAuthLoginHelper helper=OAuthLoginHelper.newAuth2LoginHelper(clientId, getConsumerSecret(context), URL_OAUTH2_AUTH, URL_OAUTH2_GRANT, getRedirectUri(clientId), new OAuthLoginHelper.OAuthLoginListener() {
             @Override
             public void onRequestUrlGot() {
                 dialog.dismiss();
@@ -101,6 +101,31 @@ public class PIXNET {
             }
         });
         helper.loginByOauth2(webView);
+    }
+
+    public static void xAuthLogin(final Context context, final OnAccessTokenGotListener listener, String name, String passwd){
+        OAuthLoginHelper loginHelper=OAuthLoginHelper.newXAuthLoginHelper(getConsumerKey(context), getConsumerSecret(context), URL_OAUTH1_ACCESS, new OAuthLoginHelper.OAuthLoginListener() {
+            @Override
+            public void onRequestUrlGot() {
+            }
+
+            @Override
+            public void onVerify() {
+            }
+
+            @Override
+            public void onAccessTokenGot(String token, String secret) {
+                listener.onAccessTokenGot(token, secret);
+                setOauthVersion(context, OAuthVersion.VER_1);
+                setOauthAccessTokenAndSecret(context, token, secret);
+            }
+
+            @Override
+            public void onError(String msg) {
+                listener.onError(msg);
+            }
+        });
+        loginHelper.loginByXauth(name, passwd);
     }
 
     public static void logout(Context c){

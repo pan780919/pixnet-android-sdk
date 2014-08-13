@@ -19,6 +19,7 @@ import net.pixnet.sdk.utils.OAuthConnectionTool.OAuthVersion;
 
 public class OAuthLoginHelper {
 
+    private String xauthUrl_access;
     private String oauth1Url_request;
     private String oauth1Url_access;
     private String oauth2Url_auth;
@@ -35,7 +36,16 @@ public class OAuthLoginHelper {
     private String accessUrl;
     private String redirect_uri="http://oob";
 
-    public static OAuthLoginHelper newAoth1LoginHelper(String consumerKey, String consumerSecret, String requestUrl, String accessUrl, OAuthLoginListener listener){
+    public static OAuthLoginHelper newXAuthLoginHelper(String consumerKey, String consumerSecret, String accessUrl, OAuthLoginListener listener){
+        OAuthLoginHelper helper=new OAuthLoginHelper();
+        helper.key =consumerKey;
+        helper.secret =consumerSecret;
+        helper.xauthUrl_access=accessUrl;
+        helper.listener=listener;
+        return helper;
+    }
+
+    public static OAuthLoginHelper newAuth1LoginHelper(String consumerKey, String consumerSecret, String requestUrl, String accessUrl, OAuthLoginListener listener){
         OAuthLoginHelper helper=new OAuthLoginHelper();
         helper.key =consumerKey;
         helper.secret =consumerSecret;
@@ -45,7 +55,7 @@ public class OAuthLoginHelper {
         return helper;
     }
 
-    public static OAuthLoginHelper newAoth2LoginHelper(String clientId, String clientSecret, String authUrl, String grantUrl, String redirectUri, OAuthLoginListener listener){
+    public static OAuthLoginHelper newAuth2LoginHelper(String clientId, String clientSecret, String authUrl, String grantUrl, String redirectUri, OAuthLoginListener listener){
         OAuthLoginHelper helper=new OAuthLoginHelper();
         helper.key =clientId;
         helper.secret =clientSecret;
@@ -60,13 +70,13 @@ public class OAuthLoginHelper {
         redirect_uri=uri;
     }
 
-    public void loginByXauth(String userName, String passwd, String accessTokenUrl, final OAuthLoginListener listener) {
+    public void loginByXauth(String userName, String passwd) {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("x_auth_mode", "client_auth"));
         params.add(new BasicNameValuePair("x_auth_password", passwd));
         params.add(new BasicNameValuePair("x_auth_username", userName));
 
-        Request request = new Request(accessTokenUrl);
+        Request request = new Request(xauthUrl_access);
         request.setMethod(Request.Method.POST);
         request.setParams(params);
         request.setCallback(new Request.RequestCallback() {
@@ -82,6 +92,7 @@ public class OAuthLoginHelper {
         rc.setHttpConnectionTool(getConnectionTool(OAuthVersion.VER_1));
         rc.addRequest(request);
     }
+
     public void loginByOauth1(WebView view){
         webView=view;
         getUrlForOauth1Request();
