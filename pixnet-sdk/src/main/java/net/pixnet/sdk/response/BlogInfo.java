@@ -33,6 +33,10 @@ public class BlogInfo extends BasicResponse{
      */
     public Hits hits;
 
+    public BlogInfo(JSONObject jo) {
+        super(jo);
+    }
+
     public BlogInfo(String str) {
         super(str);
     }
@@ -40,12 +44,6 @@ public class BlogInfo extends BasicResponse{
     @Override
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
         JSONObject obj = super.parseJSON(jo);
-        if (obj.has("message")) {
-            message = obj.getString("message");
-        }
-        if (obj.has("error")) {
-            error = obj.getString("error");
-        }
         if(obj.has("blog")){
             JSONObject blog = obj.getJSONObject("blog");
             if(blog.has("link")){

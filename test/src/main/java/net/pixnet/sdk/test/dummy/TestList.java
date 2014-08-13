@@ -15,6 +15,7 @@ public class TestList {
 
     public static enum ItemId{
         LOGIN,
+        ACCOUNT,
         BLOG,
         ALBUM
     }
@@ -31,6 +32,7 @@ public class TestList {
 
     static {
         addItem(new TestItem(ItemId.LOGIN, "LOGIN"));
+        addItem(new TestItem(ItemId.ACCOUNT, "ACCOUNT"));
         addItem(new TestItem(ItemId.BLOG, "BLOG"));
         addItem(new TestItem(ItemId.ALBUM, "ALBUM"));
     }

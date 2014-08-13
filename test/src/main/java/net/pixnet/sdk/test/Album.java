@@ -15,12 +15,51 @@ import net.pixnet.sdk.utils.Helper;
 public class Album extends ItemDetailFragment {
 
     private static enum Apis{
-        MAIN,
-        SETFOLDERS,
-        SORT_SETFOLDERS,
-        SETS,
-        SET,
-        TEST
+        main,
+
+        getSetAndFolderList,
+        sortSetAndFolders,
+
+        getSetList,
+        getSet,
+        getElementListBySet,
+        getCommentListBySet,
+        addSet,
+        updateSet,
+        deleteSet,
+        sortSets,
+        getSetListByNear,
+
+        getFolderList,
+        getFolder,
+        addFolder,
+        updateFolder,
+        deleteFolder,
+
+        getElement,
+        getCommentListByElement,
+        addElement,
+        updateElement,
+        deleteElement,
+        sortElements,
+        getElementListByNear,
+
+        addCommentToSet,
+        getCommentBySet,
+        markSetCommentIsSpam,
+        markSetCommentIsHam,
+        deleteCommentFromSet,
+
+        addCommentToElement,
+        getCommentByElement,
+        markElementCommentIsSpam,
+        markElementCommentIsHam,
+        deleteCommentFromElement,
+
+        addFace,
+        updateFace,
+        deleteFace
+
     }
 
     @Override
@@ -71,41 +110,114 @@ public class Album extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                net.pixnet.sdk.utils.Album album=PIXNET.newAlbum(getActivity(), new DataProxy.DataProxyListener() {
-                            @Override
-                            public void onError(String msg) {
-                                Helper.log("error:"+msg);
-                            }
+                net.pixnet.sdk.utils.Album album=PIXNET.getAlbum(getActivity(), new DataProxy.DataProxyListener() {
+                    @Override
+                    public void onError(String msg) {
+                        Helper.log("error:" + msg);
+                    }
 
-                            @Override
-                            public void onDataResponse(BasicResponse response) {
-                                Helper.log("onDataResponse");
-                            }
-                        });
+                    @Override
+                    public void onDataResponse(BasicResponse response) {
+                        Helper.log("onDataResponse");
+                    }
+                });
                 album.setDefaultUserName("emmademo");
                 album.setDefaultPerPage(2);
                 album.setDefaultTrimUser(true);
                 switch (Apis.values()[position]){
-                    case MAIN:
+                    case main:
                         album.getMain();
                         break;
-                    case SETFOLDERS:
+                    case getSetAndFolderList:
                         album.getSetAndFolderList();
                         break;
-                    case SORT_SETFOLDERS:
-                        album.sortSetAndFolderList("");
+                    case sortSetAndFolders:
+                        album.sortSetAndFolders(null);
                         break;
-                    case SETS:
+                    case getSetList:
                         album.getSetList();
                         break;
-                    case SET:
+                    case getSet:
                         album.getSet("34260");
                         break;
-                    case TEST:
+                    case getElementListBySet:
+                        album.getElementListBySet("34260");
+                        break;
+                    case getCommentListBySet:
+                        album.getCommentListBySet("34258");
+                        break;
+                    case addSet:
+                        album.addSet("testSet", "setDescription");
+                        break;
+                    case updateSet:
+                        break;
+                    case deleteSet:
+                        album.deleteSet("5024067");
+                        break;
+                    case sortSets:
+                        break;
+                    case getSetListByNear:
+                        album.getSetListByNear(23.9738759, 120.982024);
+                        break;
+                    case getFolderList:
+                        album.getFolderList();
+                        break;
+                    case getFolder:
+                        album.getFolder("4953822");
+                        break;
+                    case addFolder:
+                        album.addFolder("testFolder", "this is a test folder");
+                        break;
+                    case updateFolder:
+                        album.updateFolder("5028546", "modify test", "this is a modified folder");
+                        break;
+                    case deleteFolder:
+                        album.deleteFolder("5028546");
+                        break;
+                    case getElement:
+                        album.getElement("413994");
+                        break;
+                    case getCommentListByElement:
+                        album.getCommentListByElement("413994");
+                        break;
+                    case addElement:
+                        break;
+                    case updateElement:
+                        break;
+                    case deleteElement:
+                        break;
+                    case sortElements:
+                        break;
+                    case getElementListByNear:
+                        break;
+                    case addCommentToSet:
+                        break;
+                    case getCommentBySet:
+                        break;
+                    case markSetCommentIsSpam:
+                        break;
+                    case markSetCommentIsHam:
+                        break;
+                    case deleteCommentFromSet:
+                        break;
+                    case addCommentToElement:
+                        break;
+                    case getCommentByElement:
+                        break;
+                    case markElementCommentIsSpam:
+                        break;
+                    case markElementCommentIsHam:
+                        break;
+                    case deleteCommentFromElement:
+                        break;
+                    case addFace:
+                        break;
+                    case updateFace:
+                        break;
+                    case deleteFace:
                         break;
                     default:
                 }
-
             }
         });
     }

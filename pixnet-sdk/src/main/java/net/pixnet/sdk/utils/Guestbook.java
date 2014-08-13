@@ -16,32 +16,8 @@ import java.util.ArrayList;
  * Created by Koi on 2014/8/8.
  */
 public class GuestBook extends DataProxy {
+
     private static final String URL_GUESTBOOK = "http://emma.pixnet.cc/guestbook";
-    /**
-     * 預設使用者名稱
-     */
-    private String defaultUserName = "emmademo";
-
-    public String getDefaultUserName() {
-        return defaultUserName;
-    }
-
-    public void setDefaultUserName(String defaultUserName) {
-        this.defaultUserName = defaultUserName;
-    }
-
-    /**
-     * 預設每頁幾筆資料
-     */
-    private int defaultPerPage = 20;
-
-    public int getDefaultPerPage() {
-        return defaultPerPage;
-    }
-
-    public void setDefaultPerPage(int defaultPerPage) {
-        this.defaultPerPage = defaultPerPage;
-    }
 
     public void getGuestbookList() {
         getGuestbookList(defaultUserName, null, null, defaultPerPage);

@@ -6,6 +6,7 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 
 import net.pixnet.sdk.proxy.DataProxy;
+import net.pixnet.sdk.utils.Account;
 import net.pixnet.sdk.utils.Album;
 import net.pixnet.sdk.utils.Helper;
 import net.pixnet.sdk.utils.OAuthLoginHelper;
@@ -17,11 +18,18 @@ public class PIXNET {
     private static final String URL_OAUTH1_REQUEST = "http://emma.pixnet.cc/oauth/request_token";
     private static final String URL_OAUTH1_ACCESS = "http://emma.pixnet.cc/oauth/access_token";
 
-    public static Album newAlbum(Context c, DataProxy.DataProxyListener listener){
+    public static Album getAlbum(Context c, DataProxy.DataProxyListener listener){
         Album album=new Album();
         album.setContext(c);
         album.setListener(listener);
         return album;
+    }
+
+    public static Account getAccount(Context c, DataProxy.DataProxyListener listener){
+        Account account=new Account();
+        account.setContext(c);
+        account.setListener(listener);
+        return account;
     }
 
     public static void oAuth1Login(final Context context, final OnAccessTokenGotListener listener){

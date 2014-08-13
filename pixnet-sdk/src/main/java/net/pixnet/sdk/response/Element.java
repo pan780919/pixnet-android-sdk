@@ -112,15 +112,13 @@ public class Element extends BasicResponse {
         super(str);
     }
 
+    public Element(JSONObject jo) {
+        super(jo);
+    }
+
     @Override
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
         JSONObject obj = super.parseJSON(jo);
-        if (obj.has("message")) {
-            message = obj.getString("message");
-        }
-        if (obj.has("error")) {
-            error = obj.getString("error");
-        }
         if (obj.has("id")) {
             id = obj.getString("id");
         }

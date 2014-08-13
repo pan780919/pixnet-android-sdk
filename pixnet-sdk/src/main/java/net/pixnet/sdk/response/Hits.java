@@ -18,6 +18,11 @@ public class Hits extends BasicResponse {
      */
     public int weekly;
 
+    /**
+     * monthly blog visits
+     */
+    public int monthly;
+
     public Hits(JSONObject jo) {
         super(jo);
     }
@@ -34,6 +39,8 @@ public class Hits extends BasicResponse {
         if (obj.has("weekly")) {
             weekly = obj.getInt("weekly");
         }
+        if(obj.has("monthly"))
+            monthly=obj.getInt("monthly");
         return obj;
     }
 }

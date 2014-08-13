@@ -72,6 +72,7 @@ public class Comment extends BasicResponse {
      * Set this comment comes from
      */
     public Set set;
+
     /**
      * Element this comment comes from
      */
@@ -81,15 +82,13 @@ public class Comment extends BasicResponse {
         super(str);
     }
 
+    public Comment(JSONObject jo) {
+        super(jo);
+    }
+
     @Override
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
         JSONObject obj = super.parseJSON(jo);
-        if (obj.has("message")) {
-            message = obj.getString("message");
-        }
-        if (obj.has("error")) {
-            error = obj.getString("error");
-        }
         if (obj.has("id")) {
             id = obj.getString("id");
         }
@@ -130,13 +129,13 @@ public class Comment extends BasicResponse {
             user = new User(obj.getJSONObject("user"));
         }
         if (obj.has("reply")) {
-            reply = new Reply(obj.getString("reply"));
+            reply = new Reply(obj.getJSONObject("reply"));
         }
         if (obj.has("article")) {
-            article = new Article(obj.getString("article"));
+            article = new Article(obj.getJSONObject("article"));
         }
         if(obj.has("element")){
-            element = new Element(obj.getString("element"));
+            element = new Element(obj.getJSONObject("element"));
         }
         return obj;
     }

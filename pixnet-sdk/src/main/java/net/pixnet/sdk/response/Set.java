@@ -61,33 +61,32 @@ public class Set extends AlbumContainer{
 
     @Override
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
-        JSONObject json = super.parseJSON(jo);
-
-        if(json.has("link"))
+        jo = super.parseJSON(jo).getJSONObject("set");
+        if(jo.has("link"))
             link=jo.getString("link");
-        if(json.has("permission"))
+        if(jo.has("permission"))
             permission =jo.getString("permission");
-        if(json.has("category_id"))
+        if(jo.has("category_id"))
             category_id=jo.getString("category_id");
-        if(json.has("category"))
+        if(jo.has("category"))
             category=jo.getString("category");
-        if(json.has("is_lockright"))
+        if(jo.has("is_lockright"))
             is_lockright=jo.getInt("is_lockright")==0?false:true;
-        if(json.has("lincense"))
+        if(jo.has("lincense"))
             licence=new License(jo.getJSONObject("lincense"));
-        if(json.has("cancomment"))
+        if(jo.has("cancomment"))
             cancomment=jo.getInt("cancomment")==0?false:true;
-        if(json.has("parent_id"))
+        if(jo.has("parent_id"))
             parent_id=jo.getString("parent_id");
-        if(json.has("is_system_set"))
+        if(jo.has("is_system_set"))
             is_system_set=jo.getBoolean("is_system_set");
-        if(json.has("hits"))
+        if(jo.has("hits"))
             hits=new Hits(jo.getJSONObject("hits"));
-        if(json.has("total_elements"))
+        if(jo.has("total_elements"))
             total_elements=jo.getInt("total_elements");
-        if(json.has("is_taggable"))
+        if(jo.has("is_taggable"))
             is_taggable=jo.getBoolean("is_taggable");
 
-        return json;
+        return jo;
     }
 }

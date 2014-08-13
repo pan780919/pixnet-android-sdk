@@ -255,7 +255,9 @@ public class HttpConnectionTool implements ConnectionTool {
 
     @Override
     public String performRequest(Request request) {
+        Helper.log(request.getMethod().name());
         String url=formatUrl(request.getUrl());
+        Helper.log(url);
         List<NameValuePair> params=request.getParams();
         List<NameValuePair> headerList=request.getHeaders();
 

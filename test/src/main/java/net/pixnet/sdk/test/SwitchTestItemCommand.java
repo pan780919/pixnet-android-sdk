@@ -8,6 +8,8 @@ public class SwitchTestItemCommand {
         switch (id){
             case LOGIN:
                 return new Login();
+            case ACCOUNT:
+                return new Account();
             case BLOG:
                 return null;
             case ALBUM:
