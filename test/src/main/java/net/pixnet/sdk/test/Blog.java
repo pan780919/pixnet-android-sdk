@@ -10,6 +10,7 @@ import android.widget.TextView;
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
+import net.pixnet.sdk.response.CategoryList;
 import net.pixnet.sdk.utils.Helper;
 
 /**
@@ -104,6 +105,8 @@ public class Blog extends ItemDetailFragment {
                     public void onDataResponse(BasicResponse response) {
                         Helper.log(response.message);
                         Helper.log("onDataResponse");
+                        CategoryList list= (CategoryList) response;
+                        Helper.log(String.valueOf(list.categories.size()));
                     }
                 });
                 blog.setDefaultUserName("emmademo");
@@ -117,7 +120,7 @@ public class Blog extends ItemDetailFragment {
                         blog.setBlogInfo("Test Name","Test description",null,null);
                         break;
                     case getBlogCategorieList:
-                        blog.getBlogCategorieList();
+                         blog.getBlogCategorieList();
                         break;
                     case addCategory:
                         break;

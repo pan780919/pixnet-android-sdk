@@ -7,14 +7,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Categories List
+ * categories List
  */
 public class CategoryList extends BasicResponse {
 
     /**
      * List of categories
      */
-    public ArrayList<Category> Categories;
+    public ArrayList<Category> categories;
 
     public CategoryList(String str) {
         super(str);
@@ -28,10 +28,10 @@ public class CategoryList extends BasicResponse {
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
         JSONObject obj = super.parseJSON(jo);
         if(obj.has("categories")) {
-            Categories = new ArrayList<Category>();
-            JSONArray ja = new JSONArray(obj.getString("categories"));
+            categories = new ArrayList<Category>();
+            JSONArray ja = obj.getJSONArray("categories");
             for (int i = 0; i < ja.length(); i++) {
-                Categories.add(new Category(ja.getJSONObject(i)));
+                categories.add(new Category(ja.getJSONObject(i)));
             }
         }
         return obj;
