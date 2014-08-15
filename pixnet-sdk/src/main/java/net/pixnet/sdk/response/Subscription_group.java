@@ -8,13 +8,12 @@ public class Subscription_group {
     public String name;
     public String position;
 
-    public Subscription_group(String response) {
-        formatJson(response);
+    public Subscription_group(JSONObject obj) {
+        formatJson(obj);
     }
 
-    private void formatJson(String response) {
+    private void formatJson(JSONObject obj) {
         try {
-            JSONObject obj = new JSONObject(response);
             if (obj.has("id"))
                 id = obj.getString("id");
             if (obj.has("name"))

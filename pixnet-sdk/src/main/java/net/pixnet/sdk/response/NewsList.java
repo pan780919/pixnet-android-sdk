@@ -1,5 +1,9 @@
 package net.pixnet.sdk.response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -17,5 +21,19 @@ public class NewsList extends BaseListResponse{
 
     public NewsList(String str) {
         super(str);
+    }
+
+    @Override
+    protected JSONObject parseJSON(JSONObject jo) throws JSONException {
+        if(jo.has("next_before_time"))
+            next_before_time = jo.getString("next_before_time");
+        if(jo.has("news")){
+            news = new ArrayList<News>();
+            JSONArray ja = jo.getJSONArray("news");
+            for(int i =0;i<ja.length();i++){
+                news.add(new News(ja.getJSONObject(i)));
+            }
+        }
+        return super.parseJSON(jo);
     }
 }

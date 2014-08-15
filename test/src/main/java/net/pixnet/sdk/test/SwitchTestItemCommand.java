@@ -18,6 +18,8 @@ public class SwitchTestItemCommand {
                 return new Block();
             case GUESTBOOK:
                 return new GuestBook();
+            case FRIEND:
+                return new Friend();
             default:
                 return null;
         }

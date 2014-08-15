@@ -19,7 +19,8 @@ public class TestList {
         BLOG,
         ALBUM,
         BLOCK,
-        GUESTBOOK
+        GUESTBOOK,
+        FRIEND
     }
 
     /**
@@ -39,6 +40,7 @@ public class TestList {
         addItem(new TestItem(ItemId.ALBUM, "ALBUM"));
         addItem(new TestItem(ItemId.BLOCK,"BLOCK"));
         addItem(new TestItem(ItemId.GUESTBOOK,"GUESTBOOK"));
+        addItem(new TestItem(ItemId.FRIEND,"FRIEND"));
     }
 
     private static void addItem(TestItem item) {
