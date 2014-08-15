@@ -158,11 +158,6 @@ public class Blog extends ItemDetailFragment {
                     case getCommentList:
                         break;
                     case addComment:
-
-
-
-
-
                         break;
                     case replyComment:
                         break;

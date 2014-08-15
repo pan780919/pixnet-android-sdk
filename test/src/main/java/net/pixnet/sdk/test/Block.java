@@ -10,6 +10,8 @@ import android.widget.TextView;
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
+import net.pixnet.sdk.response.Blocks;
+import net.pixnet.sdk.response.BlocksList;
 import net.pixnet.sdk.utils.Helper;
 
 /**
@@ -64,7 +66,7 @@ public class Block extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                net.pixnet.sdk.utils.Block block = PIXNET.getBlock(getActivity(),new DataProxy.DataProxyListener() {
+                final net.pixnet.sdk.utils.Block block = PIXNET.getBlock(getActivity(),new DataProxy.DataProxyListener() {
                     @Override
                     public void onError(String msg)  {
                         Helper.log("error:" + msg);
@@ -81,6 +83,17 @@ public class Block extends ItemDetailFragment {
                 block.setDefaultTrimUser(false);
                 switch (Apis.values()[position]) {
                     case getBlockList:
+                        block.setListener(new DataProxy.DataProxyListener() {
+                            @Override
+                            public void onError(String msg) {
+
+                            }
+                            @Override
+                            public void onDataResponse(BasicResponse response) {
+                                BlocksList block1 =(BlocksList)response;
+                                Helper.log(block1.blocks.get(0).user.name);
+                            }
+                        });
                         block.getBlockList();
                         break;
                     case addBlock:
