@@ -9,10 +9,7 @@ import android.widget.TextView;
 
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
-import net.pixnet.sdk.response.Article;
-import net.pixnet.sdk.response.ArticleList;
 import net.pixnet.sdk.response.BasicResponse;
-import net.pixnet.sdk.response.CategoryList;
 import net.pixnet.sdk.utils.Helper;
 
 /**
@@ -107,8 +104,6 @@ public class Blog extends ItemDetailFragment {
                     public void onDataResponse(BasicResponse response) {
                         Helper.log(response.message);
                         Helper.log("onDataResponse");
-                        CategoryList list= (CategoryList) response;
-                        Helper.log(String.valueOf(list.categories.size()));
                     }
                 });
                 blog.setDefaultUserName("emmademo");
@@ -134,32 +129,25 @@ public class Blog extends ItemDetailFragment {
                     case sortCategorieList:
                         break;
                     case getAllArticleList:
-                        blog.setListener(new DataProxy.DataProxyListener() {
-                            @Override
-                            public void onError(String msg) {
-
-                            }
-
-                            @Override
-                            public void onDataResponse(BasicResponse response) {
-                                ArticleList al = (ArticleList) response;
-                                Helper.log(al.total+"");
-                            }
-                        });
                         blog.getAllArticleList();
                         break;
                     case getArticle:
-
+                        blog.getArticle("61695293");
                         break;
                     case getRelatedArticleList:
+                        blog.getRelatedArticleList("61695293");
                         break;
                     case getCommentListByArticle:
+                        blog.getCommentListByArticle("61695293");
                         break;
                     case addArticle:
+                        blog.addArticle("TestTitle","TestBody");
                         break;
                     case updateArticle:
+                        blog.updateArticle("174157501","TestUpdateTitle","Body",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
                         break;
                     case removeArticle:
+                        blog.removeArticle("174156916");
                         break;
                     case getArticleListByLatest:
                         break;
@@ -170,6 +158,11 @@ public class Blog extends ItemDetailFragment {
                     case getCommentList:
                         break;
                     case addComment:
+
+
+
+
+
                         break;
                     case replyComment:
                         break;
@@ -184,6 +177,7 @@ public class Blog extends ItemDetailFragment {
                     case getCommentListByLatest:
                         break;
                     case getCategorieList:
+                        blog.getCategorieList();
                         break;
                     default:
                 }

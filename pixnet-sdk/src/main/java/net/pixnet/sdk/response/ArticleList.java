@@ -25,7 +25,7 @@ public class ArticleList extends BaseListResponse {
             articles = new ArrayList<Article>();
             JSONArray ja = obj.getJSONArray("articles");
             for(int i =0;i<ja.length();i++){
-                articles.add(i,new Article(ja.getString(i)));
+                articles.add(new Article(ja.getJSONObject(i)));
             }
         }
         return obj;

@@ -17,7 +17,8 @@ public class TestList {
         LOGIN,
         ACCOUNT,
         BLOG,
-        ALBUM
+        ALBUM,
+        BLOCK
     }
 
     /**
@@ -35,6 +36,7 @@ public class TestList {
         addItem(new TestItem(ItemId.ACCOUNT, "ACCOUNT"));
         addItem(new TestItem(ItemId.BLOG, "BLOG"));
         addItem(new TestItem(ItemId.ALBUM, "ALBUM"));
+        addItem(new TestItem(ItemId.BLOCK,"BLOCK"));
     }
 
     private static void addItem(TestItem item) {
