@@ -255,6 +255,7 @@ public class Blog extends DataProxy {
         performAPIRequest(false, URL_ARTICLE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
+                Helper.log(response);
                 ArticleList res = new ArticleList(response);
                 listener.onDataResponse(res);
             }

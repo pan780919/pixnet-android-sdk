@@ -100,8 +100,10 @@ public class Account extends ItemDetailFragment {
                     case updateMIBInfo:
                         break;
                     case getMIBPositionInfo:
+                        account.getMIBPostionInfo("790");
                         break;
                     case updateMIBPositionInfo:
+                        account.updateMIBPositionInfo("790", true, true);
                         break;
                     case payMIB:
                         account.payMIB();

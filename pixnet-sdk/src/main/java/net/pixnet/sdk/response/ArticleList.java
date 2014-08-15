@@ -1,5 +1,7 @@
 package net.pixnet.sdk.response;
 
+import net.pixnet.sdk.utils.Helper;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +27,10 @@ public class ArticleList extends BaseListResponse {
             articles = new ArrayList<Article>();
             JSONArray ja = obj.getJSONArray("articles");
             for(int i =0;i<ja.length();i++){
-                articles.add(i,new Article(ja.getString(i)));
+                JSONObject articleData=ja.getJSONObject(i);
+                Article article=new Article((articleData));
+                Helper.log(article.id);
+                articles.add(article);
             }
         }
         return obj;

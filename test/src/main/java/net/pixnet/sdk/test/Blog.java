@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
+import net.pixnet.sdk.response.ArticleList;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.CategoryList;
 import net.pixnet.sdk.utils.Helper;
@@ -105,8 +106,9 @@ public class Blog extends ItemDetailFragment {
                     public void onDataResponse(BasicResponse response) {
                         Helper.log(response.message);
                         Helper.log("onDataResponse");
-                        CategoryList list= (CategoryList) response;
-                        Helper.log(String.valueOf(list.categories.size()));
+                        ArticleList list= (ArticleList) response;
+                        Helper.log(String.valueOf(list.total));
+                        Helper.log(list.articles.get(0).id);
                     }
                 });
                 blog.setDefaultUserName("emmademo");
@@ -131,6 +133,7 @@ public class Blog extends ItemDetailFragment {
                     case sortCategorieList:
                         break;
                     case getAllArticleList:
+                        blog.getAllArticleList();
                         break;
                     case getArticle:
                         break;

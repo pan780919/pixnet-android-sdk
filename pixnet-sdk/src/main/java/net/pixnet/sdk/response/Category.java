@@ -3,6 +3,7 @@ package net.pixnet.sdk.response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -64,14 +65,8 @@ public class Category extends BasicResponse{
         if(obj.has("show_index")){
             show_index = obj.getString("show_index");
         }
-        if(obj.has("site_category_id")){
-            site_category_id = obj.getString("site_category_id");
-        }
-        if(obj.has("site_category_done")){
-            site_category_done = obj.getString("site_category_done");
-        }
         if(obj.has("child_categories")){
-            child_categories = new CategoryList(obj.getString("child_categories"));
+            child_categories = new ArrayList<ChildCategory>();
         }
         return obj;
     }

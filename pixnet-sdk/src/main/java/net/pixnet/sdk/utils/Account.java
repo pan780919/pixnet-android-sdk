@@ -9,6 +9,7 @@ import net.pixnet.sdk.response.Analytics;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.MIB;
 import net.pixnet.sdk.response.NotificationList;
+import net.pixnet.sdk.response.Position;
 import net.pixnet.sdk.response.User;
 
 import org.apache.http.NameValuePair;
@@ -16,6 +17,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.CRC32;
 
 public class Account extends DataProxy {
 
@@ -180,8 +182,42 @@ public class Account extends DataProxy {
         }, params);
     }
 
-    public void getMIBPostionInfo(){
+    public void getMIBPostionInfo(String id){
+        if(TextUtils.isEmpty(id)){
+            listener.onError(Error.MISS_PARAMETER+":id");
+            return;
+        }
+        performAPIRequest(true, URL_ACCOUNT_MIB_POSTION+"/"+id, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                Helper.log(response);
+                BasicResponse res=new Position(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
+            }
+        });
+    }
 
+    public void updateMIBPositionInfo(String id, boolean enabled, boolean fixed){
+        if(TextUtils.isEmpty(id)){
+            listener.onError(Error.MISS_PARAMETER+":id");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("enabled", enabled?"1":"0"));
+        params.add(new BasicNameValuePair("fixedadbox", fixed?"1":"0"));
+
+        performAPIRequest(true, URL_ACCOUNT_MIB_POSTION+"/"+id, Request.Method.POST, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                Helper.log(response);
+                BasicResponse res=new MIB(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
+            }
+        }, params);
     }
 
     /**
