@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
+import net.pixnet.sdk.response.Article;
+import net.pixnet.sdk.response.ArticleList;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.utils.Helper;
 
@@ -94,7 +96,7 @@ public class Blog extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                net.pixnet.sdk.utils.Blog blog = PIXNET.getBlog(getActivity(),new DataProxy.DataProxyListener() {
+                net.pixnet.sdk.utils.Blog blog = PIXNET.getBlog(getActivity(), new DataProxy.DataProxyListener() {
                     @Override
                     public void onError(String msg) {
                         Helper.log("error:" + msg);
@@ -109,17 +111,18 @@ public class Blog extends ItemDetailFragment {
                 blog.setDefaultUserName("emmademo");
                 blog.setDefaultPerPage(2);
                 blog.setDefaultTrimUser(false);
-                switch(Apis.values()[position]){
+                switch (Apis.values()[position]) {
                     case getBlogInfo:
                         blog.getBlogInfo();
                         break;
                     case setBlogInfo:
-                        blog.setBlogInfo("Test Name","Test description",null,null);
+                        blog.setBlogInfo("Test Name", "Test description", null, null);
                         break;
                     case getBlogCategorieList:
                         blog.getBlogCategorieList();
                         break;
                     case addCategory:
+                        blog.addCategory("Test");
                         break;
                     case updateCategory:
                         break;
@@ -128,8 +131,22 @@ public class Blog extends ItemDetailFragment {
                     case sortCategorieList:
                         break;
                     case getAllArticleList:
+                        blog.setListener(new DataProxy.DataProxyListener() {
+                            @Override
+                            public void onError(String msg) {
+
+                            }
+
+                            @Override
+                            public void onDataResponse(BasicResponse response) {
+                                ArticleList al = (ArticleList) response;
+                                Helper.log(al.total+"");
+                            }
+                        });
+                        blog.getAllArticleList();
                         break;
                     case getArticle:
+
                         break;
                     case getRelatedArticleList:
                         break;
