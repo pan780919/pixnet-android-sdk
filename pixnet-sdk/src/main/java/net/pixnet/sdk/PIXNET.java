@@ -10,6 +10,7 @@ import net.pixnet.sdk.utils.Account;
 import net.pixnet.sdk.utils.Album;
 import net.pixnet.sdk.utils.Block;
 import net.pixnet.sdk.utils.Blog;
+import net.pixnet.sdk.utils.GuestBook;
 import net.pixnet.sdk.utils.Helper;
 import net.pixnet.sdk.utils.OAuthLoginHelper;
 import net.pixnet.sdk.utils.OAuthConnectionTool.OAuthVersion;
@@ -19,6 +20,12 @@ public class PIXNET {
     private static final String URL_OAUTH2_GRANT = "https://emma.pixnet.cc/oauth2/grant";
     private static final String URL_OAUTH1_REQUEST = "http://emma.pixnet.cc/oauth/request_token";
     private static final String URL_OAUTH1_ACCESS = "http://emma.pixnet.cc/oauth/access_token";
+    public static GuestBook getGuestBook(Context c,DataProxy.DataProxyListener listener){
+        GuestBook guestBook = new GuestBook();
+        guestBook.setContext(c);
+        guestBook.setListener(listener);
+        return guestBook;
+    }
     public static Block getBlock(Context c,DataProxy.DataProxyListener listener){
         Block block = new Block();
         block.setContext(c);

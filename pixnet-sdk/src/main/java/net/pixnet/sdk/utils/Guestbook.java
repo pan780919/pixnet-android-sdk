@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class GuestBook extends DataProxy {
 
-    private static final String URL_GUESTBOOK = "http://emma.pixnet.cc/guestbook";
+    private static final String URL_GUESTBOOK = "https://emma.pixnet.cc/guestbook";
 
     public void getGuestbookList() {
         getGuestbookList(defaultUserName, null, null, defaultPerPage);
@@ -38,6 +38,7 @@ public class GuestBook extends DataProxy {
         performAPIRequest(false, URL_GUESTBOOK, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
+                Helper.log(response);
                 GuestbookList res = new GuestbookList(response);
                 listener.onDataResponse(res);
             }
@@ -45,10 +46,10 @@ public class GuestBook extends DataProxy {
     }
 
     public void addGuestbook(String user, String title, String body) {
-        addGuestbook(user, title, body, null, null, null, null);
+        addGuestbook(user, title, body, null, null, null, true);
     }
 
-    public void addGuestbook(String user, String title, String body, String auther, String url, String email, String is_open) {
+    public void addGuestbook(String user, String title, String body, String auther, String url, String email, boolean is_open) {
         if (user == null || TextUtils.isEmpty(user)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
             return;
@@ -63,16 +64,16 @@ public class GuestBook extends DataProxy {
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("user", user));
-        params.add(new BasicNameValuePair("title", user));
-        params.add(new BasicNameValuePair("body", user));
+        params.add(new BasicNameValuePair("title", title));
+        params.add(new BasicNameValuePair("body", body));
         if (!TextUtils.isEmpty(auther))
             params.add(new BasicNameValuePair("auther", auther));
         if (!TextUtils.isEmpty(url))
             params.add(new BasicNameValuePair("url", url));
         if (!TextUtils.isEmpty(email))
             params.add(new BasicNameValuePair("email", email));
-        if (!TextUtils.isEmpty(is_open))
-            params.add(new BasicNameValuePair("is_open", is_open));
+        params.add(new BasicNameValuePair("is_open", is_open ? "1" : "0"));
+
         performAPIRequest(true, URL_GUESTBOOK, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {

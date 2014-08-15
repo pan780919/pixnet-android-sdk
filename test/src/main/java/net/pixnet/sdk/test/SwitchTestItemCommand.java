@@ -16,6 +16,8 @@ public class SwitchTestItemCommand {
                 return new Album();
             case BLOCK:
                 return new Block();
+            case GUESTBOOK:
+                return new GuestBook();
             default:
                 return null;
         }
