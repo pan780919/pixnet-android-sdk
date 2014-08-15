@@ -35,7 +35,7 @@ public class FriendshipList extends BaseListResponse {
         JSONObject obj = super.parseJSON(jo);
         if (obj.has("friend_pairs")) {
             friend_pairs = new ArrayList<Friendship>();
-            JSONArray ja = obj.getJSONArray("friends_pairs");
+            JSONArray ja = obj.getJSONArray("friend_pairs");
             for (int i = 0; i < ja.length(); i++) {
                 friend_pairs.add(new Friendship(ja.getString(i)));
             }

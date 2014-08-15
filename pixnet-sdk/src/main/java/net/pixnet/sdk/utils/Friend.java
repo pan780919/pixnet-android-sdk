@@ -7,6 +7,7 @@ import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.FriendshipList;
 import net.pixnet.sdk.response.GroupList;
 import net.pixnet.sdk.response.News;
+import net.pixnet.sdk.response.NewsList;
 import net.pixnet.sdk.response.SubscriptionList;
 import net.pixnet.sdk.response.Subscription_groupList;
 
@@ -19,11 +20,11 @@ import java.util.ArrayList;
  * Created by Koi on 2014/8/8.
  */
 public class Friend extends DataProxy {
-    private static final String URL_NEWS = "http://emma.pixnet.cc/friend/news";
-    private static final String URL_GROUP = "http://emma.pixnet.cc/friend/groups";
-    private static final String URL_FRIENDSHIP = "http://emma.pixnet.cc/friendships";
-    private static final String URL_SUBSCRIPTION = "http://emma.pixnet.cc/friend/subscriptions";
-    private static final String URL_SUBSCRIPTION_GROUP = "http://emma.pixnet.cc/friend/subscription_groups";
+    private static final String URL_NEWS = "https://emma.pixnet.cc/friend/news";
+    private static final String URL_GROUP = "https://emma.pixnet.cc/friend/groups";
+    private static final String URL_FRIENDSHIP = "https://emma.pixnet.cc/friendships";
+    private static final String URL_SUBSCRIPTION = "https://emma.pixnet.cc/friend/subscriptions";
+    private static final String URL_SUBSCRIPTION_GROUP = "https://emma.pixnet.cc/friend/subscription_groups";
     /**
      * 預設使用者名稱
      */
@@ -74,7 +75,8 @@ public class Friend extends DataProxy {
         performAPIRequest(true, URL_NEWS, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                News res = new News(response);
+                Helper.log(response);
+                NewsList res = new NewsList(response);
                 listener.onDataResponse(res);
             }
         }, params);
@@ -242,6 +244,7 @@ public class Friend extends DataProxy {
         performAPIRequest(true, URL_SUBSCRIPTION, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
+                Helper.log(response);
                 SubscriptionList res =new SubscriptionList(response);
                 listener.onDataResponse(res);
             }
@@ -282,18 +285,18 @@ public class Friend extends DataProxy {
         }, params);
     }
 
-    public void joinSubscriptionGroup(String user, String group_id) {
+    public void joinSubscriptionGroup(String user, String group_ids) {
         if (user == null || TextUtils.isEmpty(user)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
             return;
         }
-        if (group_id == null || TextUtils.isEmpty(group_id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":group_id");
+        if (group_ids == null || TextUtils.isEmpty(group_ids)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":group_ids");
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("user", user));
-        params.add(new BasicNameValuePair("group_id", group_id));
+        params.add(new BasicNameValuePair("group_ids", group_ids));
         performAPIRequest(true, URL_SUBSCRIPTION + "/" + user + "/join_subscription_group", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
@@ -303,18 +306,18 @@ public class Friend extends DataProxy {
         }, params);
     }
 
-    public void leaveSubscriptionGroup(String user, String group_id) {
+    public void leaveSubscriptionGroup(String user, String group_ids) {
         if (user == null || TextUtils.isEmpty(user)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
             return;
         }
-        if (group_id == null || TextUtils.isEmpty(group_id)) {
+        if (group_ids == null || TextUtils.isEmpty(group_ids)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":group_id");
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("user", user));
-        params.add(new BasicNameValuePair("group_id", group_id));
+        params.add(new BasicNameValuePair("group_ids", group_ids));
         performAPIRequest(true, URL_SUBSCRIPTION + "/" + user + "/leave_subscription_group", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {

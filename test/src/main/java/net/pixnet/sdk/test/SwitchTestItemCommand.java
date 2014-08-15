@@ -14,6 +14,12 @@ public class SwitchTestItemCommand {
                 return new Blog();
             case ALBUM:
                 return new Album();
+            case BLOCK:
+                return new Block();
+            case GUESTBOOK:
+                return new GuestBook();
+            case FRIEND:
+                return new Friend();
             default:
                 return null;
         }

@@ -10,21 +10,6 @@ import java.util.ArrayList;
  * Group list
  */
 public class GroupList extends BaseListResponse {
-    /**
-     * Total counts of group
-     */
-    public int total;
-    /**
-     * Group shows per page
-     */
-    public int per_page;
-    /**
-     * Current page
-     */
-    public int page;
-    /**
-     * Group list
-     */
     public ArrayList<Group> friend_groups;
 
     public GroupList(String str) {
@@ -37,7 +22,7 @@ public class GroupList extends BaseListResponse {
             friend_groups = new ArrayList<Group>();
             JSONArray ja = obj.getJSONArray("friend_groups");
             for (int i = 0; i < ja.length(); i++) {
-                friend_groups.add(new Group(ja.getString(i)));
+                friend_groups.add(new Group(ja.getJSONObject(i)));
             }
         }
         return obj;

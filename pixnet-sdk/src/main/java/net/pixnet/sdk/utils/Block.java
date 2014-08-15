@@ -13,7 +13,7 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 
 public class Block extends DataProxy {
-    private static final String URL_BLOCK = "http://emma.pixnet.cc/blocks";
+    private static final String URL_BLOCK = "https://emma.pixnet.cc/blocks";
 
     public void getBlockList() {
         performAPIRequest(true, URL_BLOCK, new Request.RequestCallback() {

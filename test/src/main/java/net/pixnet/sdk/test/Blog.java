@@ -11,7 +11,6 @@ import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.ArticleList;
 import net.pixnet.sdk.response.BasicResponse;
-import net.pixnet.sdk.response.CategoryList;
 import net.pixnet.sdk.utils.Helper;
 
 /**
@@ -96,7 +95,7 @@ public class Blog extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                net.pixnet.sdk.utils.Blog blog = PIXNET.getBlog(getActivity(),new DataProxy.DataProxyListener() {
+                net.pixnet.sdk.utils.Blog blog = PIXNET.getBlog(getActivity(), new DataProxy.DataProxyListener() {
                     @Override
                     public void onError(String msg) {
                         Helper.log("error:" + msg);
@@ -106,25 +105,23 @@ public class Blog extends ItemDetailFragment {
                     public void onDataResponse(BasicResponse response) {
                         Helper.log(response.message);
                         Helper.log("onDataResponse");
-                        ArticleList list= (ArticleList) response;
-                        Helper.log(String.valueOf(list.total));
-                        Helper.log(list.articles.get(0).id);
                     }
                 });
                 blog.setDefaultUserName("emmademo");
                 blog.setDefaultPerPage(2);
                 blog.setDefaultTrimUser(false);
-                switch(Apis.values()[position]){
+                switch (Apis.values()[position]) {
                     case getBlogInfo:
                         blog.getBlogInfo();
                         break;
                     case setBlogInfo:
-                        blog.setBlogInfo("Test Name","Test description",null,null);
+                        blog.setBlogInfo("Test Name", "Test description", null, null);
                         break;
                     case getBlogCategorieList:
                          blog.getBlogCategorieList();
                         break;
                     case addCategory:
+                        blog.addCategory("Test");
                         break;
                     case updateCategory:
                         break;
@@ -136,16 +133,22 @@ public class Blog extends ItemDetailFragment {
                         blog.getAllArticleList();
                         break;
                     case getArticle:
+                        blog.getArticle("61695293");
                         break;
                     case getRelatedArticleList:
+                        blog.getRelatedArticleList("61695293");
                         break;
                     case getCommentListByArticle:
+                        blog.getCommentListByArticle("61695293");
                         break;
                     case addArticle:
+                        blog.addArticle("TestTitle","TestBody");
                         break;
                     case updateArticle:
+                        blog.updateArticle("174157501","TestUpdateTitle","Body",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
                         break;
                     case removeArticle:
+                        blog.removeArticle("174156916");
                         break;
                     case getArticleListByLatest:
                         break;
@@ -170,6 +173,7 @@ public class Blog extends ItemDetailFragment {
                     case getCommentListByLatest:
                         break;
                     case getCategorieList:
+                        blog.getCategorieList();
                         break;
                     default:
                 }

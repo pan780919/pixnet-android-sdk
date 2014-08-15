@@ -324,6 +324,7 @@ public class Blog extends DataProxy {
         performAPIRequest(false, URL_ARTICLE + "/" + id + "/related", new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
+                Helper.log(response);
                 ArticleList res = new ArticleList(response);
                 listener.onDataResponse(res);
             }
@@ -365,6 +366,7 @@ public class Blog extends DataProxy {
         performAPIRequest(false, URL_COMMENT, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
+                Helper.log(response);
                 CommentList res = new CommentList(response);
                 listener.onDataResponse(res);
             }
@@ -614,9 +616,7 @@ public class Blog extends DataProxy {
             }
         }, params);
     }
-    public void getCommentList(){
-        getCommentList(null);
-    }
+
     public void getCommentList(String article_id){
         getCommentList(article_id,1);
     }
@@ -628,11 +628,13 @@ public class Blog extends DataProxy {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
             return;
         }
+        if (article_id == null || TextUtils.isEmpty(article_id)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":article_id");
+            return;
+        }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("user", user));
-        if (!TextUtils.isEmpty(article_id)) {
-            params.add(new BasicNameValuePair("article_id", article_id));
-        }
+        params.add(new BasicNameValuePair("article_id", article_id));
         if (!TextUtils.isEmpty(blog_password)) {
             params.add(new BasicNameValuePair("blog_password", blog_password));
         }

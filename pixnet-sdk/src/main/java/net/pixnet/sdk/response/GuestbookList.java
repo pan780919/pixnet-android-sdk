@@ -11,19 +11,11 @@ import java.util.ArrayList;
  */
 public class GuestbookList extends BaseListResponse{
     /**
-     * Total counts of guestbook articles
-     */
-    public int total;
-    /**
      *Guestbook articles list
      */
     public ArrayList<Article> articles;
     /**
      * Articles show per page
-     */
-    public int per_page;
-    /**
-     * previous_cursor
      */
     public int previous_cursor;
     /**

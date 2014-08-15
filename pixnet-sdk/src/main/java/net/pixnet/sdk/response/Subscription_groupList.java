@@ -22,7 +22,7 @@ public class Subscription_groupList extends BaseListResponse {
             subscription_groups = new ArrayList<Subscription_group>();
             JSONArray ja = obj.getJSONArray("subscription_groups");
             for (int i = 0; i < ja.length(); i++) {
-                subscription_groups.add(new Subscription_group(ja.getString(i)));
+                subscription_groups.add(new Subscription_group(ja.getJSONObject(i)));
             }
         }
         return obj;

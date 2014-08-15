@@ -7,10 +7,9 @@ import org.json.JSONObject;
  * Group
  */
 public class Group{
-    public Group(String response){
-        formatJson(response);
+    public Group(JSONObject jo){
+        formatJson(jo);
     }
-
     /**
      * Group id
      */
@@ -23,9 +22,8 @@ public class Group{
      * Group order
      */
     public String order;
-    private void formatJson(String response) {
+    private void formatJson(JSONObject obj) {
         try {
-            JSONObject obj = new JSONObject(response);
             if(obj.has("id")){
                 id = obj.getString("id");
             }

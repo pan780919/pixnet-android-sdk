@@ -44,7 +44,7 @@ public class Friendship {
                 groups = new ArrayList<Group>();
                 JSONArray ja = obj.getJSONArray("groups");
                 for (int i = 0; i < ja.length(); i++) {
-                    groups.add(new Group(ja.getString(i)));
+                    groups.add(new Group(ja.getJSONObject(i)));
                 }
             }
         } catch (JSONException e) {

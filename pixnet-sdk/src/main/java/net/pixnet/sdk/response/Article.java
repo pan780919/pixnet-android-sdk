@@ -107,75 +107,78 @@ public class Article extends BasicResponse {
     @Override
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
         JSONObject obj = super.parseJSON(jo);
+        JSONObject article;
         if (obj.has("article")) {
-            JSONObject article = obj.getJSONObject("article");
-            if (article.has("id")) {
-                id = article.getString("id");
+            article = obj.getJSONObject("article");
+        } else {
+            article = jo;
+        }
+        if (article.has("id")) {
+            id = article.getString("id");
+        }
+        if (article.has("public_at")) {
+            public_at = article.getString("public_at");
+        }
+        if (article.has("site_category")) {
+            site_category = article.getString("site_category");
+        }
+        if (article.has("category")) {
+            category = article.getString("category");
+        }
+        if (article.has("category_id")) {
+            category_id = article.getString("category_id");
+        }
+        if (article.has("link")) {
+            link = article.getString("link");
+        }
+        if (article.has("status")) {
+            status = article.getString("status");
+        }
+        if (article.has("tags")) {
+            JSONArray taglist = article.getJSONArray("tags");
+            tags = new ArrayList<Tag>();
+            for (int i = 0; i < taglist.length(); i++) {
+                tags.add(new Tag(taglist.getJSONObject(i)));
             }
-            if (article.has("public_at")) {
-                public_at = article.getString("public_at");
-            }
-            if (article.has("site_category")) {
-                site_category = article.getString("site_category");
-            }
-            if (article.has("category")) {
-                category = article.getString("category");
-            }
-            if (article.has("category_id")) {
-                category_id = article.getString("category_id");
-            }
-            if (article.has("link")) {
-                link = article.getString("link");
-            }
-            if (article.has("status")) {
-                status = article.getString("status");
-            }
-            if (article.has("tags")) {
-                JSONArray taglist = article.getJSONArray("tags");
-                tags = new ArrayList<Tag>();
-                for (int i = 0; i < taglist.length(); i++) {
-                    tags.add(new Tag(taglist.getJSONObject(i)));
-                }
-            }
-            if (article.has("is_top")) {
-                is_top = article.getString("is_top");
-            }
-            if (article.has("comment_perm")) {
-                comment_perm = article.getString("comment_perm");
-            }
-            if (article.has("comment_hidden")) {
-                comment_hidden = article.getString("comment_hidden");
-            }
-            if (article.has("title")) {
-                title = article.getString("title");
-            }
-            if (article.has("thumb")) {
-                thumb = article.getString("thumb");
-            }
-            if (article.has("info")) {
-                info = new Info(article.getString("info"));
-            }
-            if (article.has("user")) {
-                user = new User(article);
-            }
-            if (article.has("body")) {
-                body = article.getString("body");
-            }
-            if (article.has("ip")) {
-                ip = article.getString("ip");
-            }
-            if (article.has("url")) {
-                url = article.getString("url");
-            }
-            if (article.has("email")) {
-                email = article.getString("email");
-            }
-            if (article.has("images")) {
-                JSONArray imagelist = article.getJSONArray("images");
-                images = new ArrayList<Image>();
-                for (int i = 0; i < imagelist.length(); i++) {
-                    images.add(new Image(imagelist.getString(i)));
-                }
+        }
+        if (article.has("is_top")) {
+            is_top = article.getString("is_top");
+        }
+        if (article.has("comment_perm")) {
+            comment_perm = article.getString("comment_perm");
+        }
+        if (article.has("comment_hidden")) {
+            comment_hidden = article.getString("comment_hidden");
+        }
+        if (article.has("title")) {
+            title = article.getString("title");
+        }
+        if (article.has("thumb")) {
+            thumb = article.getString("thumb");
+        }
+        if (article.has("info")) {
+            info = new Info(article.getString("info"));
+        }
+        if (article.has("user")) {
+            user = new User(article);
+        }
+        if (article.has("body")) {
+            body = article.getString("body");
+        }
+        if (article.has("ip")) {
+            ip = article.getString("ip");
+        }
+        if (article.has("url")) {
+            url = article.getString("url");
+        }
+        if (article.has("email")) {
+            email = article.getString("email");
+        }
+        if (article.has("images")) {
+            JSONArray imagelist = article.getJSONArray("images");
+            images = new ArrayList<Image>();
+            for (int i = 0; i < imagelist.length(); i++) {
+                images.add(new Image(imagelist.getString(i)));
             }
         }
         return obj;

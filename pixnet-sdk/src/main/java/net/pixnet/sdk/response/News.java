@@ -29,7 +29,7 @@ public class News extends BasicResponse {
     public ArrayList<Element> latest_elements;
     public String next_before_time;
 
-    public News(String response) {
+    public News(JSONObject response) {
         super(response);
     }
 
@@ -38,7 +38,7 @@ public class News extends BasicResponse {
         if (obj.has("content_type"))
             content_type = obj.getString("content_type");
         if (obj.has("blog_article"))
-            blog_article = new Article(obj.getString("blog_article"));
+            blog_article = new Article(obj.getJSONObject("blog_article"));
         if (obj.has("user"))
             user = new User(obj);
         if (obj.has("album_set"))
@@ -47,7 +47,7 @@ public class News extends BasicResponse {
             latest_elements = new ArrayList<Element>();
             JSONArray ja = obj.getJSONArray("latest_elements");
             for (int i = 0; i < ja.length(); i++) {
-                latest_elements.add(new Element(ja.getString(i)));
+                latest_elements.add(new Element(ja.getJSONObject(i)));
             }
         }
         if (obj.has("next_before_time"))
