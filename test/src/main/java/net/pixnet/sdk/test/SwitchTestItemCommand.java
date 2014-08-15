@@ -11,7 +11,7 @@ public class SwitchTestItemCommand {
             case ACCOUNT:
                 return new Account();
             case BLOG:
-                return null;
+                return new Blog();
             case ALBUM:
                 return new Album();
             default:
