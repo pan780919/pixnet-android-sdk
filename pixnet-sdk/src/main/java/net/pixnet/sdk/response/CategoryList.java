@@ -27,12 +27,6 @@ public class CategoryList extends BaseListResponse {
     @Override
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
         JSONObject obj = super.parseJSON(jo);
-        if (obj.has("message")) {
-            message = obj.getString("message");
-        }
-        if (obj.has("error")) {
-            error = obj.getString("error");
-        }
         if(obj.has("categories")) {
             Categories = new ArrayList<Category>();
             JSONArray ja = new JSONArray(obj.getString("categories"));

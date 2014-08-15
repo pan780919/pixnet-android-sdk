@@ -18,7 +18,7 @@ public class BasicResponse {
      * error code
      * 0 = success
      */
-    public String error;
+    public int error;
 
     public BasicResponse() {}
 
@@ -43,8 +43,10 @@ public class BasicResponse {
     }
 
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
-        message=jo.getString("message");
-        error=jo.getString("error");
+        if(jo.has("message"))
+            message=jo.getString("message");
+        if(jo.has("error"))
+            error=jo.getInt("error");
         return jo;
     }
 

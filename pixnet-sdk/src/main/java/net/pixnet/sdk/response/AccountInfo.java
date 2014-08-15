@@ -1,6 +1,7 @@
 package net.pixnet.sdk.response;
 
 import net.pixnet.sdk.proxy.DataProxy;
+import net.pixnet.sdk.utils.Helper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +34,7 @@ public class AccountInfo extends BasicResponse {
     public String phone;
     public String education;
     public VIPInfo vip_info;
+    public Quota quota;
     public Preferences preferences;
     public BlogInfo blog;
     public List<Notification> notifications;
@@ -93,16 +95,22 @@ public class AccountInfo extends BasicResponse {
                 vip_info.has_ad=DataProxy.getJsonBoolean(vipData, "has_ad");
             if(vipData.has("expire_date"))
                 vip_info.expire_date=vipData.getString("expire_date");
-            if(vipData.has("album_space_quota"))
-                vip_info.album_space_quota=vipData.getLong("album_space_quota");
-            if(vipData.has("album_space_left"))
-                vip_info.album_space_left=vipData.getLong("album_space_left");
-            if(vipData.has("album_upload_quota"))
-                vip_info.album_upload_quota=vipData.getLong("album_upload_quota");
-            if(vipData.has("album_upload_usage"))
-                vip_info.album_upload_usage=vipData.getLong("album_upload_usage");
-            if(vipData.has("album_upload_left"))
-                vip_info.album_upload_left=vipData.getLong("album_upload_left");
+        }
+        if(jo.has("quota")){
+            JSONObject quotaData=jo.getJSONObject("quota");
+            quota=new Quota();
+            if(quotaData.has("album_space_quota"))
+                quota.album_space_quota=quotaData.getLong("album_space_quota");
+            if(quotaData.has("album_space_usage"))
+                quota.album_space_usage=quotaData.getLong("album_space_usage");
+            if(quotaData.has("album_space_left"))
+                quota.album_space_left=quotaData.getLong("album_space_left");
+            if(quotaData.has("album_upload_quota"))
+                quota.album_upload_quota=quotaData.getLong("album_upload_quota");
+            if(quotaData.has("album_upload_usage"))
+                quota.album_upload_usage=quotaData.getLong("album_upload_usage");
+            if(quotaData.has("album_upload_left"))
+                quota.album_upload_left=quotaData.getLong("album_upload_left");
         }
         if(jo.has("preferences")) {
             JSONObject prefercenceData = jo.getJSONObject("preferences");
@@ -156,9 +164,9 @@ public class AccountInfo extends BasicResponse {
         if(jo.has("blog"))
             blog = new BlogInfo(jo);
         if(jo.has("mib"))
-            mib=new MIB(jo.getJSONObject("mib"));
+            mib=new MIB(jo);
         if(jo.has("analytics"))
-            analytics=new Analytics(jo.getJSONObject("analytics"));
+            analytics=new Analytics(jo);
 
         return jo;
     }
@@ -167,7 +175,11 @@ public class AccountInfo extends BasicResponse {
         public String name;
         public boolean has_ad;
         public String expire_date;
+    }
+
+    public class Quota{
         public long album_space_quota;
+        public long album_space_usage;
         public long album_space_left;
         public long album_upload_quota;
         public long album_upload_usage;

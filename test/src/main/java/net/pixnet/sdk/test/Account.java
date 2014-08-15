@@ -92,9 +92,10 @@ public class Account extends ItemDetailFragment {
                         account.getAccountInfo(true, null, true, true, true);
                         break;
                     case updateAccountInfo:
-                        account.updateAccountInfo("1211", "UncleBen");
+                        account.updateAccountInfo("121111", "UncleBen");
                         break;
                     case getMIBInfo:
+                        account.getMIBInfo();
                         break;
                     case updateMIBInfo:
                         break;
@@ -103,8 +104,10 @@ public class Account extends ItemDetailFragment {
                     case updateMIBPositionInfo:
                         break;
                     case payMIB:
+                        account.payMIB();
                         break;
                     case getAnalyticData:
+                        account.getAnalyticData(2, 2);
                         break;
                     case updatePassword:
                         break;

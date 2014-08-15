@@ -20,12 +20,6 @@ public class Site_CategoryList extends BaseListResponse {
     @Override
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
         JSONObject obj = super.parseJSON(jo);
-        if (obj.has("message")) {
-            message = obj.getString("message");
-        }
-        if (obj.has("error")) {
-            error = obj.getString("error");
-        }
         if (obj.has("categories")) {
             categories = new ArrayList<Category>();
             JSONArray aobj = obj.getJSONArray("categories");

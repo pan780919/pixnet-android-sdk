@@ -1,5 +1,7 @@
 package net.pixnet.sdk.response;
 
+import net.pixnet.sdk.proxy.DataProxy;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,6 +13,10 @@ public class MIB extends BasicResponse {
     public BlogInfo blog;
     public UserInfo account;
 
+    public MIB(String str) {
+        super(str);
+    }
+
     public MIB(JSONObject jo) {
         super(jo);
     }
@@ -19,6 +25,10 @@ public class MIB extends BasicResponse {
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
         jo = super.parseJSON(jo);
 
+        if(!jo.has("mib"))
+            return jo;
+        jo=jo.getJSONObject("mib");
+
         if(jo.has("applied"))
             applied=jo.getInt("applied");
         if(jo.has("status"))
@@ -26,7 +36,7 @@ public class MIB extends BasicResponse {
         if(jo.has("payable_revenue"))
             payable_revenue=jo.getInt("payable_revenue");
         if(jo.has("payable"))
-            payable=jo.getBoolean("payable");
+            payable= DataProxy.getJsonBoolean(jo, "payable");
         if(jo.has("blog"))
             blog=new BlogInfo(jo);
 
@@ -36,7 +46,7 @@ public class MIB extends BasicResponse {
             if(accountData.has("id_number"))
                 account.id_number=accountData.getString("id_number");
             if(accountData.has("id_image_uploaded"))
-                account.id_image_uploaded=accountData.getBoolean("id_image_uploaded");
+                account.id_image_uploaded=DataProxy.getJsonBoolean(accountData, "id_image_uploaded");
             if(accountData.has("email"))
                 account.email=accountData.getString("email");
             if(accountData.has("cellphone"))
