@@ -107,13 +107,16 @@ public class Account extends ItemDetailFragment {
                         account.payMIB();
                         break;
                     case getAnalyticData:
-                        account.getAnalyticData(2, 2);
+                        account.getAnalyticData();
                         break;
                     case updatePassword:
+                        account.updatePassword("121111", "221111");
                         break;
                     case getNotificationList:
+                        account.getNotifications();
                         break;
                     case getUserInfo:
+                        account.getUserInfo("ben68");
                         break;
                     default:
                 }

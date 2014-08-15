@@ -21,9 +21,12 @@ public class BaseListResponse extends BasicResponse {
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
         jo=super.parseJSON(jo);
 
-        total=jo.getInt("total");
-        per_page=jo.getInt("per_page");
-        page=jo.getInt("page");
+        if(jo.has("total"))
+            total=jo.getInt("total");
+        if(jo.has("per_page"))
+            per_page=jo.getInt("per_page");
+        if(jo.has("page"))
+            page=jo.getInt("page");
 
         return jo;
     }

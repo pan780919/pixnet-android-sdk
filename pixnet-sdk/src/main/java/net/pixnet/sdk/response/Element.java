@@ -147,7 +147,7 @@ public class Element extends BasicResponse {
             uploaded_at = obj.getString("uploaded_at");
         }
         if (obj.has("user")) {
-            user = new User(obj.getJSONObject("user"));
+            user = new User(obj);
         }
         if (obj.has("location")) {
             location = new Location(obj.getString("location"));

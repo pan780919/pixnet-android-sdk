@@ -8,6 +8,8 @@ import net.pixnet.sdk.response.AccountInfo;
 import net.pixnet.sdk.response.Analytics;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.MIB;
+import net.pixnet.sdk.response.NotificationList;
+import net.pixnet.sdk.response.User;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -20,9 +22,12 @@ public class Account extends DataProxy {
     public static final String URL_ACCOUNT="https://emma.pixnet.cc/account";
     public static final String URL_ACCOUNT_INFO="https://emma.pixnet.cc/account/info";
     public static final String URL_ACCOUNT_MIB="https://emma.pixnet.cc/account/mib";
-    public static final String URL_ACCOUNT_MIB_POSTION="https://emma.pixnet.cc/account/mib/positions/";
+    public static final String URL_ACCOUNT_MIB_POSTION="https://emma.pixnet.cc/account/mib/positions";
     public static final String URL_ACCOUNT_MIB_PAY="https://emma.pixnet.cc/account/mibpay";
     public static final String URL_ACCOUNT_ANALYTICS="https://emma.pixnet.cc/account/analytics";
+    public static final String URL_ACCOUNT_PASSWD ="https://emma.pixnet.cc/account/password";
+    public static final String URL_ACCOUNT_NOTIFICATIONS ="https://emma.pixnet.cc/account/notifications";
+    public static final String URL_USER ="https://emma.pixnet.cc/users";
 
     public static enum NotificationType{
         friend,
@@ -196,6 +201,12 @@ public class Account extends DataProxy {
     }
 
     /**
+     * @see #getAnalyticData(int, int)
+     */
+    public void getAnalyticData(){
+        getAnalyticData(-1, -1);
+    }
+    /**
      * 取得認證使用者拜訪紀錄分析資料
      * @param statisticsDays 列出指定天數的歷史拜訪資訊，最少 0 天，最多 45 天
      * @param refererDays 列出指定天數的誰連結我資訊，最少 0 天，最多 7 天
@@ -217,6 +228,71 @@ public class Account extends DataProxy {
                 else listener.onError(res.message);
             }
         }, params);
+    }
+
+    public void updatePassword(String oldPassword, String newPassword){
+        if(TextUtils.isEmpty(oldPassword) || TextUtils.isEmpty(newPassword)){
+            listener.onError(Error.MISS_PARAMETER+":oldPassword, newPassword");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("password", oldPassword));
+        params.add(new BasicNameValuePair("new_password", newPassword));
+
+        performAPIRequest(true, URL_ACCOUNT_PASSWD, Request.Method.POST, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                Helper.log(response);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
+            }
+        }, params);
+    }
+
+    /**
+     * 列出全部通知類型，通知數量限制為 10 筆
+     * @see #getNotifications(net.pixnet.sdk.utils.Account.NotificationType, int)
+     */
+    public void getNotifications(){
+        getNotifications(null, -1);
+    }
+    /**
+     * 列出通知
+     * @param type 限制傳回通知類型 （friend: 好友互動，system: 系統通知，comments: 留言，appmarket:應用市集）
+     * @param limit 傳回通知數量限制
+     */
+    public void getNotifications(NotificationType type, int limit){
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        if(type!=null)
+            params.add(new BasicNameValuePair("notificatoin_type", type.name()));
+        if(limit>0)
+            params.add(new BasicNameValuePair("limit", String.valueOf(limit)));
+
+        performAPIRequest(true, URL_ACCOUNT_NOTIFICATIONS, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                Helper.log(response);
+                BasicResponse res=new NotificationList(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
+            }
+        }, params);
+    }
+
+    public void getUserInfo(String userName){
+        performAPIRequest(false, URL_USER+"/"+userName, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                Helper.log(response);
+                BasicResponse res=new User(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
+            }
+        });
     }
 
 }

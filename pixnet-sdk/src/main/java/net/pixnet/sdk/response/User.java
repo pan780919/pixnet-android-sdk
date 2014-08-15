@@ -40,9 +40,15 @@ public class User extends BasicResponse {
         super(jo);
     }
 
+    public User(String str) {
+        super(str);
+    }
+
     @Override
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
         jo = super.parseJSON(jo);
+        jo=jo.getJSONObject("user");
+
         if (jo.has("name")) {
             name = jo.getString("name");
         }
