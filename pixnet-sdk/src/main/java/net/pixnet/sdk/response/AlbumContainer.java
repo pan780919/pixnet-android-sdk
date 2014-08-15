@@ -69,7 +69,7 @@ public abstract class AlbumContainer extends BasicResponse {
         if(jo.has("create_at"))
             created_at=jo.getInt("create_at");
         if(jo.has("user"))
-            user=new User(jo.getJSONObject("user"));
+            user=new User(jo);
         if(jo.has("description"))
             description=jo.getString("description");
         if(jo.has("tags")){

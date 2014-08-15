@@ -3,6 +3,8 @@ package net.pixnet.sdk.response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 
 /**
  * Response for Category
@@ -33,18 +35,9 @@ public class Category extends BasicResponse{
      */
     public String show_index;
     /**
-     * site_category_id
-     */
-    public String site_category_id;
-
-    /**
-     * site_category_done
-     */
-    public String site_category_done;
-    /**
      * Child categories list
      */
-    public CategoryList child_categories;
+    public List<ChildCategory> child_categories;
 
     public Category(JSONObject jo) {
         super(jo);
@@ -81,5 +74,41 @@ public class Category extends BasicResponse{
             child_categories = new CategoryList(obj.getString("child_categories"));
         }
         return obj;
+    }
+
+    public class ChildCategory{
+        /**
+         * Category id
+         */
+        public String id;
+        /**
+         * Category type
+         */
+        public String type;
+        /**
+         * Order
+         */
+        public String order;
+        /**
+         * Category name
+         */
+        public String name;
+        /**
+         * Category description
+         */
+        public String description;
+        /**
+         * Show index or not
+         */
+        public String show_index;
+        /**
+         * site_category_id
+         */
+        public String site_category_id;
+
+        /**
+         * site_category_done
+         */
+        public String site_category_done;
     }
 }

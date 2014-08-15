@@ -83,6 +83,7 @@ public class Blog extends DataProxy {
         performAPIRequest(false, URL_CATEGORY, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
+                Helper.log(response);
                 CategoryList res = new CategoryList(response);
                 listener.onDataResponse(res);
             }

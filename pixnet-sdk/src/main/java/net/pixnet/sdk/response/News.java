@@ -40,7 +40,7 @@ public class News extends BasicResponse {
         if (obj.has("blog_article"))
             blog_article = new Article(obj.getString("blog_article"));
         if (obj.has("user"))
-            user = new User(obj.getJSONObject("user"));
+            user = new User(obj);
         if (obj.has("album_set"))
             album_set = new Set(obj.getJSONObject("album_set"));
         if (obj.has("latest_elements")) {

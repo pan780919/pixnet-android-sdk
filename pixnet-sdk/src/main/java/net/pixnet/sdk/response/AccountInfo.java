@@ -1,13 +1,10 @@
 package net.pixnet.sdk.response;
 
 import net.pixnet.sdk.proxy.DataProxy;
-import net.pixnet.sdk.utils.Helper;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AccountInfo extends BasicResponse {
@@ -37,7 +34,7 @@ public class AccountInfo extends BasicResponse {
     public Quota quota;
     public Preferences preferences;
     public BlogInfo blog;
-    public List<Notification> notifications;
+    public NotificationList notifications;
     public MIB mib;
     public Analytics analytics;
 
@@ -135,32 +132,8 @@ public class AccountInfo extends BasicResponse {
                     preferences.functions.hide_navigation_bar=DataProxy.getJsonBoolean(functionsData,"hide_navigation_bar");
             }
         }
-        if(jo.has("notifications")) {
-            JSONArray notifyDataAry=jo.getJSONArray("notifyData");
-            notifications = new ArrayList<Notification>();
-            int i=0, len=notifyDataAry.length();
-            while (i<len){
-                JSONObject notifyData=notifyDataAry.getJSONObject(i);
-                Notification notification=new Notification();
-                if(notifyData.has("id"))
-                    notification.id=notifyData.getString("id");
-                if(notifyData.has("title"))
-                    notification.title=notifyData.getString("title");
-                if(notifyData.has("is_read"))
-                    notification.is_read=DataProxy.getJsonBoolean(notifyData, "is_read");
-                if(notifyData.has("body"))
-                    notification.body=notifyData.getString("body");
-                if(notifyData.has("link"))
-                    notification.link=notifyData.getString("link");
-                if(notifyData.has("icon"))
-                    notification.icon=notifyData.getString("icon");
-                if(notifyData.has("date"))
-                    notification.date=notifyData.getLong("date");
-                notification.users=null;
-                notifications.add(notification);
-                i++;
-            }
-        }
+        if(jo.has("notifications"))
+            notifications=new NotificationList(jo);
         if(jo.has("blog"))
             blog = new BlogInfo(jo);
         if(jo.has("mib"))
@@ -202,14 +175,4 @@ public class AccountInfo extends BasicResponse {
         public boolean hide_navigation_bar;
     }
 
-    public class Notification{
-        public String id;
-        public String title;
-        public boolean is_read;
-        public String body;
-        public String link;
-        public String icon;
-        public long date;
-        public User users;
-    }
 }

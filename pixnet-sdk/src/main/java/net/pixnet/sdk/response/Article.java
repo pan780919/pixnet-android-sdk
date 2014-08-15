@@ -156,7 +156,7 @@ public class Article extends BasicResponse {
                 info = new Info(article.getString("info"));
             }
             if (article.has("user")) {
-                user = new User(article.getJSONObject("user"));
+                user = new User(article);
             }
             if (article.has("body")) {
                 body = article.getString("body");

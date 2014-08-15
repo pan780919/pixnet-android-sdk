@@ -18,7 +18,7 @@ public class Subscription {
         try {
             JSONObject obj = new JSONObject(response);
             if (obj.has("user"))
-                user = new User(obj.getJSONObject("user"));
+                user = new User(obj);
             if (obj.has("groups")) {
                 groups = new ArrayList<Group>();
                 JSONArray ja = obj.getJSONArray("groups");
