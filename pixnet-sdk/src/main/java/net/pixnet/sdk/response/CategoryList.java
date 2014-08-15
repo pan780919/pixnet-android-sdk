@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Categories List
  */
-public class CategoryList extends BaseListResponse {
+public class CategoryList extends BasicResponse {
 
     /**
      * List of categories
