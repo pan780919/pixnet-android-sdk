@@ -86,6 +86,7 @@ public class Account extends DataProxy {
     public void updateAccountInfo(String password, String displayName, String email, AccountInfo.Gender gender, String address, String phone, String birthday, String education, String avatar){
         if(TextUtils.isEmpty(password)){
             listener.onError(Error.MISS_PARAMETER+":password");
+            return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("password", password));
