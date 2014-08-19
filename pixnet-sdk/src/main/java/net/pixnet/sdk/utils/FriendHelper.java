@@ -19,7 +19,7 @@ import java.util.ArrayList;
 /**
  * Created by Koi on 2014/8/8.
  */
-public class Friend extends DataProxy {
+public class FriendHelper extends DataProxy {
     private static final String URL_NEWS = "https://emma.pixnet.cc/friend/news";
     private static final String URL_GROUP = "https://emma.pixnet.cc/friend/groups";
     private static final String URL_FRIENDSHIP = "https://emma.pixnet.cc/friendships";

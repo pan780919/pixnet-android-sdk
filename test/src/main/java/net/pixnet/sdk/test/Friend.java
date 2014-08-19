@@ -10,6 +10,7 @@ import android.widget.TextView;
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
+import net.pixnet.sdk.utils.FriendHelper;
 import net.pixnet.sdk.utils.Helper;
 
 /**
@@ -87,7 +88,7 @@ public class Friend extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                net.pixnet.sdk.utils.Friend friend = PIXNET.getFriend(getActivity(), new DataProxy.DataProxyListener() {
+                FriendHelper friendHelper = PIXNET.getFriendHelper(getActivity(), new DataProxy.DataProxyListener() {
                     @Override
                     public void onError(String msg) {
                         Helper.log("error:" + msg);
@@ -99,66 +100,66 @@ public class Friend extends ItemDetailFragment {
                         Helper.log("onDataResponse");
                     }
                 });
-                friend.setDefaultUserName("emmademo");
-                friend.setDefaultPerPage(2);
-                friend.setDefaultTrimUser(false);
+                friendHelper.setDefaultUserName("emmademo");
+                friendHelper.setDefaultPerPage(2);
+                friendHelper.setDefaultTrimUser(false);
                 switch (Apis.values()[position]) {
                     case getFriendNews:
-                        friend.getFriendNews(null,null,null);
+                        friendHelper.getFriendNews(null,null,null);
                         break;
                     case getGroupList:
-                        friend.getGroupList(1,1);
+                        friendHelper.getGroupList(1,1);
                         break;
                     case addGroup:
-                        friend.addGroup("Test");
+                        friendHelper.addGroup("Test");
                         break;
                     case updateGroup:
-                        friend.updateGroup("375056","TestUpdate");
+                        friendHelper.updateGroup("375056","TestUpdate");
                         break;
                     case removeGroup:
-                        friend.removeGroup("375056");
+                        friendHelper.removeGroup("375056");
                         break;
                     case getFriendshipList:
-                        friend.getFriendshipList(null,null,null);
+                        friendHelper.getFriendshipList(null,null,null);
                         break;
                     case addFriendship:
-                        friend.addFriendship("kkkoooiii2Test");
+                        friendHelper.addFriendship("kkkoooiii2Test");
                         break;
                     case removeFriendship:
-                        friend.removeFriendship("kkkoooiii2Test");
+                        friendHelper.removeFriendship("kkkoooiii2Test");
                         break;
                     case addFriendshipToGroup:
-                        friend.addFriendshipToGroup("kkkoooiii2Test","375056");
+                        friendHelper.addFriendshipToGroup("kkkoooiii2Test","375056");
                         break;
                     case removeFriendshipFromGroup:
-                        friend.removeFriendshipFromGroup("kkkoooiii2Test","375056");
+                        friendHelper.removeFriendshipFromGroup("kkkoooiii2Test","375056");
                         break;
                     case getSubscriptionGroupList:
-                        friend.getSubscriptionGroupList();
+                        friendHelper.getSubscriptionGroupList();
                         break;
                     case addSubscription:
-                        friend.addSubscription("kkkoooiii2Test",null);
+                        friendHelper.addSubscription("kkkoooiii2Test",null);
                         break;
                     case removeSubscription:
-                        friend.removeSubscription("kkkoooiii2Test");
+                        friendHelper.removeSubscription("kkkoooiii2Test");
                         break;
                     case joinSubscriptionGroup:
-                        friend.joinSubscriptionGroup("kkkoooiii2Test","163370");
+                        friendHelper.joinSubscriptionGroup("kkkoooiii2Test","163370");
                         break;
                     case leaveSubscriptionGroup:
-                        friend.leaveSubscriptionGroup("kkkoooiii2Test","163370");
+                        friendHelper.leaveSubscriptionGroup("kkkoooiii2Test","163370");
                         break;
                     case getSubscribedFriendship:
-                        friend.getSubscribedFriendship(1,1);
+                        friendHelper.getSubscribedFriendship(1,1);
                         break;
                     case addSubscriptionGroup:
-                        friend.addSubscriptionGroup("Test");
+                        friendHelper.addSubscriptionGroup("Test");
                         break;
                     case updateSubscriptionGroup:
-                        friend.updateSubscriptionGroup("TestUpdate","163370");
+                        friendHelper.updateSubscriptionGroup("TestUpdate","163370");
                         break;
                     case removeSubscriptionGroup:
-                        friend.removeSubscriptionGroup("163370");
+                        friendHelper.removeSubscriptionGroup("163370");
                         break;
                     case sortSubscriptionGroupList:
                         break;

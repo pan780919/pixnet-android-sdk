@@ -61,7 +61,11 @@ public class Set extends AlbumContainer{
 
     @Override
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
-        jo = super.parseJSON(jo).getJSONObject("set");
+        jo = super.parseJSON(jo);
+
+        if(jo.has("set"))
+            jo=jo.getJSONObject("set");
+
         if(jo.has("link"))
             link=jo.getString("link");
         if(jo.has("permission"))

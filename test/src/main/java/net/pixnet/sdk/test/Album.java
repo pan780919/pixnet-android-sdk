@@ -10,6 +10,7 @@ import android.widget.TextView;
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
+import net.pixnet.sdk.utils.AlbumHelper;
 import net.pixnet.sdk.utils.Helper;
 
 public class Album extends ItemDetailFragment {
@@ -110,7 +111,7 @@ public class Album extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                net.pixnet.sdk.utils.Album album=PIXNET.getAlbum(getActivity(), new DataProxy.DataProxyListener() {
+                AlbumHelper albumHelper =PIXNET.getAlbumHelper(getActivity(), "emmademo", new DataProxy.DataProxyListener() {
                     @Override
                     public void onError(String msg) {
                         Helper.log("error:" + msg);
@@ -121,64 +122,63 @@ public class Album extends ItemDetailFragment {
                         Helper.log("onDataResponse");
                     }
                 });
-                album.setDefaultUserName("emmademo");
-                album.setDefaultPerPage(2);
-                album.setDefaultTrimUser(true);
+                albumHelper.setDefaultPerPage(2);
+                albumHelper.setDefaultTrimUser(true);
                 switch (Apis.values()[position]){
                     case main:
-                        album.getMain();
+                        albumHelper.getMain();
                         break;
                     case getSetAndFolderList:
-                        album.getSetAndFolderList();
+                        albumHelper.getSetAndFolderList();
                         break;
                     case sortSetAndFolders:
-                        album.sortSetAndFolders(null);
+                        albumHelper.sortSetAndFolders(null);
                         break;
                     case getSetList:
-                        album.getSetList();
+                        albumHelper.getSetList();
                         break;
                     case getSet:
-                        album.getSet("34260");
+                        albumHelper.getSet("34260");
                         break;
                     case getElementListBySet:
-                        album.getElementListBySet("34260");
+                        albumHelper.getElementListBySet("34260");
                         break;
                     case getCommentListBySet:
-                        album.getCommentListBySet("34258");
+                        albumHelper.getCommentListBySet("34258");
                         break;
                     case addSet:
-                        album.addSet("testSet", "setDescription");
+                        albumHelper.addSet("testSet", "setDescription");
                         break;
                     case updateSet:
                         break;
                     case deleteSet:
-                        album.deleteSet("5024067");
+                        albumHelper.deleteSet("5024067");
                         break;
                     case sortSets:
                         break;
                     case getSetListByNear:
-                        album.getSetListByNear(23.9738759, 120.982024);
+                        albumHelper.getSetListByNear(23.9738759, 120.982024);
                         break;
                     case getFolderList:
-                        album.getFolderList();
+                        albumHelper.getFolderList();
                         break;
                     case getFolder:
-                        album.getFolder("4953822");
+                        albumHelper.getFolder("4953822");
                         break;
                     case addFolder:
-                        album.addFolder("testFolder", "this is a test folder");
+                        albumHelper.addFolder("testFolder", "this is a test folder");
                         break;
                     case updateFolder:
-                        album.updateFolder("5028546", "modify test", "this is a modified folder");
+                        albumHelper.updateFolder("5028546", "modify test", "this is a modified folder");
                         break;
                     case deleteFolder:
-                        album.deleteFolder("5028546");
+                        albumHelper.deleteFolder("5028546");
                         break;
                     case getElement:
-                        album.getElement("413994");
+                        albumHelper.getElement("413994");
                         break;
                     case getCommentListByElement:
-                        album.getCommentListByElement("413994");
+                        albumHelper.getCommentListByElement("413994");
                         break;
                     case addElement:
                         break;

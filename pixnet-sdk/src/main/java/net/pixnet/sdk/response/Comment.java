@@ -1,5 +1,7 @@
 package net.pixnet.sdk.response;
 
+import net.pixnet.sdk.proxy.DataProxy;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,6 +34,8 @@ public class Comment extends BasicResponse {
      * Comment writer
      */
     public String author;
+
+    public String avatar;
     /**
      * Comment's url
      */
@@ -39,15 +43,17 @@ public class Comment extends BasicResponse {
     /**
      * Comment open rate
      */
-    public int is_open;
+    public boolean is_open;
     /**
      * Comment spam rate
      */
-    public int is_spam;
+    public boolean is_spam;
     /**
      * Time comment created
      */
-    public String created_at;
+    public long created_at;
+
+    public long read_at;
     /**
      * Comment author oAuth1Login type
      */
@@ -89,6 +95,10 @@ public class Comment extends BasicResponse {
     @Override
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
         JSONObject obj = super.parseJSON(jo);
+
+        if(obj.has("comment"))
+            obj=obj.getJSONObject("comment");
+
         if (obj.has("id")) {
             id = obj.getString("id");
         }
@@ -107,18 +117,22 @@ public class Comment extends BasicResponse {
         if (obj.has("author")) {
             author = obj.getString("author");
         }
+        if(obj.has("avatar"))
+            avatar=obj.getString("avatar");
         if (obj.has("link")) {
             link = obj.getString("link");
         }
         if (obj.has("is_open")) {
-            is_open = obj.getInt("is_open");
+            is_open = DataProxy.getJsonBoolean(obj, "is_open");
         }
         if (obj.has("is_spam")) {
-            is_spam = obj.getInt("is_spam");
+            is_spam = DataProxy.getJsonBoolean(obj, "is_spam");
         }
         if (obj.has("created_at")) {
-            created_at = obj.getString("created_at");
+            created_at = obj.getLong("created_at");
         }
+        if(obj.has("read_at"))
+            read_at=obj.getLong("read_at");
         if (obj.has("author_login_type")) {
             author_login_type = obj.getString("author_login_type");
         }
@@ -132,11 +146,14 @@ public class Comment extends BasicResponse {
             reply = new Reply(obj.getJSONObject("reply"));
         }
         if (obj.has("article")) {
-            article = new Article(obj.getJSONObject("article"));
+            article = new Article(obj);
         }
         if(obj.has("element")){
             element = new Element(obj.getJSONObject("element"));
         }
+        if(obj.has("set"))
+            set=new Set(obj);
+
         return obj;
     }
 }

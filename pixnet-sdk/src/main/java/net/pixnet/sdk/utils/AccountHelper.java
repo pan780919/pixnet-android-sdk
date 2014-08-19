@@ -17,9 +17,8 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.CRC32;
 
-public class Account extends DataProxy {
+public class AccountHelper extends DataProxy {
 
     public static final String URL_ACCOUNT="https://emma.pixnet.cc/account";
     public static final String URL_ACCOUNT_INFO="https://emma.pixnet.cc/account/info";
@@ -290,7 +289,7 @@ public class Account extends DataProxy {
 
     /**
      * 列出全部通知類型，通知數量限制為 10 筆
-     * @see #getNotifications(net.pixnet.sdk.utils.Account.NotificationType, int)
+     * @see #getNotifications(AccountHelper.NotificationType, int)
      */
     public void getNotifications(){
         getNotifications(null, -1);

@@ -10,8 +10,8 @@ import android.widget.TextView;
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
-import net.pixnet.sdk.response.Blocks;
 import net.pixnet.sdk.response.BlocksList;
+import net.pixnet.sdk.utils.BlockHelper;
 import net.pixnet.sdk.utils.Helper;
 
 /**
@@ -66,9 +66,9 @@ public class Block extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final net.pixnet.sdk.utils.Block block = PIXNET.getBlock(getActivity(),new DataProxy.DataProxyListener() {
+                final BlockHelper blockHelper = PIXNET.getBlockHelper(getActivity(), new DataProxy.DataProxyListener() {
                     @Override
-                    public void onError(String msg)  {
+                    public void onError(String msg) {
                         Helper.log("error:" + msg);
                     }
 
@@ -78,12 +78,12 @@ public class Block extends ItemDetailFragment {
                         Helper.log("onDataResponse");
                     }
                 });
-                block.setDefaultUserName("emmademo");
-                block.setDefaultPerPage(2);
-                block.setDefaultTrimUser(false);
+                blockHelper.setDefaultUserName("emmademo");
+                blockHelper.setDefaultPerPage(2);
+                blockHelper.setDefaultTrimUser(false);
                 switch (Apis.values()[position]) {
                     case getBlockList:
-                        block.setListener(new DataProxy.DataProxyListener() {
+                        blockHelper.setListener(new DataProxy.DataProxyListener() {
                             @Override
                             public void onError(String msg) {
 
@@ -94,13 +94,13 @@ public class Block extends ItemDetailFragment {
                                 Helper.log(block1.blocks.get(0).user.name);
                             }
                         });
-                        block.getBlockList();
+                        blockHelper.getBlockList();
                         break;
                     case addBlock:
-                        block.addBlock("wolflsi");
+                        blockHelper.addBlock("wolflsi");
                         break;
                     case removeBlock:
-                        block.removeBlock("wolflsi");
+                        blockHelper.removeBlock("wolflsi");
                         break;
                     default:
                 }

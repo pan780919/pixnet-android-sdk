@@ -9,6 +9,18 @@ import org.json.JSONObject;
  * default response
  */
 public class BasicResponse {
+
+    /**
+     * @return a json string by http response
+     */
+    public String getRawData() {
+        return rawData;
+    }
+
+    /**
+     * json string
+     */
+    private String rawData;
     /**
      * auxiliary message
      */
@@ -25,6 +37,9 @@ public class BasicResponse {
     public BasicResponse(String str) {
         if(TextUtils.isEmpty(str))
             return;
+
+        rawData=str;
+
         try {
             parseJSON(new JSONObject(str));
         } catch (JSONException e) {

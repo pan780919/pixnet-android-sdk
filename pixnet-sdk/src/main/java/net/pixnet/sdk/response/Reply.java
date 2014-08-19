@@ -11,7 +11,7 @@ public class Reply extends BasicResponse{
     /**
      * time reply created
      */
-    public String created_at;
+    public long created_at;
 
     public Reply(JSONObject jo) {
         super(jo);
@@ -24,7 +24,7 @@ public class Reply extends BasicResponse{
             body = obj.getString("body");
         }
         if(obj.has("created_at")){
-            created_at = obj.getString("created_at");
+            created_at = obj.getLong("created_at");
         }
         return obj;
     }

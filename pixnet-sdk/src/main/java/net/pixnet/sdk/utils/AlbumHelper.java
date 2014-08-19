@@ -22,7 +22,7 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Album extends DataProxy {
+public class AlbumHelper extends DataProxy {
 
     private static final String URL_MAIN="https://emma.pixnet.cc/album/main";
     private static final String URL_SETFOLDERS="https://emma.pixnet.cc/album/setfolders";
@@ -379,25 +379,25 @@ public class Album extends DataProxy {
     }
 
     /**
-     * @see #getElementListBySet(String, String, net.pixnet.sdk.utils.Album.ElementType, int, int, String, boolean, boolean, boolean, int, int)
+     * @see #getElementListBySet(String, String, AlbumHelper.ElementType, int, int, String, boolean, boolean, boolean, int, int)
      */
     public void getElementListBySet(String setId){
         getElementListBySet(setId, 1);
     }
     /**
-     * @see #getElementListBySet(String, String, net.pixnet.sdk.utils.Album.ElementType, int, int, String, boolean, boolean, boolean, int, int)
+     * @see #getElementListBySet(String, String, AlbumHelper.ElementType, int, int, String, boolean, boolean, boolean, int, int)
      */
     public void getElementListBySet(String setId, int page){
         getElementListBySet(setId, ElementType.pic, page);
     }
     /**
-     * @see #getElementListBySet(String, String, net.pixnet.sdk.utils.Album.ElementType, int, int, String, boolean, boolean, boolean, int, int)
+     * @see #getElementListBySet(String, String, AlbumHelper.ElementType, int, int, String, boolean, boolean, boolean, int, int)
      */
     public void getElementListBySet(String setId, ElementType type, int page){
         getElementListBySet(setId, type, page, false);
     }
     /**
-     * @see #getElementListBySet(String, String, net.pixnet.sdk.utils.Album.ElementType, int, int, String, boolean, boolean, boolean, int, int)
+     * @see #getElementListBySet(String, String, AlbumHelper.ElementType, int, int, String, boolean, boolean, boolean, int, int)
      */
     public void getElementListBySet(String setId, ElementType type, int page, boolean withDetail){
         getElementListBySet(defaultUserName, setId, type, defaultPerPage, page, null, withDetail, defaultTrimUser, false, 0, 0);
@@ -587,7 +587,7 @@ public class Album extends DataProxy {
     }
 
     /**
-     * @see #addSet(String, String, net.pixnet.sdk.utils.Album.Permission, String, boolean, boolean, net.pixnet.sdk.utils.Album.CommentPermission, String, String, java.util.List, boolean, boolean, String)
+     * @see #addSet(String, String, AlbumHelper.Permission, String, boolean, boolean, AlbumHelper.CommentPermission, String, String, java.util.List, boolean, boolean, String)
      */
     public void addSet(String title, String description){
         addSet(title, description, Permission.all, null, false, true, CommentPermission.allow, null, null, null, false, false, null);
@@ -694,7 +694,7 @@ public class Album extends DataProxy {
     }
 
     /**
-     * @see #updateSet(String, String, String, net.pixnet.sdk.utils.Album.Permission, String, boolean, boolean, net.pixnet.sdk.utils.Album.CommentPermission, String, String, java.util.List, boolean, boolean, String)
+     * @see #updateSet(String, String, String, AlbumHelper.Permission, String, boolean, boolean, AlbumHelper.CommentPermission, String, String, java.util.List, boolean, boolean, String)
      */
     public void updateSet(String setId, String title, String description){
         updateSet(setId, title, description, Permission.all, null, false, true, CommentPermission.allow, null, null, null, false, false, null);

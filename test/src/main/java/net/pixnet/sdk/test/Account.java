@@ -10,6 +10,7 @@ import android.widget.TextView;
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
+import net.pixnet.sdk.utils.AccountHelper;
 import net.pixnet.sdk.utils.Helper;
 
 public class Account extends ItemDetailFragment {
@@ -76,7 +77,7 @@ public class Account extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                net.pixnet.sdk.utils.Account account=PIXNET.getAccount(getActivity(), new DataProxy.DataProxyListener() {
+                AccountHelper account=PIXNET.getAccountHelper(getActivity(), new DataProxy.DataProxyListener() {
                     @Override
                     public void onError(String msg) {
                         Helper.log("error:" + msg);

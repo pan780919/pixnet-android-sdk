@@ -11,6 +11,7 @@ import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.GuestbookList;
+import net.pixnet.sdk.utils.GuestBookHelper;
 import net.pixnet.sdk.utils.Helper;
 
 /**
@@ -70,9 +71,9 @@ public class GuestBook extends ItemDetailFragment{
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                net.pixnet.sdk.utils.GuestBook guestBook = PIXNET.getGuestBook(getActivity(),new DataProxy.DataProxyListener() {
+                GuestBookHelper guestBookHelper = PIXNET.getGuestBookHelper(getActivity(), new DataProxy.DataProxyListener() {
                     @Override
-                    public void onError(String msg)  {
+                    public void onError(String msg) {
                         Helper.log("error:" + msg);
                     }
 
@@ -82,12 +83,12 @@ public class GuestBook extends ItemDetailFragment{
                         Helper.log("onDataResponse");
                     }
                 });
-                guestBook.setDefaultUserName("emmademo");
-                guestBook.setDefaultPerPage(2);
-                guestBook.setDefaultTrimUser(false);
+                guestBookHelper.setDefaultUserName("emmademo");
+                guestBookHelper.setDefaultPerPage(2);
+                guestBookHelper.setDefaultTrimUser(false);
                 switch (Apis.values()[position]){
                     case getGuestbookList:
-                        guestBook.setListener(new DataProxy.DataProxyListener() {
+                        guestBookHelper.setListener(new DataProxy.DataProxyListener() {
                             @Override
                             public void onError(String msg) {
 
@@ -101,26 +102,26 @@ public class GuestBook extends ItemDetailFragment{
                                 }
                             }
                         });
-                        guestBook.getGuestbookList("kkkoooiii2",null,null,10);
+                        guestBookHelper.getGuestbookList("kkkoooiii2",null,null,10);
                         break;
                     case addGuestbook:
-                        guestBook.addGuestbook("kkkoooiii2","Hi","Bye");
+                        guestBookHelper.addGuestbook("kkkoooiii2","Hi","Bye");
                         break;
                     case getGuestbook:
-                        guestBook.getGuestbook("kkkoooiii2","44152667");
+                        guestBookHelper.getGuestbook("kkkoooiii2","44152667");
                         break;
                     case replyGuestbook:
-                        guestBook.replyGuestbook("44152667","HiHi");
+                        guestBookHelper.replyGuestbook("44152667","HiHi");
                         break;
                     case setGuestbookVisibility:
-                        guestBook.setGuestbookVisibility("44152667",false);
+                        guestBookHelper.setGuestbookVisibility("44152667",false);
                         break;
                     case markGuestbookSpam:
                         break;
                     case markGuestbookHam:
                         break;
                     case removeGuestbook:
-                        guestBook.removeGuestbook("44152667");
+                        guestBookHelper.removeGuestbook("44152667");
                         break;
                     default:
                 }

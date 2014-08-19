@@ -5,16 +5,16 @@ import android.content.Context;
 import android.view.WindowManager;
 import android.webkit.WebView;
 
-import net.pixnet.sdk.proxy.DataProxy;
-import net.pixnet.sdk.utils.Account;
-import net.pixnet.sdk.utils.Album;
-import net.pixnet.sdk.utils.Block;
-import net.pixnet.sdk.utils.Blog;
-import net.pixnet.sdk.utils.Friend;
-import net.pixnet.sdk.utils.GuestBook;
+import net.pixnet.sdk.utils.AccountHelper;
+import net.pixnet.sdk.utils.AlbumHelper;
+import net.pixnet.sdk.utils.BlockHelper;
+import net.pixnet.sdk.utils.BlogHelper;
+import net.pixnet.sdk.utils.FriendHelper;
+import net.pixnet.sdk.utils.GuestBookHelper;
 import net.pixnet.sdk.utils.Helper;
 import net.pixnet.sdk.utils.OAuthLoginHelper;
 import net.pixnet.sdk.utils.OAuthConnectionTool.OAuthVersion;
+import net.pixnet.sdk.proxy.DataProxy.DataProxyListener;
 
 public class PIXNET {
     private static final String URL_OAUTH2_AUTH = "https://emma.pixnet.cc/oauth2/authorize";
@@ -22,43 +22,45 @@ public class PIXNET {
     private static final String URL_OAUTH1_REQUEST = "http://emma.pixnet.cc/oauth/request_token";
     private static final String URL_OAUTH1_ACCESS = "http://emma.pixnet.cc/oauth/access_token";
 
-    public static Friend getFriend(Context c, DataProxy.DataProxyListener listener) {
-        Friend friend = new Friend();
-        friend.setContext(c);
-        friend.setListener(listener);
-        return friend;
+    public static FriendHelper getFriendHelper(Context c, DataProxyListener listener) {
+        FriendHelper friendHelper = new FriendHelper();
+        friendHelper.setContext(c);
+        friendHelper.setListener(listener);
+        return friendHelper;
     }
 
-    public static GuestBook getGuestBook(Context c, DataProxy.DataProxyListener listener) {
-        GuestBook guestBook = new GuestBook();
-        guestBook.setContext(c);
-        guestBook.setListener(listener);
-        return guestBook;
+    public static GuestBookHelper getGuestBookHelper(Context c, DataProxyListener listener) {
+        GuestBookHelper guestBookHelper = new GuestBookHelper();
+        guestBookHelper.setContext(c);
+        guestBookHelper.setListener(listener);
+        return guestBookHelper;
     }
 
-    public static Block getBlock(Context c, DataProxy.DataProxyListener listener) {
-        Block block = new Block();
-        block.setContext(c);
-        block.setListener(listener);
-        return block;
+    public static BlockHelper getBlockHelper(Context c, DataProxyListener listener) {
+        BlockHelper blockHelper = new BlockHelper();
+        blockHelper.setContext(c);
+        blockHelper.setListener(listener);
+        return blockHelper;
     }
 
-    public static Blog getBlog(Context c, DataProxy.DataProxyListener listener) {
-        Blog blog = new Blog();
-        blog.setContext(c);
-        blog.setListener(listener);
-        return blog;
+    public static BlogHelper getBlogHelper(Context c, String name, DataProxyListener listener) {
+        BlogHelper blogHelper = new BlogHelper();
+        blogHelper.setContext(c);
+        blogHelper.setDefaultUserName(name);
+        blogHelper.setListener(listener);
+        return blogHelper;
     }
 
-    public static Album getAlbum(Context c, DataProxy.DataProxyListener listener) {
-        Album album = new Album();
-        album.setContext(c);
-        album.setListener(listener);
-        return album;
+    public static AlbumHelper getAlbumHelper(Context c, String name, DataProxyListener listener) {
+        AlbumHelper albumHelper = new AlbumHelper();
+        albumHelper.setContext(c);
+        albumHelper.setDefaultUserName(name);
+        albumHelper.setListener(listener);
+        return albumHelper;
     }
 
-    public static Account getAccount(Context c, DataProxy.DataProxyListener listener) {
-        Account account = new Account();
+    public static AccountHelper getAccountHelper(Context c, DataProxyListener listener) {
+        AccountHelper account = new AccountHelper();
         account.setContext(c);
         account.setListener(listener);
         return account;

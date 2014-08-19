@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by Koi on 2014/8/8.
  */
-public class GuestBook extends DataProxy {
+public class GuestBookHelper extends DataProxy {
 
     private static final String URL_GUESTBOOK = "https://emma.pixnet.cc/guestbook";
 
@@ -24,7 +24,7 @@ public class GuestBook extends DataProxy {
     }
 
     public void getGuestbookList(String user, String filter, String cursor, int per_page) {
-        if (user == null || TextUtils.isEmpty(user)) {
+        if (TextUtils.isEmpty(user)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
             return;
         }

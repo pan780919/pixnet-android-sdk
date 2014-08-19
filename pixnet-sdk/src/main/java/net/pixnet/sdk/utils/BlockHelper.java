@@ -6,13 +6,14 @@ import android.text.TextUtils;
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.BlocksList;
+import net.pixnet.sdk.proxy.Error;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 
-public class Block extends DataProxy {
+public class BlockHelper extends DataProxy {
     private static final String URL_BLOCK = "https://emma.pixnet.cc/blocks";
 
     public void getBlockList() {
@@ -26,8 +27,8 @@ public class Block extends DataProxy {
     }
 
     public void addBlock(String user) {
-        if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+        if (TextUtils.isEmpty(user)) {
+            listener.onError(Error.MISS_PARAMETER + ":user");
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -36,7 +37,9 @@ public class Block extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
