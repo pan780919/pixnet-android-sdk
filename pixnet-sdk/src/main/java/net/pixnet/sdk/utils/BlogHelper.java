@@ -13,6 +13,7 @@ import net.pixnet.sdk.response.CategoryList;
 import net.pixnet.sdk.response.Comment;
 import net.pixnet.sdk.response.CommentList;
 import net.pixnet.sdk.response.Site_CategoryList;
+import net.pixnet.sdk.response.Tags;
 import net.pixnet.sdk.utils.Request.Method;
 
 import org.apache.http.NameValuePair;
@@ -27,6 +28,7 @@ public class BlogHelper extends DataProxy {
     private static final String URL_ARTICLE = "https://emma.pixnet.cc/blog/articles";
     private static final String URL_COMMENT = "https://emma.pixnet.cc/blog/comments";
     private static final String URL_BLOG = "https://emma.pixnet.cc/blog";
+    private static final String URL_TAGS = "https://emma.pixnet.cc/blog/suggested_tags";
     /**
      * 預設使用者名稱
      */
@@ -845,6 +847,33 @@ public class BlogHelper extends DataProxy {
             public void onResponse(String response) {
                 BasicResponse res = new BasicResponse(response);
                 listener.onDataResponse(res);
+            }
+        }, params);
+    }
+
+
+    public void getTags(){
+        getTags(defaultUserName);
+    }
+    /**
+     * 部落格 熱門標籤 及 相關標籤
+     * @param userName 使用者名稱
+     */
+    public void getTags(String userName){
+        if (TextUtils.isEmpty(userName)) {
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":userName");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", userName));
+        performAPIRequest(false, URL_TAGS, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                Helper.log(response);
+                BasicResponse res=new Tags(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }

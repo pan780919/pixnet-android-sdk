@@ -47,7 +47,8 @@ public class Blog extends ItemDetailFragment {
         removeComment,
         getCommentListByLatest,
 
-        getCategorieList
+        getCategorieList,
+        getTags
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -156,6 +157,8 @@ public class Blog extends ItemDetailFragment {
                         break;
                     case addComment:
                         break;
+                    case getComment:
+                        break;
                     case replyComment:
                         break;
                     case setCommentVisibility:
@@ -170,6 +173,9 @@ public class Blog extends ItemDetailFragment {
                         break;
                     case getCategorieList:
                         blogHelper.getCategorieList();
+                        break;
+                    case getTags:
+                        blogHelper.getTags();
                         break;
                     default:
                 }
