@@ -184,11 +184,11 @@ public class BlogHelper extends DataProxy {
         }, params);
     }
 
-    public void removeCategory(String id) {
-        removeCategory(id, null);
+    public void deleteCategory(String id) {
+        deleteCategory(id, null);
     }
 
-    public void removeCategory(String id, String type) {
+    public void deleteCategory(String id, String type) {
         if (id == null || TextUtils.isEmpty(id)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
             return;
@@ -472,7 +472,7 @@ public class BlogHelper extends DataProxy {
         }, params);
     }
 
-    public void removeArticle(String id) {
+    public void deleteArticle(String id) {
         if (id == null || TextUtils.isEmpty(id)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
             return;
@@ -580,18 +580,44 @@ public class BlogHelper extends DataProxy {
         }, params);
     }
 
+    /**
+     * @see #getCommentList(String, String, String, String, String, String, int, int)
+     */
     public void getCommentList(){
         getCommentList(null);
     }
+    /**
+     * @see #getCommentList(String, String, String, String, String, String, int, int)
+     */
     public void getCommentList(String article_id){
         getCommentList(article_id,1);
     }
+    /**
+     * @see #getCommentList(String, String, String, String, String, String, int, int)
+     */
     public void getCommentList(String article_id,int page){
         getCommentList(defaultUserName,article_id,null,null,null,null,page,defaultPerPage);
     }
+    /**
+     *
+     * @param filter 顯示特別屬性的留言. whisper: 只顯示悄悄話留言; nospam: 只顯示非廣告留言; noreply: 只顯示未回覆留言
+     * @param sort 排序條件. date-posted-asc: 依照留言時間由舊到新排序; date-posted-desc: 依照留言時間由新到舊排序
+     * @see #getCommentList(String, String, String, String, String, String, int, int)
+     */
     public void getCommentList(String filter, String sort, int page) {
         getCommentList(defaultUserName,null,null,null,filter,sort,page,defaultPerPage);
     }
+    /**
+     * 列出部落格留言
+     * @param user 指定要回傳的使用者資訊
+     * @param article_id 指定要回傳的留言文章
+     * @param blog_password 如果指定使用者的 Blog 被密碼保護，則需要指定這個參數以通過授權
+     * @param article_password 如果指定使用者的文章被密碼保護，則需要指定這個參數以通過授權
+     * @param filter 顯示特別屬性的留言. whisper: 只顯示悄悄話留言; nospam: 只顯示非廣告留言; noreply: 只顯示未回覆留言
+     * @param sort 排序條件. date-posted-asc: 依照留言時間由舊到新排序; date-posted-desc: 依照留言時間由新到舊排序
+     * @param page 頁數
+     * @param per_page 每頁幾筆
+     */
     public void getCommentList(String user, String article_id, String blog_password, String article_password, String filter, String sort, int page, int per_page) {
         if (TextUtils.isEmpty(user)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
@@ -617,23 +643,43 @@ public class BlogHelper extends DataProxy {
             params.add(new BasicNameValuePair("page", String.valueOf(page)));
         if(per_page>0)
             params.add(new BasicNameValuePair("per_page", String.valueOf(per_page)));
-        performAPIRequest(false,URL_COMMENT,new Request.RequestCallback() {
+        performAPIRequest(false, URL_COMMENT, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 Helper.log(response);
-                BasicResponse res=new CommentList(response);
-                if(res.error==0)
+                BasicResponse res = new CommentList(response);
+                if (res.error == 0)
                     listener.onDataResponse(res);
                 else listener.onError(res.message);
             }
-        },params);
+        }, params);
     }
+
+    /**
+     * @see #addComment(String, String, String, String, String, String, String, String, String, String)
+     */
     public void addComment(String article_id,String body){
-        addComment(article_id,body,defaultUserName);
+        addComment(article_id, body, defaultUserName);
     }
+    /**
+     * @see #addComment(String, String, String, String, String, String, String, String, String, String)
+     */
     public void addComment(String article_id,String body,String user){
         addComment(article_id,body,user,null,null,null,null,null,null,null);
     }
+    /**
+     * 新增部落格留言
+     * @param article_id 要留言的文章 id
+     * @param body 留言內容
+     * @param user 要留言的部落格作者名稱
+     * @param author 留言的暱稱, 不填入則預設代入認證使用者的 display_name
+     * @param title 留言標題
+     * @param url 個人網頁
+     * @param is_open 公開留言/悄悄話
+     * @param email 電子郵件
+     * @param blog_password 如果指定使用者的 Blog 被密碼保護，則需要指定這個參數以通過授權
+     * @param article_password 如果指定使用者的文章被密碼保護，則需要指定這個參數以通過授權
+     */
     public void addComment(String article_id, String body, String user, String author, String title, String url, String is_open, String email, String blog_password, String article_password) {
         if (article_id == null || TextUtils.isEmpty(article_id)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":article_id");
@@ -675,8 +721,11 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true,URL_COMMENT, Request.Method.POST,new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
+                Helper.log(response);
                 BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         },params);
     }
@@ -705,64 +754,121 @@ public class BlogHelper extends DataProxy {
         }, params);
     }
 
-    public void replyComment(String id, String body) {
-        if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+    /**
+     * 回覆部落格留言，可以重覆使用這個功能來修改回覆內容
+     * @param body 回覆的內容
+     * @param id 欲回覆的留言 id
+     */
+    public void replyComment(String body, String... id) {
+        if(id==null || id.length<1){
+            listener.onError(Error.MISS_PARAMETER + ":id");
             return;
         }
         if (body == null || TextUtils.isEmpty(body)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":body");
             return;
         }
-        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        String ids="";
+        for(String str : id){
+            if(!TextUtils.isEmpty(str)) {
+                if(ids.length()>0)
+                    ids+=",";
+                ids += str;
+            }
+        }
+        if(ids.length()<1){
+            listener.onError(Error.MISS_PARAMETER + ":id");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("api_version", "2"));
         params.add(new BasicNameValuePair("body", body));
-        performAPIRequest(true, URL_COMMENT + "/" + id + "/reply", Request.Method.POST, new Request.RequestCallback() {
+        performAPIRequest(true, URL_COMMENT + "/" + ids + "/reply", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res = new CommentList(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
 
-    public void setCommentVisibility(String id, boolean visible) {
-        if (TextUtils.isEmpty(id)) {
+    /**
+     * 將留言設為悄悄話
+     * @param id 欲更動的留言 id
+     * @param visible 是否公開? false=悄悄話
+     */
+    public void setCommentVisibility(boolean visible, String... id) {
+        if(id==null || id.length<1){
             listener.onError(Error.MISS_PARAMETER + ":id");
             return;
         }
+        String ids="";
+        for(String str : id){
+            if(!TextUtils.isEmpty(str)) {
+                if(ids.length()>0)
+                    ids+=",";
+                ids += str;
+            }
+        }
+        if(ids.length()<1){
+            listener.onError(Error.MISS_PARAMETER + ":id");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("api_version", "2"));
         String url;
         if (visible) {
-            url = URL_COMMENT + "/" + id + "/open";
+            url = URL_COMMENT + "/" + ids + "/open";
         } else {
-            url = URL_COMMENT + "/" + id + "/close";
+            url = URL_COMMENT + "/" + ids + "/close";
         }
         performAPIRequest(true, url, Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 Helper.log(response);
-                BasicResponse res = new BasicResponse(response);
+                BasicResponse res = new CommentList(response);
                 if(res.error!=0)
                     listener.onError(res.message);
                 else listener.onDataResponse(res);
             }
-        });
+        }, params);
     }
 
-    public void removeComment(String id) {
-        if (TextUtils.isEmpty(id)) {
+    /**
+     * 刪除部落格留言
+     * @param id 欲刪除的留言 id
+     */
+    public void deleteComment(String... id) {
+        if(id==null || id.length<1){
             listener.onError(Error.MISS_PARAMETER + ":id");
             return;
         }
-        performAPIRequest(true, URL_COMMENT + "/" + id, Request.Method.DELETE, new Request.RequestCallback() {
+        String ids="";
+        for(String str : id){
+            if(!TextUtils.isEmpty(str)) {
+                if(ids.length()>0)
+                    ids+=",";
+                ids += str;
+            }
+        }
+        if(ids.length()<1){
+            listener.onError(Error.MISS_PARAMETER + ":id");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("api_version", "2"));
+        performAPIRequest(true, URL_COMMENT + "/" + ids, Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 Helper.log(response);
                 BasicResponse res = new BasicResponse(response);
-                if(res.error!=0)
+                if (res.error != 0)
                     listener.onError(res.message);
                 else listener.onDataResponse(res);
             }
-        });
+        }, params);
     }
 
     public void getCommentListByLatest() {
@@ -785,26 +891,44 @@ public class BlogHelper extends DataProxy {
         }, params);
     }
 
-    public void markComment(String id, boolean isSpam) {
-        if (TextUtils.isEmpty(id)) {
+    /**
+     * 將留言設為廣告／非廣告留言
+     * @param isSpam 是否廣告
+     * @param id 欲更動的留言 id
+     */
+    public void markComment(boolean isSpam, String... id) {
+        if(id==null || id.length<1){
             listener.onError(Error.MISS_PARAMETER + ":id");
             return;
         }
-        String url=URL_COMMENT+"/"+id;
+        String ids="";
+        for(String str : id){
+            if(!TextUtils.isEmpty(str)) {
+                if(ids.length()>0)
+                    ids+=",";
+                ids += str;
+            }
+        }
+        if(ids.length()<1){
+            listener.onError(Error.MISS_PARAMETER + ":id");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("api_version", "2"));
+        String url=URL_COMMENT+"/"+ids+"/";
         if(isSpam)
             url+="mark_spam";
-        else url+="mark_harm";
-
+        else url+="mark_ham";
         performAPIRequest(true, url, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 Helper.log(response);
-                BasicResponse res = new BasicResponse(response);
+                BasicResponse res = new CommentList(response);
                 if(res.error!=0)
                     listener.onError(res.message);
                 else listener.onDataResponse(res);
             }
-        });
+        }, params);
     }
 
     public void getBlogInfo() {

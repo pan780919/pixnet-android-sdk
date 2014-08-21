@@ -17,6 +17,7 @@ public class MIB extends BasicResponse {
     public UserInfo account;
     public List<Position> blog;
     public List<Position> article;
+    public List<Revenue> revenue;
 
     public static enum PositionCategory{
         blog,
@@ -49,6 +50,17 @@ public class MIB extends BasicResponse {
             payable= DataProxy.getJsonBoolean(jo, "payable");
         if(jo.has("blog") && !jo.isNull("blog")){
             JSONObject blogData=jo.getJSONObject("blog");
+            if(blogData.has("revenue")){
+                JSONArray revenues=blogData.getJSONArray("revenue");
+                int i=0, len=revenues.length();
+                if(len>0){
+                    revenue=new ArrayList<Revenue>();
+                    while (i<len){
+                        revenue.add(new Revenue(revenues.getJSONObject(i)));
+                        i++;
+                    }
+                }
+            }
             if(blogData.has("positions")){
                 JSONObject posData=blogData.getJSONObject("positions");
                 if(posData.has("blog") && !jo.isNull("blog")){
@@ -106,6 +118,30 @@ public class MIB extends BasicResponse {
                 domicile=jo.getString("domicile");
             if(jo.has("invalid_fields") && !jo.isNull("invalid_fields"))
                 invalid_fields=jo.getString("invalid_fields");
+        }
+    }
+
+    public class Revenue{
+        public String year_month;
+        public int amount;
+        public int difference;
+        public double difference_percentage;
+        public int click;
+        public int imp;
+
+        public Revenue(JSONObject jo) throws JSONException {
+            if(jo.has("year_month"))
+                year_month=jo.getString("year_month");
+            if(jo.has("amount"))
+                amount=jo.getInt("amount");
+            if(jo.has("difference"))
+                difference=jo.getInt("difference");
+            if(jo.has("difference_percentage"))
+                difference_percentage=jo.getDouble("difference_percentage");
+            if(jo.has("click"))
+                click=jo.getInt("click");
+            if(jo.has("imp"))
+                imp=jo.getInt("imp");
         }
     }
 }

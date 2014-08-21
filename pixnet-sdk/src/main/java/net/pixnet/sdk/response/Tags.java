@@ -1,7 +1,5 @@
 package net.pixnet.sdk.response;
 
-import net.pixnet.sdk.utils.Helper;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +29,6 @@ public class Tags extends BasicResponse {
             if(len>0)
                 hot=new ArrayList<String>();
             while (i<len){
-                Helper.log(ja.getString(i));
                 hot.add(ja.getString(i));
                 i++;
             }

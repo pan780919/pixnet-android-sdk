@@ -42,8 +42,7 @@ public class Blog extends ItemDetailFragment {
         getComment,
         replyComment,
         setCommentVisibility,
-        markCommentIsSpam,
-        markCommentIsHam,
+        markComment,
         removeComment,
         getCommentListByLatest,
 
@@ -103,11 +102,13 @@ public class Blog extends ItemDetailFragment {
 
                     @Override
                     public void onDataResponse(BasicResponse response) {
+                        Helper.log(response.getRawData());
                         Helper.log(response.message);
                         Helper.log("onDataResponse");
                     }
                 });
-                blogHelper.setDefaultPerPage(2);
+                blogHelper.setDefaultUserName("ben68");
+                blogHelper.setDefaultPerPage(8);
                 blogHelper.setDefaultTrimUser(false);
                 switch (Apis.values()[position]) {
                     case getBlogInfo:
@@ -144,7 +145,7 @@ public class Blog extends ItemDetailFragment {
                         blogHelper.updateArticle("174157501","TestUpdateTitle","Body",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
                         break;
                     case removeArticle:
-                        blogHelper.removeArticle("174156916");
+                        blogHelper.deleteArticle("174156916");
                         break;
                     case getArticleListByLatest:
                         break;
@@ -156,18 +157,21 @@ public class Blog extends ItemDetailFragment {
                         blogHelper.getCommentList();
                         break;
                     case addComment:
+                        blogHelper.addComment("185509473", "test");
                         break;
                     case getComment:
                         break;
                     case replyComment:
+                        blogHelper.replyComment("multireply test", "33785508", "33784806", "33783552");
                         break;
                     case setCommentVisibility:
+                        blogHelper.setCommentVisibility(false, "33785508", "33784806", "33783552");
                         break;
-                    case markCommentIsSpam:
-                        break;
-                    case markCommentIsHam:
+                    case markComment:
+                        blogHelper.markComment(false, "33785508", "33784806", "33783552");
                         break;
                     case removeComment:
+                        //blogHelper.deleteComment("33802053", "33802059", "33802065");
                         break;
                     case getCommentListByLatest:
                         break;

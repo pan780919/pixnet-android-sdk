@@ -74,6 +74,7 @@ public class Block extends ItemDetailFragment {
 
                     @Override
                     public void onDataResponse(BasicResponse response) {
+                        Helper.log(response.getRawData());
                         Helper.log(response.message);
                         Helper.log("onDataResponse");
                     }
@@ -83,24 +84,13 @@ public class Block extends ItemDetailFragment {
                 blockHelper.setDefaultTrimUser(false);
                 switch (Apis.values()[position]) {
                     case getBlockList:
-                        blockHelper.setListener(new DataProxy.DataProxyListener() {
-                            @Override
-                            public void onError(String msg) {
-
-                            }
-                            @Override
-                            public void onDataResponse(BasicResponse response) {
-                                BlocksList block1 =(BlocksList)response;
-                                Helper.log(block1.blocks.get(0).user.name);
-                            }
-                        });
                         blockHelper.getBlockList();
                         break;
                     case addBlock:
-                        blockHelper.addBlock("wolflsi");
+                        blockHelper.addBlock("wolflsi", "giddens");
                         break;
                     case removeBlock:
-                        blockHelper.removeBlock("wolflsi");
+                        blockHelper.removeBlock("giddens");
                         break;
                     default:
                 }
