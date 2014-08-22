@@ -30,6 +30,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.pixnet.sdk.test.ItemListActivity" />
         </activity>
+        <activity
+            android:name=".Show_Article"
+            android:label="@string/title_activity_show__article" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,6 +1,9 @@
 package net.pixnet.sdk.test;
 
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -9,6 +12,7 @@ import android.widget.TextView;
 
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
+import net.pixnet.sdk.response.Article;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.utils.BlogHelper;
 import net.pixnet.sdk.utils.Helper;
@@ -107,7 +111,7 @@ public class Blog extends ItemDetailFragment {
                         Helper.log("onDataResponse");
                     }
                 });
-                blogHelper.setDefaultUserName("ben68");
+                blogHelper.setDefaultUserName("kkkoooiii2");
                 blogHelper.setDefaultPerPage(8);
                 blogHelper.setDefaultTrimUser(false);
                 switch (Apis.values()[position]) {
@@ -133,7 +137,37 @@ public class Blog extends ItemDetailFragment {
                         blogHelper.getAllArticleList();
                         break;
                     case getArticle:
-                        blogHelper.getArticle("61695293");
+                        blogHelper.setListener(new DataProxy.DataProxyListener() {
+                            @Override
+                            public void onError(String msg) {
+
+                            }
+
+                            @Override
+                            public void onDataResponse(BasicResponse response) {
+                                Article article = (Article)response;
+                                Helper.log(response.getRawData());
+                                Bundle bundle = new Bundle();
+                                if(article.body!=null){
+                                    bundle.putString("body",article.body);
+                                    bundle.putString("title",article.title);
+                                    bundle.putString("user",article.user.name);
+                                }
+                                ShowArticleFragment newFragment = new ShowArticleFragment();
+                                newFragment.setArguments(bundle);
+                                android.support.v4.app.FragmentT'[ransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                                ft.replace(R.id.item_detail_container,newFragment);
+                                ft.addToBackStack(null);
+                                ft.commit();
+                                //bundle.putInt("error",article.error);
+                                //bundle.putString("message",article.message);
+                                //Intent intent = new Intent(Blog.this.getActivity(),Show_Article.class);
+                                //intent.putExtra("bundle",bundle);
+                                //startActivityForResult(intent, 0);
+                            }
+                        });
+                        blogHelper.getArticle("165129609");
+
                         break;
                     case getRelatedArticleList:
                         blogHelper.getRelatedArticleList("61695293");
