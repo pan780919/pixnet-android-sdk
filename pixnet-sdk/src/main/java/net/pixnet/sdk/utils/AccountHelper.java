@@ -62,8 +62,8 @@ public class AccountHelper extends DataProxy {
                 if(res.error==0){
                     if(listener.onDataResponse(res))
                         return;
-                    else if(listener instanceof AccountInfoListener)
-                        ((AccountInfoListener) listener).onGetAccountInfoResponse(new AccountInfo(response));
+                    else if(listener instanceof AccountHelperListener)
+                        ((AccountHelperListener) listener).onGetAccountInfoResponse(new AccountInfo(response));
                 }
                 else listener.onError(res.message);
             }
@@ -149,8 +149,8 @@ public class AccountHelper extends DataProxy {
                 if(res.error==0){
                     if(listener.onDataResponse(res))
                         return;
-                    else if(listener instanceof AccountInfoListener)
-                        ((AccountInfoListener) listener).onGetMIBInfoResponse(new MIB(response));
+                    else if(listener instanceof AccountHelperListener)
+                        ((AccountHelperListener) listener).onGetMIBInfoResponse(new MIB(response));
                 }
                 else listener.onError(res.message);
             }
@@ -192,8 +192,8 @@ public class AccountHelper extends DataProxy {
                 if(res.error==0){
                     if(listener.onDataResponse(res))
                         return;
-                    else if(listener instanceof AccountInfoListener)
-                        ((AccountInfoListener) listener).onUpdateMIBInfoResponse(new MIB(response));
+                    else if(listener instanceof AccountHelperListener)
+                        ((AccountHelperListener) listener).onUpdateMIBInfoResponse(new MIB(response));
                 }
                 else listener.onError(res.message);
             }
@@ -211,8 +211,8 @@ public class AccountHelper extends DataProxy {
                 if(res.error==0){
                     if(listener.onDataResponse(res))
                         return;
-                    else if(listener instanceof AccountInfoListener)
-                        ((AccountInfoListener) listener).onGetMIBPositionListInfoResponse(new PositionList(response));
+                    else if(listener instanceof AccountHelperListener)
+                        ((AccountHelperListener) listener).onGetMIBPositionListInfoResponse(new PositionList(response));
                 }
                 else listener.onError(res.message);
             }
@@ -234,8 +234,8 @@ public class AccountHelper extends DataProxy {
                 if(res.error==0){
                     if(listener.onDataResponse(res))
                         return;
-                    else if(listener instanceof AccountInfoListener)
-                        ((AccountInfoListener) listener).onGetMIBPositionInfoResponse(new Position(response));
+                    else if(listener instanceof AccountHelperListener)
+                        ((AccountHelperListener) listener).onGetMIBPositionInfoResponse(new Position(response));
                 }
                 else listener.onError(res.message);
             }
@@ -264,8 +264,8 @@ public class AccountHelper extends DataProxy {
                 if(res.error==0){
                     if(listener.onDataResponse(res))
                         return;
-                    else if(listener instanceof AccountInfoListener)
-                        ((AccountInfoListener) listener).onUpdateMIBPositionInfoResponse(new MIB(response));
+                    else if(listener instanceof AccountHelperListener)
+                        ((AccountHelperListener) listener).onUpdateMIBPositionInfoResponse(new MIB(response));
                 }
                 else listener.onError(res.message);
             }
@@ -312,8 +312,8 @@ public class AccountHelper extends DataProxy {
                 if (res.error == 0) {
                     if (listener.onDataResponse(res))
                         return;
-                    else if (listener instanceof AccountInfoListener)
-                        ((AccountInfoListener) listener).onGetAnalyticDataResponse(new Analytics(response));
+                    else if (listener instanceof AccountHelperListener)
+                        ((AccountHelperListener) listener).onGetAnalyticDataResponse(new Analytics(response));
                 } else listener.onError(res.message);
             }
         }, params);
@@ -370,8 +370,8 @@ public class AccountHelper extends DataProxy {
                 if (res.error == 0) {
                     if (listener.onDataResponse(res))
                         return;
-                    else if (listener instanceof AccountInfoListener)
-                        ((AccountInfoListener) listener).onGetNotificationsResponse(new NotificationList(response));
+                    else if (listener instanceof AccountHelperListener)
+                        ((AccountHelperListener) listener).onGetNotificationsResponse(new NotificationList(response));
                 } else listener.onError(res.message);
             }
         }, params);
@@ -389,30 +389,12 @@ public class AccountHelper extends DataProxy {
                 if(res.error==0){
                     if(listener.onDataResponse(res))
                         return;
-                    else if(listener instanceof AccountInfoListener)
-                        ((AccountInfoListener) listener).onGetUserInfoResponse(new User(response));
+                    else if(listener instanceof AccountHelperListener)
+                        ((AccountHelperListener) listener).onGetUserInfoResponse(new User(response));
                 }
                 else listener.onError(res.message);
             }
         });
-    }
-
-    public class AccountInfoListener implements DataProxyListener{
-        @Override
-        public void onError(String msg){}
-        @Override
-        public boolean onDataResponse(BasicResponse response) {
-            return false;
-        }
-        public void onGetAccountInfoResponse(AccountInfo response){}
-        public void onGetMIBInfoResponse(MIB response){}
-        public void onUpdateMIBInfoResponse(MIB response){}
-        public void onGetMIBPositionListInfoResponse(PositionList response){}
-        public void onGetMIBPositionInfoResponse(Position response){}
-        public void onUpdateMIBPositionInfoResponse(MIB response){}
-        public void onGetAnalyticDataResponse(Analytics response){}
-        public void onGetNotificationsResponse(NotificationList response){}
-        public void onGetUserInfoResponse(User response){}
     }
 
 }
