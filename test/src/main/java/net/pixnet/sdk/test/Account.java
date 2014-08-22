@@ -84,8 +84,9 @@ public class Account extends ItemDetailFragment {
                     }
 
                     @Override
-                    public void onDataResponse(BasicResponse response) {
+                    public boolean onDataResponse(BasicResponse response) {
                         Helper.log("onDataResponse");
+                        return true;
                     }
                 });
                 switch (Apis.values()[position]){

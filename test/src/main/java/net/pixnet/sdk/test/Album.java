@@ -118,8 +118,9 @@ public class Album extends ItemDetailFragment {
                     }
 
                     @Override
-                    public void onDataResponse(BasicResponse response) {
+                    public boolean onDataResponse(BasicResponse response) {
                         Helper.log("onDataResponse");
+                        return true;
                     }
                 });
                 albumHelper.setDefaultPerPage(2);

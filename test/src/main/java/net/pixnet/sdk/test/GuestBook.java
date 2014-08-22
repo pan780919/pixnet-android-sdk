@@ -78,9 +78,11 @@ public class GuestBook extends ItemDetailFragment{
                     }
 
                     @Override
-                    public void onDataResponse(BasicResponse response) {
+                    public boolean onDataResponse(BasicResponse response) {
+                        Helper.log(response.getRawData());
                         Helper.log(response.message);
                         Helper.log("onDataResponse");
+                        return true;
                     }
                 });
                 guestBookHelper.setDefaultUserName("emmademo");
@@ -95,11 +97,12 @@ public class GuestBook extends ItemDetailFragment{
                             }
 
                             @Override
-                            public void onDataResponse(BasicResponse response) {
+                            public boolean onDataResponse(BasicResponse response) {
                                 GuestbookList guestbookList = (GuestbookList)response;
                                 for(int i =0;i<guestbookList.total;i++){
                                     Helper.log(guestbookList.articles.get(i).id);
                                 }
+                                return true;
                             }
                         });
                         guestBookHelper.getGuestbookList("kkkoooiii2",null,null,10);

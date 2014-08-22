@@ -15,8 +15,7 @@ public class MIB extends BasicResponse {
     public int payable_revenue;
     public boolean payable;
     public UserInfo account;
-    public List<Position> blog;
-    public List<Position> article;
+    public PositionList positions;
     public List<Revenue> revenue;
 
     public static enum PositionCategory{
@@ -61,31 +60,8 @@ public class MIB extends BasicResponse {
                     }
                 }
             }
-            if(blogData.has("positions")){
-                JSONObject posData=blogData.getJSONObject("positions");
-                if(posData.has("blog") && !jo.isNull("blog")){
-                    JSONArray ja=posData.getJSONArray("blog");
-                    int i=0, len=ja.length();
-                    if(len>0){
-                        blog=new ArrayList<Position>();
-                        while (i<len){
-                            blog.add(new Position(ja.getJSONObject(i)));
-                            i++;
-                        }
-                    }
-                }
-                if(posData.has("articles") && !jo.isNull("articles")){
-                    JSONArray ja=posData.getJSONArray("articles");
-                    int i=0, len=ja.length();
-                    if(len>0){
-                        article=new ArrayList<Position>();
-                        while (i<len){
-                            article.add(new Position(ja.getJSONObject(i)));
-                            i++;
-                        }
-                    }
-                }
-            }
+            if(blogData.has("positions") && !blogData.isNull("positions"))
+                positions=new PositionList(blogData);
         }
 
         if(jo.has("account") && !jo.isNull("account"))

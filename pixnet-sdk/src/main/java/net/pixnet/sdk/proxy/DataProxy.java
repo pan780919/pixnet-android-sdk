@@ -136,8 +136,17 @@ public abstract class DataProxy {
     }
 
     public interface DataProxyListener{
+        /**
+         * run on error code !=0
+         * @param msg
+         */
         void onError(String msg);
-        void onDataResponse(BasicResponse response);
+        /**
+         * on http data response
+         * @param response a basically response with error and message
+         * @return You must return true for the JSON parsing; if you return false it will not be continue.
+         */
+        boolean onDataResponse(BasicResponse response);
     }
 
 }

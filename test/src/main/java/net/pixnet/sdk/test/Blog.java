@@ -101,10 +101,11 @@ public class Blog extends ItemDetailFragment {
                     }
 
                     @Override
-                    public void onDataResponse(BasicResponse response) {
+                    public boolean onDataResponse(BasicResponse response) {
                         Helper.log(response.getRawData());
                         Helper.log(response.message);
                         Helper.log("onDataResponse");
+                        return true;
                     }
                 });
                 blogHelper.setDefaultUserName("ben68");
