@@ -7,6 +7,8 @@ import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.BlocksList;
 import net.pixnet.sdk.proxy.Error;
+import net.pixnet.sdk.response.NotificationList;
+import net.pixnet.sdk.response.User;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -24,10 +26,13 @@ public class BlockHelper extends DataProxy {
         performAPIRequest(true, URL_BLOCK, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BlocksList(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof BlockListener)
+                        ((BlockListener) listener).onGetBlockList(new BlocksList(response));
+                } else listener.onError(res.message);
             }
         });
     }
@@ -59,7 +64,7 @@ public class BlockHelper extends DataProxy {
         performAPIRequest(true, URL_BLOCK + "/create", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BlocksList(response);
+                BasicResponse res=new BasicResponse(response);
                 if(res.error==0)
                     listener.onDataResponse(res);
                 else listener.onError(res.message);
@@ -81,11 +86,22 @@ public class BlockHelper extends DataProxy {
         performAPIRequest(true, URL_BLOCK + "/delete", Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
+                BasicResponse res=new BasicResponse(response);
                 if(res.error==0)
                     listener.onDataResponse(res);
                 else listener.onError(res.message);
             }
         }, params);
+    }
+    public class BlockListener implements DataProxyListener{
+
+        @Override
+        public void onError(String msg) {}
+
+        @Override
+        public boolean onDataResponse(BasicResponse response) {
+            return false;
+        }
+        public void onGetBlockList(BlocksList res){}
     }
 }

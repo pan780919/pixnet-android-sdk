@@ -14,8 +14,11 @@ import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.Article;
 import net.pixnet.sdk.response.BasicResponse;
+import net.pixnet.sdk.utils.AccountHelper;
 import net.pixnet.sdk.utils.BlogHelper;
 import net.pixnet.sdk.utils.Helper;
+
+import static net.pixnet.sdk.utils.AccountHelper.*;
 
 /**
  * Created by Koi on 2014/8/15.
@@ -93,6 +96,8 @@ public class Blog extends ItemDetailFragment {
         });
     }
 
+    private AccountHelper.AccountInfoListener listener;
+
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -145,7 +150,7 @@ public class Blog extends ItemDetailFragment {
                             }
 
                             @Override
-                            public void onDataResponse(BasicResponse response) {
+                            public boolean onDataResponse(BasicResponse response) {
                                 Article article = (Article)response;
                                 Helper.log(response.getRawData());
                                 Bundle bundle = new Bundle();
@@ -156,7 +161,7 @@ public class Blog extends ItemDetailFragment {
                                 }
                                 ShowArticleFragment newFragment = new ShowArticleFragment();
                                 newFragment.setArguments(bundle);
-                                android.support.v4.app.FragmentT'[ransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                                android.support.v4.app.FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                                 ft.replace(R.id.item_detail_container,newFragment);
                                 ft.addToBackStack(null);
                                 ft.commit();
@@ -165,6 +170,7 @@ public class Blog extends ItemDetailFragment {
                                 //Intent intent = new Intent(Blog.this.getActivity(),Show_Article.class);
                                 //intent.putExtra("bundle",bundle);
                                 //startActivityForResult(intent, 0);
+                                return true;
                             }
                         });
                         blogHelper.getArticle("165129609");

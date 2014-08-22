@@ -403,4 +403,21 @@ public class FriendHelper extends DataProxy {
             }
         }, params);
     }
+    public class FriendListener implements DataProxyListener{
+
+        @Override
+        public void onError(String msg) {
+
+        }
+
+        @Override
+        public boolean onDataResponse(BasicResponse response) {
+            return false;
+        }
+        public void onGetSubscribedFriendship(SubscriptionList res){}
+        public void onGetFriendshipList(FriendshipList res){}
+        public void onGetGroupList(GroupList res){}
+        public void onGetFriendNews(NewsList res){}
+        public void onGetSubscriptionGroupList(Subscription_groupList res){}
+    }
 }
