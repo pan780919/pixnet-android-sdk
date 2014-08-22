@@ -14,7 +14,7 @@ public class Blocks{
     /**
      * block time
      */
-    public String created_at;
+    public long created_at;
     private void formatJson(String response){
         try {
             JSONObject obj = new JSONObject(response);
@@ -22,7 +22,7 @@ public class Blocks{
                 user = new User(obj);
             }
             if(obj.has("created_at")){
-                created_at = obj.getString("created_at");
+                created_at = obj.getInt("created_at")*1000;
             }
         }catch(JSONException e){
         }

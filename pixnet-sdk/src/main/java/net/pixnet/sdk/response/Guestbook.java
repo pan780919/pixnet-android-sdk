@@ -58,7 +58,7 @@ public class Guestbook extends BasicResponse {
         if(obj.has("is_spam"))
             is_spam=DataProxy.getJsonBoolean(obj, "is_spam");
         if(obj.has("created_at"))
-            created_at=obj.getLong("created_at");
+            created_at=obj.getInt("created_at")*1000;
         if(obj.has("user"))
             user=new User(obj);
 
