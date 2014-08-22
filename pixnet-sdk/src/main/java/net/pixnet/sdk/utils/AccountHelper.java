@@ -10,6 +10,7 @@ import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.MIB;
 import net.pixnet.sdk.response.NotificationList;
 import net.pixnet.sdk.response.Position;
+import net.pixnet.sdk.response.PositionList;
 import net.pixnet.sdk.response.User;
 
 import org.apache.http.NameValuePair;
@@ -38,7 +39,7 @@ public class AccountHelper extends DataProxy {
     }
 
     /**
-     * 讀取認證使用者資訊
+     * 讀取認證使用者資訊, 傳回結果：{@link net.pixnet.sdk.response.AccountInfo}
      * @param withNotification 傳回最近的 5 則通知
      * @param notificationType 限制傳回通知類型（friend: 好友互動，system: 系統通知，comment: 留言，appmarket:應用市集）
      * @param withBlogInfo 傳回部落格資訊
@@ -57,8 +58,14 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                listener.onDataResponse(new AccountInfo(response));
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof AccountInfoListener)
+                        ((AccountInfoListener) listener).onGetAccountInfoResponse(new AccountInfo(response));
+                }
+                else listener.onError(res.message);
             }
         }, params);
 
@@ -71,7 +78,7 @@ public class AccountHelper extends DataProxy {
         updateAccountInfo(password, displayName, null, null, null, null, null, null, null);
     }
     /**
-     * 修改認證使用者資訊
+     * 修改認證使用者資訊, 傳回結果：{@link net.pixnet.sdk.response.BasicResponse}
      * @param password 密碼，需要檢查與系統內儲存資訊相符後才能執行修改
      * @param displayName 使用者暱稱
      * @param email 信箱
@@ -109,8 +116,10 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_INFO, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                listener.onDataResponse(new BasicResponse(response));
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -122,7 +131,7 @@ public class AccountHelper extends DataProxy {
         getMIBInfo(-1);
     }
     /**
-     * 讀取認證使用者 MIB 帳戶資訊
+     * 讀取認證使用者 MIB 帳戶資訊, 傳回結果：{@link net.pixnet.sdk.response.MIB}
      * @param historyDays 列出指定天數的歷史收益資訊，最少 0 天，最多 45 天
      */
     public void getMIBInfo(int historyDays){
@@ -136,14 +145,20 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_MIB, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                listener.onDataResponse(new MIB(response));
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof AccountInfoListener)
+                        ((AccountInfoListener) listener).onGetMIBInfoResponse(new MIB(response));
+                }
+                else listener.onError(res.message);
             }
         }, params);
     }
 
     /**
-     * 上傳認證使用者 MIB 帳戶資訊, 如果已經上傳過帳戶資料，除非需要補件，否則不開放再次上傳帳戶資料
+     * 上傳認證使用者 MIB 帳戶資訊, 如果已經上傳過帳戶資料，除非需要補件，否則不開放再次上傳帳戶資料, 傳回結果：{@link net.pixnet.sdk.response.MIB}
      * @param idNumber 身分證字號
      * @param idImageFront 身分證正面
      * @param idImageBack 身分證反面
@@ -173,15 +188,40 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_MIB, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                BasicResponse res=new MIB(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof AccountInfoListener)
+                        ((AccountInfoListener) listener).onUpdateMIBInfoResponse(new MIB(response));
+                }
                 else listener.onError(res.message);
             }
         }, params);
     }
 
+    /**
+     * 取得 MIB 版位資料, 傳回結果：{@link net.pixnet.sdk.response.PositionList}
+     */
+    public void getMIBPostionListInfo(){
+        performAPIRequest(true, URL_ACCOUNT_MIB_POSTION, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof AccountInfoListener)
+                        ((AccountInfoListener) listener).onGetMIBPositionListInfoResponse(new PositionList(response));
+                }
+                else listener.onError(res.message);
+            }
+        });
+    }
+    /**
+     * 取得 MIB 單一版位資料, 傳回結果：{@link net.pixnet.sdk.response.Position}
+     * @param id 版位 ID, 可由 {@link #getMIBPostionListInfo()} 或 {@link #getMIBInfo()} 取得
+     */
     public void getMIBPostionInfo(String id){
         if(TextUtils.isEmpty(id)){
             listener.onError(Error.MISS_PARAMETER+":id");
@@ -190,15 +230,24 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_MIB_POSTION+"/"+id, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                BasicResponse res=new Position(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof AccountInfoListener)
+                        ((AccountInfoListener) listener).onGetMIBPositionInfoResponse(new Position(response));
+                }
                 else listener.onError(res.message);
             }
         });
     }
 
+    /**
+     * 修改 MIB 版位資料, 傳回結果：{@link net.pixnet.sdk.response.MIB}
+     * @param id 版位 id
+     * @param enabled 是否啟用
+     * @param fixed 是否固定式廣告框
+     */
     public void updateMIBPositionInfo(String id, boolean enabled, boolean fixed){
         if(TextUtils.isEmpty(id)){
             listener.onError(Error.MISS_PARAMETER+":id");
@@ -211,23 +260,25 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_MIB_POSTION+"/"+id, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                BasicResponse res=new MIB(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof AccountInfoListener)
+                        ((AccountInfoListener) listener).onUpdateMIBPositionInfoResponse(new MIB(response));
+                }
                 else listener.onError(res.message);
             }
         }, params);
     }
 
     /**
-     * MIB 請款
+     * MIB 請款, 傳回結果：{@link net.pixnet.sdk.response.BasicResponse}
      */
     public void payMIB(){
         performAPIRequest(true, URL_ACCOUNT_MIB_PAY, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
                 BasicResponse res=new BasicResponse(response);
                 if(res.error==0)
                     listener.onDataResponse(res);
@@ -243,7 +294,7 @@ public class AccountHelper extends DataProxy {
         getAnalyticData(-1, -1);
     }
     /**
-     * 取得認證使用者拜訪紀錄分析資料
+     * 取得認證使用者拜訪紀錄分析資料, 傳回結果：{@link net.pixnet.sdk.response.Analytics}
      * @param statisticsDays 列出指定天數的歷史拜訪資訊，最少 0 天，最多 45 天
      * @param refererDays 列出指定天數的誰連結我資訊，最少 0 天，最多 7 天
      */
@@ -257,15 +308,22 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_ANALYTICS, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                BasicResponse res=new Analytics(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof AccountInfoListener)
+                        ((AccountInfoListener) listener).onGetAnalyticDataResponse(new Analytics(response));
+                } else listener.onError(res.message);
             }
         }, params);
     }
 
+    /**
+     * 修改密碼, 傳回結果：{@link net.pixnet.sdk.response.BasicResponse}
+     * @param oldPassword
+     * @param newPassword
+     */
     public void updatePassword(String oldPassword, String newPassword){
         if(TextUtils.isEmpty(oldPassword) || TextUtils.isEmpty(newPassword)){
             listener.onError(Error.MISS_PARAMETER+":oldPassword, newPassword");
@@ -278,7 +336,6 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_PASSWD, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
                 BasicResponse res=new BasicResponse(response);
                 if(res.error==0)
                     listener.onDataResponse(res);
@@ -288,14 +345,14 @@ public class AccountHelper extends DataProxy {
     }
 
     /**
-     * 列出全部通知類型，通知數量限制為 10 筆
+     * 列出全部通知類型，通知數量限制為 10 筆, 傳回結果：{@link net.pixnet.sdk.response.NotificationList}
      * @see #getNotifications(AccountHelper.NotificationType, int)
      */
     public void getNotifications(){
         getNotifications(null, -1);
     }
     /**
-     * 列出通知
+     * 列出通知, 傳回結果：{@link net.pixnet.sdk.response.NotificationList}
      * @param type 限制傳回通知類型 （friend: 好友互動，system: 系統通知，comments: 留言，appmarket:應用市集）
      * @param limit 傳回通知數量限制
      */
@@ -309,26 +366,53 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_NOTIFICATIONS, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                BasicResponse res=new NotificationList(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof AccountInfoListener)
+                        ((AccountInfoListener) listener).onGetNotificationsResponse(new NotificationList(response));
+                } else listener.onError(res.message);
             }
         }, params);
     }
 
+    /**
+     * 讀取使用者公開資訊, 傳回結果：{@link net.pixnet.sdk.response.User}
+     * @param userName 使用者名稱
+     */
     public void getUserInfo(String userName){
         performAPIRequest(false, URL_USER+"/"+userName, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                BasicResponse res=new User(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof AccountInfoListener)
+                        ((AccountInfoListener) listener).onGetUserInfoResponse(new User(response));
+                }
                 else listener.onError(res.message);
             }
         });
+    }
+
+    public class AccountInfoListener implements DataProxyListener{
+        @Override
+        public void onError(String msg){}
+        @Override
+        public boolean onDataResponse(BasicResponse response) {
+            return false;
+        }
+        public void onGetAccountInfoResponse(AccountInfo response){}
+        public void onGetMIBInfoResponse(MIB response){}
+        public void onUpdateMIBInfoResponse(MIB response){}
+        public void onGetMIBPositionListInfoResponse(PositionList response){}
+        public void onGetMIBPositionInfoResponse(Position response){}
+        public void onUpdateMIBPositionInfoResponse(MIB response){}
+        public void onGetAnalyticDataResponse(Analytics response){}
+        public void onGetNotificationsResponse(NotificationList response){}
+        public void onGetUserInfoResponse(User response){}
     }
 
 }

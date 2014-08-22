@@ -6,7 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * default response
+ * a basically response with error and message
  */
 public class BasicResponse {
 

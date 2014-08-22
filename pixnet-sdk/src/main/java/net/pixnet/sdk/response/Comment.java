@@ -1,6 +1,7 @@
 package net.pixnet.sdk.response;
 
 import net.pixnet.sdk.proxy.DataProxy;
+import net.pixnet.sdk.utils.Helper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -129,10 +130,13 @@ public class Comment extends BasicResponse {
             is_spam = DataProxy.getJsonBoolean(obj, "is_spam");
         }
         if (obj.has("created_at")) {
-            created_at = obj.getLong("created_at");
+            created_at = obj.getInt("created_at")*1000l;
         }
-        if(obj.has("read_at"))
-            read_at=obj.getLong("read_at");
+        if(obj.has("read_at")) {
+            read_at = obj.getInt("read_at");
+            if(read_at!=0)
+                read_at*=1000l;
+        }
         if (obj.has("author_login_type")) {
             author_login_type = obj.getString("author_login_type");
         }
