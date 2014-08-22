@@ -24,7 +24,7 @@ public class Reply extends BasicResponse{
             body = obj.getString("body");
         }
         if(obj.has("created_at")){
-            created_at = obj.getInt("created_at")*1000;
+            created_at = obj.getInt("created_at")*1000l;
         }
         return obj;
     }
