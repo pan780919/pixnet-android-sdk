@@ -95,9 +95,6 @@ public class Blog extends ItemDetailFragment {
             }
         });
     }
-
-    private AccountHelper.AccountInfoListener listener;
-
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {

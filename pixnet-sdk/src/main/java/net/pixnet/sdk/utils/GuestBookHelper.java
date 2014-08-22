@@ -6,6 +6,7 @@ import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.Guestbook;
 import net.pixnet.sdk.response.GuestbookList;
+import net.pixnet.sdk.response.User;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -38,9 +39,14 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(false, URL_GUESTBOOK, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                GuestbookList res = new GuestbookList(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof GuestBookHelperListener)
+                        ((GuestBookHelperListener) listener).onGetGuestbookList(new GuestbookList(response));
+                }
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -77,8 +83,10 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(true, URL_GUESTBOOK, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -102,8 +110,14 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(false, URL_GUESTBOOK + "/" + id, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Guestbook res = new Guestbook(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof GuestBookHelperListener)
+                        ((GuestBookHelperListener) listener).onGetGuestbook(new Guestbook(response));
+                }
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -123,8 +137,10 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(true, URL_GUESTBOOK + "/" + id + "/reply", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -144,8 +160,10 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(true, url, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -159,8 +177,10 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(true, URL_GUESTBOOK + "/" + id + "/mark_spam", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -174,8 +194,10 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(true, URL_GUESTBOOK + "/" + id + "/mark_ham", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -189,8 +211,10 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(true, URL_GUESTBOOK + "/" + id, Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }

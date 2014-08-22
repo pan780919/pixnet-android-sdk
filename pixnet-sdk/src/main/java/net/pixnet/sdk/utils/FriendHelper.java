@@ -10,6 +10,7 @@ import net.pixnet.sdk.response.News;
 import net.pixnet.sdk.response.NewsList;
 import net.pixnet.sdk.response.SubscriptionList;
 import net.pixnet.sdk.response.Subscription_groupList;
+import net.pixnet.sdk.response.User;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -75,9 +76,14 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_NEWS, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                NewsList res = new NewsList(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onGetFriendNews(new NewsList(response));
+                }
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -89,8 +95,14 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_GROUP, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                GroupList res = new GroupList(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onGetGroupList(new GroupList(response));
+                }
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -105,8 +117,10 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_GROUP, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -125,8 +139,10 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_GROUP + "/" + id, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -140,8 +156,10 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_GROUP + "/" + id, Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -157,8 +175,14 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_FRIENDSHIP, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                FriendshipList res = new FriendshipList(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onGetFriendshipList(new FriendshipList(response));
+                }
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -173,8 +197,10 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_FRIENDSHIP, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -189,8 +215,10 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_FRIENDSHIP + "/delete", Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -210,8 +238,10 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_FRIENDSHIP + "/append_group", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -231,8 +261,10 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_FRIENDSHIP + "/remove_group", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -244,9 +276,14 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_SUBSCRIPTION, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                SubscriptionList res =new SubscriptionList(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onGetSubscribedFriendship(new SubscriptionList(response));
+                }
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -263,8 +300,10 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_SUBSCRIPTION, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -279,8 +318,10 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_SUBSCRIPTION + "/" + user, Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -300,8 +341,10 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_SUBSCRIPTION + "/" + user + "/join_subscription_group", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -321,8 +364,10 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_SUBSCRIPTION + "/" + user + "/leave_subscription_group", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -331,8 +376,14 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_SUBSCRIPTION_GROUP, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Subscription_groupList res = new Subscription_groupList(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onGetSubscriptionGroupList(new Subscription_groupList(response));
+                }
+                else listener.onError(res.message);
             }
         });
     }
@@ -347,8 +398,10 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_SUBSCRIPTION_GROUP, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -367,8 +420,10 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_SUBSCRIPTION_GROUP + "/" + id, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -382,8 +437,10 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_SUBSCRIPTION_GROUP + "/" + id, Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
     }
@@ -398,26 +455,11 @@ public class FriendHelper extends DataProxy {
         performAPIRequest(true, URL_SUBSCRIPTION_GROUP + "/position", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse(response);
+                if(res.error==0)
+                    listener.onDataResponse(res);
+                else listener.onError(res.message);
             }
         }, params);
-    }
-    public class FriendListener implements DataProxyListener{
-
-        @Override
-        public void onError(String msg) {
-
-        }
-
-        @Override
-        public boolean onDataResponse(BasicResponse response) {
-            return false;
-        }
-        public void onGetSubscribedFriendship(SubscriptionList res){}
-        public void onGetFriendshipList(FriendshipList res){}
-        public void onGetGroupList(GroupList res){}
-        public void onGetFriendNews(NewsList res){}
-        public void onGetSubscriptionGroupList(Subscription_groupList res){}
     }
 }

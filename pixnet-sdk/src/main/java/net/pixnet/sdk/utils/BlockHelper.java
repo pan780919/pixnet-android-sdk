@@ -30,8 +30,8 @@ public class BlockHelper extends DataProxy {
                 if (res.error == 0) {
                     if (listener.onDataResponse(res))
                         return;
-                    else if (listener instanceof BlockListener)
-                        ((BlockListener) listener).onGetBlockList(new BlocksList(response));
+                    else if (listener instanceof BlockHelperListener)
+                        ((BlockHelperListener) listener).onGetBlockList(new BlocksList(response));
                 } else listener.onError(res.message);
             }
         });
@@ -92,16 +92,5 @@ public class BlockHelper extends DataProxy {
                 else listener.onError(res.message);
             }
         }, params);
-    }
-    public class BlockListener implements DataProxyListener{
-
-        @Override
-        public void onError(String msg) {}
-
-        @Override
-        public boolean onDataResponse(BasicResponse response) {
-            return false;
-        }
-        public void onGetBlockList(BlocksList res){}
     }
 }
