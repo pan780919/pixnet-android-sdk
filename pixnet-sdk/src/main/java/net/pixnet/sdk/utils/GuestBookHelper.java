@@ -6,7 +6,6 @@ import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.Guestbook;
 import net.pixnet.sdk.response.GuestbookList;
-import net.pixnet.sdk.response.User;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -84,8 +83,12 @@ public class GuestBookHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof GuestBookHelperListener)
+                        ((GuestBookHelperListener) listener).onAddGuestbook(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -138,8 +141,12 @@ public class GuestBookHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof GuestBookHelperListener)
+                        ((GuestBookHelperListener) listener).onReplyGuestbook(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -161,14 +168,18 @@ public class GuestBookHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof GuestBookHelperListener)
+                        ((GuestBookHelperListener) listener).onSetGuestbookVisibility(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
     }
 
-    public void markGuestbookSpam(String id) {
+    public void markGuestbookToSpam(String id) {
         if (id == null || TextUtils.isEmpty(id)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
             return;
@@ -178,8 +189,12 @@ public class GuestBookHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof GuestBookHelperListener)
+                        ((GuestBookHelperListener) listener).onMarkGuestbookToSpam(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -195,8 +210,12 @@ public class GuestBookHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof GuestBookHelperListener)
+                        ((GuestBookHelperListener) listener).onMarkGuestbookToHam(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -212,8 +231,12 @@ public class GuestBookHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof GuestBookHelperListener)
+                        ((GuestBookHelperListener) listener).onRemoveGuestbook(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);

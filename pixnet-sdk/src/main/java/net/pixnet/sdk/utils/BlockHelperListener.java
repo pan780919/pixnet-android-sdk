@@ -17,4 +17,6 @@ public class BlockHelperListener implements DataProxy.DataProxyListener {
         return false;
     }
     public void onGetBlockList(BlocksList res){}
+    public void onAddBlockResponse(BasicResponse res){}
+    public void onRemoveBlockResponse(BasicResponse res){}
 }

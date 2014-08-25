@@ -86,6 +86,7 @@ public class Account extends ItemDetailFragment {
                     @Override
                     public boolean onDataResponse(BasicResponse response) {
                         Helper.log("onDataResponse");
+                        Helper.log(response.getRawData());
                         return true;
                     }
                 });

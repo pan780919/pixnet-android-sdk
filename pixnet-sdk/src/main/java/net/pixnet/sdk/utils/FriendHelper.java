@@ -26,44 +26,6 @@ public class FriendHelper extends DataProxy {
     private static final String URL_FRIENDSHIP = "https://emma.pixnet.cc/friendships";
     private static final String URL_SUBSCRIPTION = "https://emma.pixnet.cc/friend/subscriptions";
     private static final String URL_SUBSCRIPTION_GROUP = "https://emma.pixnet.cc/friend/subscription_groups";
-    /**
-     * 預設使用者名稱
-     */
-    private String defaultUserName = "emmademo";
-
-    public String getDefaultUserName() {
-        return defaultUserName;
-    }
-
-    public void setDefaultUserName(String defaultUserName) {
-        this.defaultUserName = defaultUserName;
-    }
-
-    /**
-     * 預設每頁幾筆資料
-     */
-    private int defaultPerPage = 20;
-
-    public int getDefaultPerPage() {
-        return defaultPerPage;
-    }
-
-    public void setDefaultPerPage(int defaultPerPage) {
-        this.defaultPerPage = defaultPerPage;
-    }
-
-    /**
-     * 預設是否每篇文章都要回傳作者資訊, 如果設定為 true, 則就不回傳
-     */
-    private boolean defaultTrimUser = false;
-
-    public boolean isDefaultTrimUser() {
-        return defaultTrimUser;
-    }
-
-    public void setDefaultTrimUser(boolean defaultTrimUser) {
-        this.defaultTrimUser = defaultTrimUser;
-    }
 
     public void getFriendNews(String group_type, String group_id, String before_time) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -118,8 +80,12 @@ public class FriendHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onAddGroup(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -140,8 +106,12 @@ public class FriendHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onUpdateGroup(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -157,8 +127,12 @@ public class FriendHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onRemoveGroup(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -198,8 +172,12 @@ public class FriendHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onAddFriendship(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -216,8 +194,12 @@ public class FriendHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onRemoveFriendship(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -239,8 +221,12 @@ public class FriendHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onAddFriendshipToGroup(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -262,8 +248,12 @@ public class FriendHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onRemoveFriendshipFromGroup(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -301,8 +291,12 @@ public class FriendHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onAddSubscription(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -319,8 +313,12 @@ public class FriendHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onRemoveSubscription(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -342,8 +340,12 @@ public class FriendHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onJoinSubscriptionGroup(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -456,8 +458,12 @@ public class FriendHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof FriendHelperListener)
+                        ((FriendHelperListener) listener).onSortSubscriptionGroupList(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);

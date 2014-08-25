@@ -218,7 +218,6 @@ public class OAuthLoginHelper {
 
     /**
      * @param code Code from RequestUrl
-     * @return Set code and Get AccessToken
      */
     public void getOauth2AccessToken(String code) {
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();

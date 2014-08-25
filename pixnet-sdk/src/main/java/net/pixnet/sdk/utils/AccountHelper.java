@@ -117,8 +117,12 @@ public class AccountHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof AccountHelperListener)
+                        ((AccountHelperListener) listener).onUpdateAccountInfoResponse(res);
+                }
                 else listener.onError(res.message);
             }
         }, params);
@@ -280,8 +284,12 @@ public class AccountHelper extends DataProxy {
             @Override
             public void onResponse(String response) {
                 BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
+                if(res.error==0){
+                    if(listener.onDataResponse(res))
+                        return;
+                    else if(listener instanceof AccountHelperListener)
+                        ((AccountHelperListener) listener).onPayMIBResponse(res);
+                }
                 else listener.onError(res.message);
             }
         });
@@ -336,10 +344,13 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_PASSWD, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof AccountHelperListener)
+                        ((AccountHelperListener) listener).onUpdatePasswordResponse(res);
+                } else listener.onError(res.message);
             }
         }, params);
     }

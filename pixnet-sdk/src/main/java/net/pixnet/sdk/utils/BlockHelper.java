@@ -64,10 +64,13 @@ public class BlockHelper extends DataProxy {
         performAPIRequest(true, URL_BLOCK + "/create", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof BlockHelperListener)
+                        ((BlockHelperListener)listener).onAddBlockResponse(res);
+                } else listener.onError(res.message);
             }
         }, params);
     }
@@ -86,10 +89,13 @@ public class BlockHelper extends DataProxy {
         performAPIRequest(true, URL_BLOCK + "/delete", Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof BlockHelperListener)
+                        ((BlockHelperListener)listener).onRemoveBlockResponse(res);
+                } else listener.onError(res.message);
             }
         }, params);
     }

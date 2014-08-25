@@ -23,7 +23,18 @@ public class FriendHelperListener implements DataProxy.DataProxyListener {
     }
     public void onGetSubscribedFriendship(SubscriptionList res){}
     public void onGetFriendshipList(FriendshipList res){}
+    public void onAddFriendship(BasicResponse res){}
+    public void onAddFriendshipToGroup(BasicResponse res){}
+    public void onRemoveFriendshipFromGroup(BasicResponse res){}
+    public void onRemoveFriendship(BasicResponse res){}
+    public void onAddSubscription(BasicResponse res){}
+    public void onRemoveSubscription(BasicResponse res){}
+    public void onJoinSubscriptionGroup(BasicResponse res){}
+    public void onSortSubscriptionGroupList(BasicResponse res){}
     public void onGetGroupList(GroupList res){}
+    public void onAddGroup(BasicResponse res){}
+    public void onUpdateGroup(BasicResponse res){}
+    public void onRemoveGroup(BasicResponse res){}
     public void onGetFriendNews(NewsList res){}
     public void onGetSubscriptionGroupList(Subscription_groupList res){}
 }

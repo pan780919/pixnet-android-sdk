@@ -21,4 +21,10 @@ public class GuestBookHelperListener implements DataProxy.DataProxyListener {
     }
     public void onGetGuestbookList(GuestbookList res){}
     public void onGetGuestbook(Guestbook res){}
+    public void onAddGuestbook(BasicResponse response){}
+    public void onReplyGuestbook(BasicResponse response){}
+    public void onSetGuestbookVisibility(BasicResponse response){}
+    public void onMarkGuestbookToSpam(BasicResponse response){}
+    public void onMarkGuestbookToHam(BasicResponse response){}
+    public void onRemoveGuestbook(BasicResponse response){}
 }

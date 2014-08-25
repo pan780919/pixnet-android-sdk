@@ -18,12 +18,15 @@ public class AccountHelperListener implements DataProxy.DataProxyListener {
         return false;
     }
     public void onGetAccountInfoResponse(AccountInfo response){}
+    public void onUpdateAccountInfoResponse(BasicResponse response){}
     public void onGetMIBInfoResponse(MIB response){}
     public void onUpdateMIBInfoResponse(MIB response){}
     public void onGetMIBPositionListInfoResponse(PositionList response){}
     public void onGetMIBPositionInfoResponse(Position response){}
     public void onUpdateMIBPositionInfoResponse(MIB response){}
+    public void onPayMIBResponse(BasicResponse response){}
     public void onGetAnalyticDataResponse(Analytics response){}
+    public void onUpdatePasswordResponse(BasicResponse response){}
     public void onGetNotificationsResponse(NotificationList response){}
     public void onGetUserInfoResponse(User response){}
 }

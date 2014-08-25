@@ -12,7 +12,6 @@ import net.pixnet.sdk.response.BlogInfo;
 import net.pixnet.sdk.response.CategoryList;
 import net.pixnet.sdk.response.Comment;
 import net.pixnet.sdk.response.CommentList;
-import net.pixnet.sdk.response.NotificationList;
 import net.pixnet.sdk.response.Site_CategoryList;
 import net.pixnet.sdk.response.Tags;
 import net.pixnet.sdk.utils.Request.Method;
@@ -155,10 +154,13 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_CATEGORY, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof BlogHelperListener)
+                        ((BlogHelperListener) listener).onAddCategory(res);
+                } else listener.onError(res.message);
             }
         }, params);
     }
@@ -190,10 +192,13 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_CATEGORY + "/" + id, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof BlogHelperListener)
+                        ((BlogHelperListener) listener).onUpdateCategory(res);
+                } else listener.onError(res.message);
             }
         }, params);
     }
@@ -214,10 +219,13 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_CATEGORY + "/" + id, Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof BlogHelperListener)
+                        ((BlogHelperListener) listener).onDeleteCategory(res);
+                } else listener.onError(res.message);
             }
         }, params);
     }
@@ -232,10 +240,13 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_CATEGORY + "/position", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof BlogHelperListener)
+                        ((BlogHelperListener) listener).onSortCategorieList(res);
+                } else listener.onError(res.message);
             }
         }, params);
     }
@@ -431,10 +442,13 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_ARTICLE, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof BlogHelperListener)
+                        ((BlogHelperListener) listener).onAddArticle(res);
+                } else listener.onError(res.message);
             }
         }, params);
     }
@@ -499,10 +513,13 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_ARTICLE + "/" + id, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof BlogHelperListener)
+                        ((BlogHelperListener) listener).onUpdateArticle(res);
+                } else listener.onError(res.message);
             }
         }, params);
     }
@@ -516,10 +533,13 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_ARTICLE + "/" + id, Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof BlogHelperListener)
+                        ((BlogHelperListener) listener).onDeleteArticle(res);
+                } else listener.onError(res.message);
             }
         }, params);
     }
@@ -775,10 +795,13 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true,URL_COMMENT, Request.Method.POST,new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof BlogHelperListener)
+                        ((BlogHelperListener) listener).onAddComment(res);
+                } else listener.onError(res.message);
             }
         },params);
     }
@@ -925,10 +948,13 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_COMMENT + "/" + ids, Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof BlogHelperListener)
+                        ((BlogHelperListener) listener).onDeleteComment(res);
+                } else listener.onError(res.message);
             }
         }, params);
     }
@@ -1043,10 +1069,13 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_BLOG, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0)
-                    listener.onDataResponse(res);
-                else listener.onError(res.message);
+                BasicResponse res = new BasicResponse(response);
+                if (res.error == 0) {
+                    if (listener.onDataResponse(res))
+                        return;
+                    else if (listener instanceof BlogHelperListener)
+                        ((BlogHelperListener) listener).onSetBlogInfo(res);
+                } else listener.onError(res.message);
             }
         }, params);
     }
