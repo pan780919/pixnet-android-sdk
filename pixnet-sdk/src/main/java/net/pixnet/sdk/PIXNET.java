@@ -22,6 +22,12 @@ public class PIXNET {
     private static final String URL_OAUTH1_REQUEST = "http://emma.pixnet.cc/oauth/request_token";
     private static final String URL_OAUTH1_ACCESS = "http://emma.pixnet.cc/oauth/access_token";
 
+    /**
+     * 取得 FriendHelper 來存取痞客邦與好友相關的 API
+     * @param c Context
+     * @param listener 使用 {@link net.pixnet.sdk.utils.FriendHelperListener} 獲得格式化的資訊，或使用 {@link net.pixnet.sdk.proxy.DataProxy.DataProxyListener} 自行處理原始資料
+     * @return {@link net.pixnet.sdk.utils.FriendHelper}
+     */
     public static FriendHelper getFriendHelper(Context c, DataProxyListener listener) {
         FriendHelper friendHelper = new FriendHelper();
         friendHelper.setContext(c);
@@ -29,6 +35,12 @@ public class PIXNET {
         return friendHelper;
     }
 
+    /**
+     * 取得 GuestBookHelper 來存取痞客邦與留言板相關的 API
+     * @param c Context
+     * @param listener 使用 {@link net.pixnet.sdk.utils.GuestBookHelperListener} 獲得格式化的資訊，或使用 {@link net.pixnet.sdk.proxy.DataProxy.DataProxyListener} 自行處理原始資料
+     * @return {@link net.pixnet.sdk.utils.GuestBookHelper}
+     */
     public static GuestBookHelper getGuestBookHelper(Context c, DataProxyListener listener) {
         GuestBookHelper guestBookHelper = new GuestBookHelper();
         guestBookHelper.setContext(c);
@@ -36,6 +48,12 @@ public class PIXNET {
         return guestBookHelper;
     }
 
+    /**
+     * 取得 BlockHelper 來存取痞客邦與黑名單相關的 API
+     * @param c Context
+     * @param listener 使用 {@link net.pixnet.sdk.utils.BlockHelperListener} 獲得格式化的資訊，或使用 {@link net.pixnet.sdk.proxy.DataProxy.DataProxyListener} 自行處理原始資料
+     * @return {@link net.pixnet.sdk.utils.BlockHelper}
+     */
     public static BlockHelper getBlockHelper(Context c, DataProxyListener listener) {
         BlockHelper blockHelper = new BlockHelper();
         blockHelper.setContext(c);
@@ -43,6 +61,12 @@ public class PIXNET {
         return blockHelper;
     }
 
+    /**
+     * 取得 BlogHelper 來存取痞客邦與部落格相關的 API
+     * @param c Context
+     * @param listener 使用 {@link net.pixnet.sdk.utils.BlogHelperListener} 獲得格式化的資訊，或使用 {@link net.pixnet.sdk.proxy.DataProxy.DataProxyListener} 自行處理原始資料
+     * @return {@link net.pixnet.sdk.utils.BlockHelper}
+     */
     public static BlogHelper getBlogHelper(Context c, String name, DataProxyListener listener) {
         BlogHelper blogHelper = new BlogHelper();
         blogHelper.setContext(c);
@@ -51,6 +75,12 @@ public class PIXNET {
         return blogHelper;
     }
 
+    /**
+     * 取得 AlbumHelper 來存取痞客邦與相簿相關的 API
+     * @param c Context
+     * @param listener 使用 {@link net.pixnet.sdk.utils.AlbumHelperListener} 獲得格式化的資訊，或使用 {@link net.pixnet.sdk.proxy.DataProxy.DataProxyListener} 自行處理原始資料
+     * @return {@link net.pixnet.sdk.utils.AlbumHelper}
+     */
     public static AlbumHelper getAlbumHelper(Context c, String name, DataProxyListener listener) {
         AlbumHelper albumHelper = new AlbumHelper();
         albumHelper.setContext(c);
@@ -59,6 +89,12 @@ public class PIXNET {
         return albumHelper;
     }
 
+    /**
+     * 取得 AccountHelper 來存取痞客邦與使用者帳號相關的 API
+     * @param c Context
+     * @param listener 使用 {@link net.pixnet.sdk.utils.AccountHelperListener} 獲得格式化的資訊，或使用 {@link net.pixnet.sdk.proxy.DataProxy.DataProxyListener} 自行處理原始資料
+     * @return {@link net.pixnet.sdk.utils.AccountHelperListener}
+     */
     public static AccountHelper getAccountHelper(Context c, DataProxyListener listener) {
         AccountHelper account = new AccountHelper();
         account.setContext(c);
