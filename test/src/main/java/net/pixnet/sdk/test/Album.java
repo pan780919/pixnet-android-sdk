@@ -57,7 +57,8 @@ public class Album extends ItemDetailFragment {
         markElementCommentIsHam,
         deleteCommentFromElement,
 
-        addFace,
+        addFaceByRecommendId,
+        addFaceByElementId,
         updateFace,
         deleteFace
 
@@ -111,7 +112,7 @@ public class Album extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AlbumHelper albumHelper =PIXNET.getAlbumHelper(getActivity(), "emmademo", new DataProxy.DataProxyListener() {
+                AlbumHelper albumHelper =PIXNET.getAlbumHelper(getActivity(), "ben68", new DataProxy.DataProxyListener() {
                     @Override
                     public void onError(String msg) {
                         Helper.log("error:" + msg);
@@ -120,6 +121,7 @@ public class Album extends ItemDetailFragment {
                     @Override
                     public boolean onDataResponse(BasicResponse response) {
                         Helper.log("onDataResponse");
+                        Helper.log(response.getRawData());
                         return true;
                     }
                 });
@@ -143,6 +145,8 @@ public class Album extends ItemDetailFragment {
                         break;
                     case getElementListBySet:
                         albumHelper.getElementListBySet("34260");
+//                        ben68
+//                        albumHelper.getElementListBySet("5024073");
                         break;
                     case getCommentListBySet:
                         albumHelper.getCommentListBySet("34258");
@@ -177,6 +181,9 @@ public class Album extends ItemDetailFragment {
                         break;
                     case getElement:
                         albumHelper.getElement("413994");
+//                        ben68
+//                        albumHelper.getElement("174125439");
+//                        albumHelper.getElement("174125448");
                         break;
                     case getCommentListByElement:
                         albumHelper.getCommentListByElement("413994");
@@ -211,9 +218,14 @@ public class Album extends ItemDetailFragment {
                         break;
                     case deleteCommentFromElement:
                         break;
-                    case addFace:
+                    case addFaceByRecommendId:
+                        albumHelper.addFaceByRecommend("emmademo", "800");
+                        break;
+                    case addFaceByElementId:
+                        albumHelper.addFaceByElement("ben68", "174125448", 10, 10, 200, 200);
                         break;
                     case updateFace:
+                        albumHelper.updateFace("76914", "ben68", "174125448", 20, 20, 100, 100);
                         break;
                     case deleteFace:
                         break;

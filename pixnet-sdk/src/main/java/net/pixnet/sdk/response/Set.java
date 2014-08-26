@@ -1,5 +1,7 @@
 package net.pixnet.sdk.response;
 
+import net.pixnet.sdk.proxy.DataProxy;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -83,13 +85,13 @@ public class Set extends AlbumContainer{
         if(jo.has("parent_id"))
             parent_id=jo.getString("parent_id");
         if(jo.has("is_system_set"))
-            is_system_set=jo.getBoolean("is_system_set");
+            is_system_set= DataProxy.getJsonBoolean(jo, "is_system_set");
         if(jo.has("hits"))
             hits=new Hits(jo.getJSONObject("hits"));
         if(jo.has("total_elements"))
             total_elements=jo.getInt("total_elements");
         if(jo.has("is_taggable"))
-            is_taggable=jo.getBoolean("is_taggable");
+            is_taggable=DataProxy.getJsonBoolean(jo, "is_taggable");
 
         return jo;
     }

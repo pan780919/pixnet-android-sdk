@@ -1,6 +1,7 @@
 package net.pixnet.sdk.proxy;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.response.BasicResponse;
@@ -133,6 +134,23 @@ public abstract class DataProxy {
             }
         }
         return b;
+    }
+
+    public static double getJsonDouble(JSONObject jo, String name){
+        if(jo.isNull(name))
+            return 0;
+        try {
+            return jo.getDouble(name);
+        } catch (JSONException e) {
+            try {
+                String str=jo.getString(name);
+                if(TextUtils.isEmpty(str))
+                    return 0;
+                else return Double.parseDouble(str);
+            } catch (JSONException e1) {
+                return 0;
+            }
+        }
     }
 
     public interface DataProxyListener{

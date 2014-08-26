@@ -49,6 +49,9 @@ public class Analytics extends BasicResponse {
                         article.id=articleData.getString("id");
                     if(articleData.has("title"))
                         article.title=articleData.getString("title");
+                    if(articleData.has("hit"))
+                        article.hit=articleData.getInt("hit");
+                    article.public_at=articleData.getInt("public_at")*1000l;
                     blog.hot_articles.add(article);
                     i++;
                 }
@@ -119,6 +122,8 @@ public class Analytics extends BasicResponse {
     public class BasicArticleInfo{
         public String id;
         public String title;
+        public int hit;
+        public long public_at;
     }
 
     public class Statistics{

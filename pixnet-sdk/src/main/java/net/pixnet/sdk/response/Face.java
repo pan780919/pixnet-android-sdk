@@ -5,29 +5,35 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Face {
-    public Face(String response) {
-        formatJson(response);
-    }
 
-    /**
-     * Faces tagged
-     */
-    public ArrayList<Tagged> tagged;
+    public List<FaceTag> tagged;
+    public List<FaceTag> recommended;
 
-    private void formatJson(String response) {
-        try {
-            JSONObject obj = new JSONObject(response);
-            if (obj.has("tagged")) {
-                tagged = new ArrayList<Tagged>();
-                JSONArray aobj = obj.getJSONArray("tagged");
-                for (int i = 0; i < aobj.length(); i++) {
-                    tagged.add(new Tagged(aobj.getString(i)));
+    public Face(JSONObject obj) throws JSONException {
+        if (obj.has("tagged")) {
+            JSONArray aobj = obj.getJSONArray("tagged");
+            int i=0, len=aobj.length();
+            if(len>0){
+                tagged = new ArrayList<FaceTag>();
+                while (i<len){
+                    tagged.add(new FaceTag(aobj.getJSONObject(i)));
+                    i++;
                 }
             }
-        } catch (JSONException e) {
-
+        }
+        if (obj.has("recommended")) {
+            JSONArray aobj = obj.getJSONArray("recommended");
+            int i=0, len=aobj.length();
+            if(len>0){
+                recommended = new ArrayList<FaceTag>();
+                while (i<len){
+                    recommended.add(new FaceTag(aobj.getJSONObject(i)));
+                    i++;
+                }
+            }
         }
     }
 }

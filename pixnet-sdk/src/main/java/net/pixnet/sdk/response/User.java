@@ -1,5 +1,7 @@
 package net.pixnet.sdk.response;
 
+import net.pixnet.sdk.proxy.DataProxy;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -65,10 +67,10 @@ public class User extends BasicResponse {
             link = jo.getString("link");
         }
         if (jo.has("is_vip")) {
-            is_vip = jo.getBoolean("is_vip");
+            is_vip = DataProxy.getJsonBoolean(jo, "is_vip");
         }
         if (jo.has("has_ad")) {
-            has_ad = jo.getBoolean("has_ad");
+            has_ad = DataProxy.getJsonBoolean(jo, "has_ad");
         }
         return jo;
     }

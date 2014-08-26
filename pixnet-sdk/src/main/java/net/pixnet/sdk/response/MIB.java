@@ -113,7 +113,7 @@ public class MIB extends BasicResponse {
             if(jo.has("difference"))
                 difference=jo.getInt("difference");
             if(jo.has("difference_percentage"))
-                difference_percentage=jo.getDouble("difference_percentage");
+                difference_percentage=DataProxy.getJsonDouble(jo, "difference_percentage");
             if(jo.has("click"))
                 click=jo.getInt("click");
             if(jo.has("imp"))

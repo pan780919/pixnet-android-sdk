@@ -42,9 +42,9 @@ public class Position extends BasicResponse {
         if(jo.has("revenue") && !jo.isNull("revenue"))
             revenue=jo.getInt("revenue");
         if(jo.has("difference") && !jo.isNull("difference"))
-            difference=jo.getDouble("difference");
+            difference=DataProxy.getJsonDouble(jo, "difference");
         if(jo.has("difference_percentage") && !jo.isNull("difference_percentage"))
-            difference_percentage=jo.getDouble("difference_percentage");
+            difference_percentage=DataProxy.getJsonDouble(jo, "difference_percentage");
         if(jo.has("imp") && !jo.isNull("imp"))
             imp=jo.getInt("imp");
         if(jo.has("click") && !jo.isNull("click"))
@@ -92,8 +92,8 @@ public class Position extends BasicResponse {
         public Date(JSONObject jo) throws JSONException {
             if(jo.has("date") && !jo.isNull("date"))
                 date=jo.getString("date");
-            if(jo.has("value") && !jo.isNull("value"))
-                value=jo.getDouble("value");
+            if(jo.has("value"))
+                value=DataProxy.getJsonDouble(jo, "value");
         }
     }
 }

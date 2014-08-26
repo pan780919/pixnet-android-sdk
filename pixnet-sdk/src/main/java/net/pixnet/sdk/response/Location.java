@@ -1,12 +1,11 @@
 package net.pixnet.sdk.response;
 
+import net.pixnet.sdk.proxy.DataProxy;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Location {
-    public Location(String response) {
-        formatJson(response);
-    }
 
     /**
      * Location latitude
@@ -17,17 +16,12 @@ public class Location {
      */
     public double longitude;
 
-    private void formatJson(String response) {
-        try {
-            JSONObject obj = new JSONObject(response);
-            if (obj.has("latitude")) {
-                latitude = obj.getDouble("latitude");
-            }
-            if (obj.has("longitude")) {
-                longitude = obj.getDouble("longitude");
-            }
-        } catch (JSONException e) {
-
+    public Location(JSONObject obj) throws JSONException {
+        if (obj.has("latitude")) {
+            latitude = DataProxy.getJsonDouble(obj, "latitude");
+        }
+        if (obj.has("longitude")) {
+            longitude = DataProxy.getJsonDouble(obj, "longitude");
         }
     }
 }

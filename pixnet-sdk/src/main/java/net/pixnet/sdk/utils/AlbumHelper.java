@@ -34,6 +34,7 @@ public class AlbumHelper extends DataProxy {
     private static final String URL_SORT_SETFOLDERS="https://emma.pixnet.cc/album/setfolders/position";
     private static final String URL_SORT_SETS="https://emma.pixnet.cc/album/sets/position";
     private static final String URL_SETS_NEAR="https://emma.pixnet.cc/album/sets/nearby";
+    private static final String URL_FACES="https://emma.pixnet.cc/album/faces";
 
     public static enum ElementType{
         pic,
@@ -667,8 +668,70 @@ public class AlbumHelper extends DataProxy {
 
     /**
      * 新增人臉標記
+     * @param userName 要標記的使用者帳號, 被標記者必須設定標記者為好友
+     * @param recommendId 系統建議的 id, {@link #getElement(String, String, boolean, boolean, int, int)} 可取得此資訊
      */
-    public void addFace(){}
+    public void addFaceByRecommend(String userName, final String recommendId){
+        if(TextUtils.isEmpty(userName) || TextUtils.isEmpty(recommendId)){
+            listener.onError(Error.MISS_PARAMETER + ":userName, recommendId");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", userName));
+        params.add(new BasicNameValuePair("recommend_id", recommendId));
+        performAPIRequest(true, URL_FACES, Method.POST, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res=new BasicResponse(response);
+                if(res.error!=0){
+                    listener.onError(res.message);
+                    return;
+                }
+                if(listener.onDataResponse(res))
+                    return;
+                ((AlbumHelperListener)listener).onAddFaceByRecommend(new Element(response));
+            }
+        }, params);
+    }
+    /**
+     * 新增人臉標記
+     * @param userName 要標記的使用者帳號, 被標記者必須設定標記者為好友
+     * @param elementId 相片或影像的 id
+     * @param x 標記起點距相片最左邊的距離，單位是 px 。所對應的座標基準是 normal 這張相片
+     * @param y 標記起點距相片最上緣的距離，單位是 px 。所對應的座標基準是 normal 這張相片
+     * @param width 標記的寬度，單位是 px 。所對應的座標基準是 normal 這張相片
+     * @param height 標記的高度，單位是 px 。所對應的座標基準是 normal 這張相片
+     */
+    public void addFaceByElement(String userName, String elementId, int x, int y, int width, int height){
+        if(TextUtils.isEmpty(userName) || TextUtils.isEmpty(elementId)){
+            listener.onError(Error.MISS_PARAMETER + ":userName, recommendId");
+            return;
+        }
+        if(x<0 || y<0 || width<1 || height<1){
+            listener.onError(Error.PARAMETER_INVALID+":x, y, width, height");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", userName));
+        params.add(new BasicNameValuePair("element_id", elementId));
+        params.add(new BasicNameValuePair("x", String.valueOf(x)));
+        params.add(new BasicNameValuePair("y", String.valueOf(y)));
+        params.add(new BasicNameValuePair("w", String.valueOf(width)));
+        params.add(new BasicNameValuePair("h", String.valueOf(height)));
+        performAPIRequest(true, URL_FACES, Method.POST, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res=new BasicResponse(response);
+                if(res.error!=0){
+                    listener.onError(res.message);
+                    return;
+                }
+                if(listener.onDataResponse(res))
+                    return;
+                ((AlbumHelperListener)listener).onAddFaceByElement(new Element(response));
+            }
+        }, params);
+    }
 
     /**
      * 修改個人相簿資料夾
@@ -766,8 +829,44 @@ public class AlbumHelper extends DataProxy {
 
     /**
      * 更新人臉標記
+     * @param faceId 欲更動的人臉標記 id
+     * @param userName 要更新標記的使用者帳號。被標記者必須設定標記者為好友
+     * @param elementId 相片或影像的 id
+     * @param x 標記起點距相片最左邊的距離，單位是 px 。所對應的座標基準是 normal 這張相片
+     * @param y 標記起點距相片最上緣的距離，單位是 px 。所對應的座標基準是 normal 這張相片
+     * @param width 標記的寬度，單位是 px 。所對應的座標基準是 normal 這張相片
+     * @param height 標記的高度，單位是 px 。所對應的座標基準是 normal 這張相片
      */
-    public void updateFace(){}
+    public void updateFace(String faceId, String userName, String elementId, int x, int y, int width, int height){
+        if(TextUtils.isEmpty(faceId) || TextUtils.isEmpty(userName) || TextUtils.isEmpty(elementId)){
+            listener.onError(Error.MISS_PARAMETER + ": faceId, userName, recommendId");
+            return;
+        }
+        if(x<0 || y<0 || width<1 || height<1){
+            listener.onError(Error.PARAMETER_INVALID+":x, y, width, height");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", userName));
+        params.add(new BasicNameValuePair("element_id", elementId));
+        params.add(new BasicNameValuePair("x", String.valueOf(x)));
+        params.add(new BasicNameValuePair("y", String.valueOf(y)));
+        params.add(new BasicNameValuePair("w", String.valueOf(width)));
+        params.add(new BasicNameValuePair("h", String.valueOf(height)));
+        performAPIRequest(true, URL_FACES+"/"+faceId, Method.POST, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res=new BasicResponse(response);
+                if(res.error!=0){
+                    listener.onError(res.message);
+                    return;
+                }
+                if(listener.onDataResponse(res))
+                    return;
+                ((AlbumHelperListener)listener).onUpdateFace(new Element(response));
+            }
+        }, params);
+    }
 
     /**
      * 刪除個人相簿資料夾
