@@ -33,8 +33,11 @@ public class AlbumHelper extends DataProxy {
     private static final String URL_COMMENT="https://emma.pixnet.cc/album/comments";
     private static final String URL_SORT_SETFOLDERS="https://emma.pixnet.cc/album/setfolders/position";
     private static final String URL_SORT_SETS="https://emma.pixnet.cc/album/sets/position";
+    private static final String URL_SORT_ELEMENTS="https://emma.pixnet.cc/album/elements/position";
     private static final String URL_SETS_NEAR="https://emma.pixnet.cc/album/sets/nearby";
     private static final String URL_FACES="https://emma.pixnet.cc/album/faces";
+    private static final String URL_ALBUM_CONIFG="https://emma.pixnet.cc/album/config";
+    private static final String URL_ELEMENTS_NEARBY = "https://emma.pixnet.cc/album/elements/nearby";
 
     public static enum ElementType{
         pic,
@@ -64,8 +67,8 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_MAIN, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-//                BasicResponse res=new BasicResponse();
-//                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse();
+                listener.onDataResponse(res);
             }
         });
     }
@@ -452,9 +455,50 @@ public class AlbumHelper extends DataProxy {
     }
 
     /**
-     * 列出附近的相簿圖片影片
+     * 列出附近的圖片影片
+     * @param userName 指定要回傳的使用者名稱
+     * @param lat WGS84 坐標系緯度，例如 25.058172
+     * @param lng WGS84 坐標系經度，例如 121.535304
+     * @param distanceMin 回傳相片／影音所在地和指定經緯度距離之最小值，單位為公尺。最小為 0 公尺，上限為 50000 公尺
+     * @param distanceMax 回傳相片／影音所在地和指定經緯度距離之最大值，單位為公尺。最小為 0 公尺，上限為 50000 公尺
+     * @param perPage 頁數
+     * @param page 每頁幾筆
+     * @param withDetail 是否傳回詳細資訊, 指定為 true 時將傳回相片／影音完整資訊及所屬相簿資訊
+     * @param type 指定要回傳的類別, pic ：只顯示圖片， video ：只顯示影片
+     * @param trimUesr 是否取消每個相片／影音都要回傳使用者資訊，若設定為 true 則不回傳
      */
-    public void getElementListByNear(){}
+    public void getElementListByNear(String userName, double lat, double lng, int distanceMin, int distanceMax, int perPage, int page, boolean withDetail, ElementType type, boolean trimUesr){
+        if(TextUtils.isEmpty(userName)){
+            listener.onError(Error.MISS_PARAMETER+":userName");
+            return;
+        }
+        if(lat<0 || lng<0){
+            listener.onError(Error.PARAMETER_INVALID+":lat, lng");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", userName));
+        params.add(new BasicNameValuePair("lat", String.valueOf(lat)));
+        params.add(new BasicNameValuePair("lon", String.valueOf(lng)));
+        if(distanceMin>0 && distanceMin<=50000)
+            params.add(new BasicNameValuePair("distance_min", String.valueOf(distanceMin)));
+        if(distanceMax>0 && distanceMax<=50000)
+            params.add(new BasicNameValuePair("distance_max", String.valueOf(distanceMax)));
+        if(page>0)
+            params.add(new BasicNameValuePair("page", String.valueOf(page)));
+        if(perPage>0)
+            params.add(new BasicNameValuePair("perPage", String.valueOf(perPage)));
+        if(withDetail)
+           params.add(new BasicNameValuePair("with_detail", "1"));
+        params.add(new BasicNameValuePair("type", type.name()));
+        if(trimUesr)
+            params.add(new BasicNameValuePair("trim_user","1"));
+        performAPIRequest(false, URL_ELEMENTS_NEARBY, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+            }
+        }, params);
+    }
 
     /**
      * 讀取 Set 單一留言
@@ -898,7 +942,6 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_SET+"/"+setId, Method.DELETE, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
                 listener.onDataResponse(new BasicResponse(response));
             }
         });
@@ -906,23 +949,71 @@ public class AlbumHelper extends DataProxy {
 
     /**
      * 刪除相簿單篇圖片影片
+     * @param elementId 欲刪除的相片或影片 id
      */
-    public void removeElement(){}
+    public void deleteElement(String elementId){
+        if(TextUtils.isEmpty(elementId)){
+            listener.onError(Error.MISS_PARAMETER+":elementId");
+            return;
+        }
+        performAPIRequest(true, URL_ELEMENTS+"/"+elementId, Method.DELETE, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                listener.onDataResponse(new BasicResponse(response));
+            }
+        });
+    }
 
     /**
      * 刪除相本 Set 的留言
+     * @param commentId 欲刪除的留言 id
      */
-    public void removeCommentFromSet(){}
+    public void deleteCommentFromSet(String commentId){
+        if(TextUtils.isEmpty(commentId)){
+            listener.onError(Error.MISS_PARAMETER+":commentId");
+            return;
+        }
+        performAPIRequest(true, URL_SET_COMMENT+"/"+commentId, Method.DELETE, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                listener.onDataResponse(new BasicResponse(response));
+            }
+        });
+    }
 
     /**
      * 刪除相片的留言
+     * @param commentId 欲刪除的留言 id
      */
-    public void removeCommentFromElement(){}
+    public void deleteCommentFromElement(String commentId){
+        if(TextUtils.isEmpty(commentId)){
+            listener.onError(Error.MISS_PARAMETER+":commentId");
+            return;
+        }
+        performAPIRequest(true, URL_COMMENT+"/"+commentId, Method.DELETE, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                listener.onDataResponse(new BasicResponse(response));
+            }
+        });
+    }
 
     /**
      * 刪除人臉標記
+     * @param faceId 欲刪除的人臉標記 id
      */
-    public void removeFace(){}
+    public void deleteFace(String faceId){
+        if(TextUtils.isEmpty(faceId)){
+            listener.onError(Error.MISS_PARAMETER+":faceId");
+            return;
+        }
+        performAPIRequest(true, URL_FACES+"/"+faceId, Method.DELETE, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                listener.onDataResponse(new BasicResponse(response));
+            }
+        });
+    }
 
     /**
      * 修改相簿首頁排序, 需要認證
@@ -981,16 +1072,44 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_SORT_SETS, Method.POST, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-//                BasicResponse res=new BasicResponse();
-//                listener.onDataResponse(res);
+                BasicResponse res=new BasicResponse();
+                listener.onDataResponse(res);
             }
         }, params);
     }
 
     /**
-     * 修改相簿圖片影片排序
+     * 修改相簿圖片/影片排序
+     * @param setId 相簿 id
+     * @param ids 圖片/影片 id 順序，放在越前面的順序越優先
      */
-    public void sortElementList(){}
+    public void sortElementList(String setId, List<String> ids){
+        if(TextUtils.isEmpty(setId) || ids==null){
+            listener.onError(Error.MISS_PARAMETER+":setId, ids");
+            return;
+        }
+        if(ids.size()<1){
+            listener.onError(Error.PARAMETER_INVALID+":ids");
+            return;
+        }
+        String idsString="";
+        int i=0, len=ids.size();
+        while(i<len){
+            idsString+=ids.get(i);
+            i++;
+            if(i<len) idsString+=",";
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("setId", setId));
+        params.add(new BasicNameValuePair("ids", idsString));
+        performAPIRequest(true, URL_SORT_ELEMENTS, Method.POST, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res=new BasicResponse();
+                listener.onDataResponse(res);
+            }
+        }, params);
+    }
 
     /**
      * 將 Set 的留言設為廣告留言
@@ -1015,6 +1134,14 @@ public class AlbumHelper extends DataProxy {
     /**
      * 列出相簿個人設定
      */
-    public void getConfig(){}
+    public void getConfig(){
+        performAPIRequest(true, URL_ALBUM_CONIFG, new RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                BasicResponse res=new BasicResponse();
+                listener.onDataResponse(res);
+            }
+        });
+    }
 
 }

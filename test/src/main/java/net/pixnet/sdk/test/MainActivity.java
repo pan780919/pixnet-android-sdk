@@ -7,6 +7,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import net.pixnet.sdk.utils.Helper;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,15 +20,6 @@ public class MainActivity extends ActionBarActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-//        String date = "2007:03:13 16:18:22";
-//        SimpleDateFormat sdf=new SimpleDateFormat("yyyy:MM:dd HH:mm:ss", Locale.getDefault());
-//        Date d;
-//        try {
-//            d=sdf.parse(date);
-//        } catch (ParseException e) {
-//        }
 
         startActivity(new Intent(this, ItemListActivity.class));
         finish();

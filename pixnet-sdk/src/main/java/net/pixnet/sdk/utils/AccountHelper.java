@@ -136,11 +136,11 @@ public class AccountHelper extends DataProxy {
     }
     /**
      * 讀取認證使用者 MIB 帳戶資訊, 傳回結果：{@link net.pixnet.sdk.response.MIB}
-     * @param historyDays 列出指定天數的歷史收益資訊，最少 0 天，最多 45 天
+     * @param historyDays 列出指定天數的歷史收益資訊，最少 0 天，最多 90 天
      */
     public void getMIBInfo(int historyDays){
         List<NameValuePair> params;
-        if(historyDays>-1 && historyDays<46){
+        if(historyDays>-1 && historyDays<=90){
             params=new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("history_days", String.valueOf(historyDays)));
         }
