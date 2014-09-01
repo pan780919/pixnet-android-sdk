@@ -114,7 +114,7 @@ public class Blog extends ItemDetailFragment {
                         return true;
                     }
                 });
-                blogHelper.setDefaultUserName("kkkoooiii2");
+                blogHelper.setDefaultUserName("ben68");
                 blogHelper.setDefaultPerPage(8);
                 blogHelper.setDefaultTrimUser(false);
                 switch (Apis.values()[position]) {
@@ -195,7 +195,7 @@ public class Blog extends ItemDetailFragment {
                         blogHelper.getCommentList();
                         break;
                     case addComment:
-                        blogHelper.addComment("185509473", "test");
+                        blogHelper.addComment("185508579", "test");
                         break;
                     case getComment:
                         break;

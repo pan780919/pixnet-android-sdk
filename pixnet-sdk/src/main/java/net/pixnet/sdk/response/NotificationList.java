@@ -24,7 +24,11 @@ public class NotificationList extends BasicResponse{
     @Override
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
         jo = super.parseJSON(jo);
+        if(!jo.has("notifications") || jo.isNull("notifications"))
+            return jo;
         JSONArray notifyDataAry=jo.getJSONArray("notifications");
+        if(notifyDataAry==null)
+            return jo;
         int i=0, len=notifyDataAry.length();
         if(len>0){
             notifications=new ArrayList<Notification>();

@@ -112,7 +112,7 @@ public class Album extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AlbumHelper albumHelper =PIXNET.getAlbumHelper(getActivity(), "ben68", new DataProxy.DataProxyListener() {
+                AlbumHelper albumHelper =PIXNET.getAlbumHelper(getActivity(), "emmademo", new DataProxy.DataProxyListener() {
                     @Override
                     public void onError(String msg) {
                         Helper.log("error:" + msg);

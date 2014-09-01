@@ -373,7 +373,7 @@ public class AlbumHelper extends DataProxy {
         if(iframeHeight>0)
             params.add(new BasicNameValuePair("iframe_height", String.valueOf(iframeHeight)));
 
-        performAPIRequest(true, URL_ELEMENTS+"/"+elementId, new RequestCallback() {
+        performAPIRequest(false, URL_ELEMENTS+"/"+elementId, new RequestCallback() {
             @Override
             public void onResponse(String response) {
                 Helper.log(response);

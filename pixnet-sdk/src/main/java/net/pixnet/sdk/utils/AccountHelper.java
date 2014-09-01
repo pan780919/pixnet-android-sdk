@@ -357,22 +357,30 @@ public class AccountHelper extends DataProxy {
 
     /**
      * 列出全部通知類型，通知數量限制為 10 筆, 傳回結果：{@link net.pixnet.sdk.response.NotificationList}
-     * @see #getNotifications(AccountHelper.NotificationType, int)
+     * @see #getNotifications(AccountHelper.NotificationType, int, boolean)
      */
     public void getNotifications(){
-        getNotifications(null, -1);
+        getNotifications(null, -1, true);
+    }
+    /**
+     * 列出全部通知類型，通知數量限制為 10 筆, 傳回結果：{@link net.pixnet.sdk.response.NotificationList}
+     * @see #getNotifications(AccountHelper.NotificationType, int, boolean)
+     */
+    public void getNotifications(NotificationType type){
+        getNotifications(type, -1, true);
     }
     /**
      * 列出通知, 傳回結果：{@link net.pixnet.sdk.response.NotificationList}
      * @param type 限制傳回通知類型 （friend: 好友互動，system: 系統通知，comments: 留言，appmarket:應用市集）
      * @param limit 傳回通知數量限制
      */
-    public void getNotifications(NotificationType type, int limit){
+    public void getNotifications(NotificationType type, int limit, boolean setRead){
         List<NameValuePair> params=new ArrayList<NameValuePair>();
         if(type!=null)
             params.add(new BasicNameValuePair("notificatoin_type", type.name()));
         if(limit>0)
             params.add(new BasicNameValuePair("limit", String.valueOf(limit)));
+        params.add(new BasicNameValuePair("skip_set_read", setRead?"0":"1"));
 
         performAPIRequest(true, URL_ACCOUNT_NOTIFICATIONS, new Request.RequestCallback() {
             @Override
