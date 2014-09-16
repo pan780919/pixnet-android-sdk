@@ -8,7 +8,7 @@ import net.pixnet.sdk.response.BlogInfo;
 import net.pixnet.sdk.response.CategoryList;
 import net.pixnet.sdk.response.Comment;
 import net.pixnet.sdk.response.CommentList;
-import net.pixnet.sdk.response.Site_CategoryList;
+import net.pixnet.sdk.response.SiteCategoryList;
 import net.pixnet.sdk.response.Tags;
 
 /**
@@ -26,7 +26,7 @@ public class BlogHelperListener implements DataProxy.DataProxyListener {
         return false;
     }
     public void onGetBlogCategorieList(CategoryList res){}
-    public void onGetCategorieList(Site_CategoryList res){}
+    public void onGetCategorieList(SiteCategoryList res){}
     public void onAddCategory(BasicResponse res){}
     public void onUpdateCategory(BasicResponse res){}
     public void onDeleteCategory(BasicResponse res){}

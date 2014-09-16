@@ -13,7 +13,7 @@ public class Reply extends BasicResponse{
      */
     public long created_at;
 
-    public Reply(JSONObject jo) {
+    public Reply(JSONObject jo) throws JSONException {
         super(jo);
     }
 

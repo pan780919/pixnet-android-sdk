@@ -38,7 +38,7 @@ public class AccountInfo extends BasicResponse {
     public MIB mib;
     public Analytics analytics;
 
-    public AccountInfo(String str) {
+    public AccountInfo(String str) throws JSONException {
         super(str);
     }
 

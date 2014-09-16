@@ -6,11 +6,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Subscription_groupList extends BaseListResponse {
+public class SubscriptionGroupList extends BaseListResponse {
     public ArrayList<Subscription_group> subscription_groups;
     public int total;
 
-    public Subscription_groupList(String str) {
+    public SubscriptionGroupList(String str) throws JSONException {
         super(str);
     }
 

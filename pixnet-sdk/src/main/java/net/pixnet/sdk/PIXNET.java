@@ -12,6 +12,7 @@ import net.pixnet.sdk.utils.BlogHelper;
 import net.pixnet.sdk.utils.FriendHelper;
 import net.pixnet.sdk.utils.GuestBookHelper;
 import net.pixnet.sdk.utils.Helper;
+import net.pixnet.sdk.utils.MainPageHelper;
 import net.pixnet.sdk.utils.OAuthLoginHelper;
 import net.pixnet.sdk.utils.OAuthConnectionTool.OAuthVersion;
 import net.pixnet.sdk.proxy.DataProxy.DataProxyListener;
@@ -21,6 +22,13 @@ public class PIXNET {
     private static final String URL_OAUTH2_GRANT = "https://emma.pixnet.cc/oauth2/grant";
     private static final String URL_OAUTH1_REQUEST = "http://emma.pixnet.cc/oauth/request_token";
     private static final String URL_OAUTH1_ACCESS = "http://emma.pixnet.cc/oauth/access_token";
+
+    public static MainPageHelper getMainPageHelper(Context c, DataProxyListener listener){
+        MainPageHelper helper = new MainPageHelper();
+        helper.setContext(c);
+        helper.setListener(listener);
+        return helper;
+    }
 
     /**
      * 取得 FriendHelper 來存取痞客邦與好友相關的 API

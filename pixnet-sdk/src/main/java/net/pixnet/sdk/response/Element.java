@@ -116,11 +116,11 @@ public class Element extends BasicResponse {
     public Face faces;
     public Exif exif;
 
-    public Element(String str) {
+    public Element(String str) throws JSONException {
         super(str);
     }
 
-    public Element(JSONObject jo) {
+    public Element(JSONObject jo) throws JSONException {
         super(jo);
     }
 

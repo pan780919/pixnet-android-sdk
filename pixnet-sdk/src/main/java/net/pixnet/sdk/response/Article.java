@@ -96,11 +96,11 @@ public class Article extends BasicResponse {
     public String url;
     public String email;
 
-    public Article(JSONObject jo) {
+    public Article(JSONObject jo) throws JSONException {
         super(jo);
     }
 
-    public Article(String str) {
+    public Article(String str) throws JSONException {
         super(str);
     }
 

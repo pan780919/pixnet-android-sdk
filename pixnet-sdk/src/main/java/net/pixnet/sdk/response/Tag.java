@@ -21,7 +21,7 @@ public class Tag extends BasicResponse {
      */
     public String added_by;
 
-    public Tag(JSONObject jo) {
+    public Tag(JSONObject jo) throws JSONException {
         super(jo);
     }
 

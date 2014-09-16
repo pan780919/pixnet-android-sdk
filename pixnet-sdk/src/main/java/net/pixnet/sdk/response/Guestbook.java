@@ -23,11 +23,11 @@ public class Guestbook extends BasicResponse {
     public long created_at;
     public User user;
 
-    public Guestbook(JSONObject jo) {
+    public Guestbook(JSONObject jo) throws JSONException {
         super(jo);
     }
 
-    public Guestbook(String str) {
+    public Guestbook(String str) throws JSONException {
         super(str);
     }
 

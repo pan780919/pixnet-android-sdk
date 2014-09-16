@@ -23,11 +23,11 @@ public class GuestbookList extends BaseListResponse{
      */
     public String next_cursor;
 
-    public GuestbookList(JSONObject jo) {
+    public GuestbookList(JSONObject jo) throws JSONException {
         super(jo);
     }
 
-    public GuestbookList(String str) {
+    public GuestbookList(String str) throws JSONException {
         super(str);
     }
 

@@ -53,11 +53,11 @@ public class Set extends AlbumContainer{
      */
     public boolean is_taggable;
 
-    public Set(String str) {
+    public Set(String str) throws JSONException {
         super(str);
     }
 
-    public Set(JSONObject jo){
+    public Set(JSONObject jo) throws JSONException {
         super(jo);
     }
 

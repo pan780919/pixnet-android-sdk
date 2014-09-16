@@ -34,7 +34,7 @@ public class AlbumConfig extends BasicResponse{
      */
     public int user_used_quota;
 
-    public AlbumConfig(String str) {
+    public AlbumConfig(String str) throws JSONException {
         super(str);
     }
 

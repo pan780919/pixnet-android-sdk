@@ -10,11 +10,11 @@ import java.util.List;
 public class Analytics extends BasicResponse {
     public BlogAnalytics blog;
 
-    public Analytics(JSONObject jo) {
+    public Analytics(JSONObject jo) throws JSONException {
         super(jo);
     }
 
-    public Analytics(String str) {
+    public Analytics(String str) throws JSONException {
         super(str);
     }
 
@@ -107,6 +107,42 @@ public class Analytics extends BasicResponse {
             }
         }
 
+        if(blogData.has("keywords")){
+            JSONArray keywordsData=blogData.getJSONArray("keywords");
+            int i=0, len=keywordsData.length();
+            if(len>0){
+                blog.keywords=new ArrayList<Keywords>();
+                while (i<len){
+                    JSONObject keywordData=keywordsData.getJSONObject(i);
+                    Keywords keywords=new Keywords();
+                    if(keywordData.has("keyword"))
+                        keywords.keyword=keywordData.getString("keyword");
+                    if(keywordData.has("count"))
+                        keywords.count=keywordData.getInt("count");
+                    blog.keywords.add(keywords);
+                    i++;
+                }
+            }
+        }
+
+        if(blogData.has("source_type")){
+            JSONArray sourcesData=blogData.getJSONArray("source_type");
+            int i=0, len=sourcesData.length();
+            if(len>0){
+                blog.source_type=new ArrayList<Sourcetype>();
+                while (i<len){
+                    JSONObject sourceData=sourcesData.getJSONObject(i);
+                    Sourcetype sources=new Sourcetype();
+                    if(sourceData.has("source"))
+                        sources.source=sourceData.getString("source");
+                    if(sourceData.has("count"))
+                        sources.count=sourceData.getInt("count");
+                    blog.source_type.add(sources);
+                    i++;
+                }
+            }
+        }
+
         return jo;
     }
 
@@ -117,6 +153,8 @@ public class Analytics extends BasicResponse {
         public List<BasicArticleInfo> hot_articles;
         public Statistics statistics;
         public List<Referer> referer;
+        public List<Keywords> keywords;
+        public List<Sourcetype> source_type;
     }
 
     public class BasicArticleInfo{
@@ -142,5 +180,15 @@ public class Analytics extends BasicResponse {
         public String keyword;
         public int count;
         public String url;
+    }
+
+    public class Keywords{
+        public String keyword;
+        public int count;
+    }
+
+    public class Sourcetype{
+        public String source;
+        public int count;
     }
 }

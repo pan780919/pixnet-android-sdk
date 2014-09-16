@@ -39,11 +39,11 @@ public abstract class AlbumContainer extends BasicResponse {
      */
     public String description;
 
-    public AlbumContainer(String str) {
+    public AlbumContainer(String str) throws JSONException {
         super(str);
     }
 
-    protected AlbumContainer(JSONObject jo) {
+    protected AlbumContainer(JSONObject jo) throws JSONException {
         super(jo);
     }
 

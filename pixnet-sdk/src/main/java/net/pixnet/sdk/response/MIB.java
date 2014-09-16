@@ -23,11 +23,11 @@ public class MIB extends BasicResponse {
         article
     }
 
-    public MIB(String str) {
+    public MIB(String str) throws JSONException {
         super(str);
     }
 
-    public MIB(JSONObject jo) {
+    public MIB(JSONObject jo) throws JSONException {
         super(jo);
     }
 

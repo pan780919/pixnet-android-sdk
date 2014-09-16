@@ -29,7 +29,7 @@ public class News extends BasicResponse {
     public ArrayList<Element> latest_elements;
     public String next_before_time;
 
-    public News(JSONObject response) {
+    public News(JSONObject response) throws JSONException {
         super(response);
     }
 

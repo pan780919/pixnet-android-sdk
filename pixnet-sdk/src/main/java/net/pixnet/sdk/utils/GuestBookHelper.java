@@ -2,13 +2,15 @@ package net.pixnet.sdk.utils;
 
 import android.text.TextUtils;
 
-import net.pixnet.sdk.proxy.DataProxy;
+import net.pixnet.sdk.proxy.*;
+import net.pixnet.sdk.proxy.Error;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.Guestbook;
 import net.pixnet.sdk.response.GuestbookList;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -18,6 +20,15 @@ import java.util.ArrayList;
 public class GuestBookHelper extends DataProxy {
 
     private static final String URL_GUESTBOOK = "https://emma.pixnet.cc/guestbook";
+
+    @Override
+    protected boolean handleBasicResponse(String response) {
+        if(super.handleBasicResponse(response))
+            return true;
+        if(listener instanceof GuestBookHelperListener)
+            return false;
+        return true;
+    }
 
     public void getGuestbookList() {
         getGuestbookList(defaultUserName, null, null, defaultPerPage);
@@ -38,14 +49,16 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(false, URL_GUESTBOOK, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof GuestBookHelperListener)
-                        ((GuestBookHelperListener) listener).onGetGuestbookList(new GuestbookList(response));
+                if(handleBasicResponse(response))
+                    return;
+                GuestbookList parsedResponse;
+                try {
+                    parsedResponse=new GuestbookList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((GuestBookHelperListener) listener).onGetGuestbookList(parsedResponse);
             }
         }, params);
     }
@@ -82,14 +95,16 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(true, URL_GUESTBOOK, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof GuestBookHelperListener)
-                        ((GuestBookHelperListener) listener).onAddGuestbook(res);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((GuestBookHelperListener) listener).onAddGuestbook(parsedResponse);
             }
         }, params);
     }
@@ -113,14 +128,16 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(false, URL_GUESTBOOK + "/" + id, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof GuestBookHelperListener)
-                        ((GuestBookHelperListener) listener).onGetGuestbook(new Guestbook(response));
+                if(handleBasicResponse(response))
+                    return;
+                Guestbook parsedResponse;
+                try {
+                    parsedResponse=new Guestbook(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((GuestBookHelperListener) listener).onGetGuestbook(parsedResponse);
             }
         }, params);
     }
@@ -140,14 +157,16 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(true, URL_GUESTBOOK + "/" + id + "/reply", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof GuestBookHelperListener)
-                        ((GuestBookHelperListener) listener).onReplyGuestbook(res);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((GuestBookHelperListener) listener).onReplyGuestbook(parsedResponse);
             }
         }, params);
     }
@@ -167,14 +186,16 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(true, url, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof GuestBookHelperListener)
-                        ((GuestBookHelperListener) listener).onSetGuestbookVisibility(res);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((GuestBookHelperListener) listener).onSetGuestbookVisibility(parsedResponse);
             }
         }, params);
     }
@@ -188,14 +209,16 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(true, URL_GUESTBOOK + "/" + id + "/mark_spam", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof GuestBookHelperListener)
-                        ((GuestBookHelperListener) listener).onMarkGuestbookToSpam(res);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((GuestBookHelperListener) listener).onMarkGuestbookToSpam(parsedResponse);
             }
         }, params);
     }
@@ -209,19 +232,21 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(true, URL_GUESTBOOK + "/" + id + "/mark_ham", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof GuestBookHelperListener)
-                        ((GuestBookHelperListener) listener).onMarkGuestbookToHam(res);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((GuestBookHelperListener) listener).onMarkGuestbookToHam(parsedResponse);
             }
         }, params);
     }
 
-    public void removeGuestbook(String id) {
+    public void deleteGuestbook(String id) {
         if (id == null || TextUtils.isEmpty(id)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
             return;
@@ -230,14 +255,16 @@ public class GuestBookHelper extends DataProxy {
         performAPIRequest(true, URL_GUESTBOOK + "/" + id, Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof GuestBookHelperListener)
-                        ((GuestBookHelperListener) listener).onRemoveGuestbook(res);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((GuestBookHelperListener) listener).onDeleteGuestbook(parsedResponse);
             }
         }, params);
     }

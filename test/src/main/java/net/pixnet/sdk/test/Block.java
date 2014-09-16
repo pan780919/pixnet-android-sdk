@@ -10,7 +10,6 @@ import android.widget.TextView;
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
-import net.pixnet.sdk.response.BlocksList;
 import net.pixnet.sdk.utils.BlockHelper;
 import net.pixnet.sdk.utils.Helper;
 
@@ -91,7 +90,7 @@ public class Block extends ItemDetailFragment {
                         blockHelper.addBlock("wolflsi", "giddens");
                         break;
                     case removeBlock:
-                        blockHelper.removeBlock("giddens");
+                        blockHelper.deleteBlock("giddens");
                         break;
                     default:
                 }

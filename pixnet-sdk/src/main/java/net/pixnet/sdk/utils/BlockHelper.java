@@ -7,17 +7,25 @@ import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.BlocksList;
 import net.pixnet.sdk.proxy.Error;
-import net.pixnet.sdk.response.NotificationList;
-import net.pixnet.sdk.response.User;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlockHelper extends DataProxy {
     private static final String URL_BLOCK = "https://emma.pixnet.cc/blocks";
+
+    @Override
+    protected boolean handleBasicResponse(String response) {
+        if(super.handleBasicResponse(response))
+            return true;
+        if(listener instanceof BlockHelperListener)
+            return false;
+        return true;
+    }
 
     /**
      * 列出黑名單
@@ -26,13 +34,16 @@ public class BlockHelper extends DataProxy {
         performAPIRequest(true, URL_BLOCK, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlockHelperListener)
-                        ((BlockHelperListener) listener).onGetBlockList(new BlocksList(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BlocksList parsedResponse;
+                try {
+                    parsedResponse=new BlocksList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlockHelperListener) listener).onGetBlockList(parsedResponse);
             }
         });
     }
@@ -64,13 +75,16 @@ public class BlockHelper extends DataProxy {
         performAPIRequest(true, URL_BLOCK + "/create", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlockHelperListener)
-                        ((BlockHelperListener)listener).onAddBlockResponse(res);
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlockHelperListener) listener).onAddBlock(parsedResponse);
             }
         }, params);
     }
@@ -79,7 +93,7 @@ public class BlockHelper extends DataProxy {
      * 移除黑名單
      * @param user 欲移除黑名單的使用者名稱
      */
-    public void removeBlock(String user) {
+    public void deleteBlock(String user) {
         if (user == null || TextUtils.isEmpty(user)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
             return;
@@ -89,13 +103,16 @@ public class BlockHelper extends DataProxy {
         performAPIRequest(true, URL_BLOCK + "/delete", Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlockHelperListener)
-                        ((BlockHelperListener)listener).onRemoveBlockResponse(res);
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlockHelperListener) listener).onDeleteBlock(parsedResponse);
             }
         }, params);
     }

@@ -20,7 +20,7 @@ public class CommentList extends BaseListResponse{
      */
     public List<Comment> comments;
 
-    public CommentList(String str) {
+    public CommentList(String str) throws JSONException {
         super(str);
     }
 

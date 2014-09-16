@@ -1,8 +1,11 @@
 package net.pixnet.sdk.utils;
 
-import net.pixnet.sdk.proxy.DataProxy;
+import net.pixnet.sdk.proxy.*;
+import net.pixnet.sdk.proxy.Error;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.SetList;
+
+import org.json.JSONException;
 
 public class MainPageHelper extends DataProxy {
 
@@ -15,16 +18,26 @@ public class MainPageHelper extends DataProxy {
         performAPIRequest(false, URL_BEST_SELECTED_ALBUM, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse();
-                if(res.error!=0){
-                    listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                SetList parsedResponse;
+                try {
+                    parsedResponse=new SetList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
                     return;
                 }
-                if(listener.onDataResponse(res))
-                    return;
-                if(listener instanceof MainPageHelperListener)
-                    ((MainPageHelperListener)listener).onGetBestSelectedAlbum(new SetList(response));
+                ((MainPageHelperListener)listener).onGetBestSelectedAlbum(parsedResponse);
             }
         });
+    }
+
+    @Override
+    protected boolean handleBasicResponse(String response) {
+        if(super.handleBasicResponse(response))
+            return true;
+        if(listener instanceof MainPageHelperListener)
+            return false;
+        return true;
     }
 }

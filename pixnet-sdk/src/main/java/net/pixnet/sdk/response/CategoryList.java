@@ -16,11 +16,11 @@ public class CategoryList extends BasicResponse {
      */
     public ArrayList<Category> categories;
 
-    public CategoryList(String str) {
+    public CategoryList(String str) throws JSONException {
         super(str);
     }
 
-    public CategoryList(JSONObject jo) {
+    public CategoryList(JSONObject jo) throws JSONException {
         super(jo);
     }
 

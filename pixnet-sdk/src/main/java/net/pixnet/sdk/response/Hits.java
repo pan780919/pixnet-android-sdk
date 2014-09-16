@@ -23,7 +23,7 @@ public class Hits extends BasicResponse {
      */
     public int monthly;
 
-    public Hits(JSONObject jo) {
+    public Hits(JSONObject jo) throws JSONException {
         super(jo);
     }
 

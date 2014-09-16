@@ -116,6 +116,24 @@ public abstract class DataProxy {
         rc.addRequest(r);
     }
 
+    protected boolean handleBasicResponse(String response){
+        BasicResponse res;
+        try {
+            res = new BasicResponse(response);
+        } catch (JSONException e) {
+            listener.onError(Error.DATA_PARSE_FAILED);
+            listener.onError(response);
+            return true;
+        }
+        if(res.error!=0){
+            if(!TextUtils.isEmpty(res.error_description))
+                listener.onError(res.error_description);
+            else listener.onError(res.message);
+            return true;
+        }
+        return listener.onDataResponse(res);
+    }
+
     public static boolean getJsonBoolean(JSONObject jo, String name){
         boolean b;
         try {
@@ -155,7 +173,7 @@ public abstract class DataProxy {
 
     public interface DataProxyListener{
         /**
-         * run on error code !=0
+         * call on the error code !=0
          * @param msg
          */
         void onError(String msg);

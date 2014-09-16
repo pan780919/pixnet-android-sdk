@@ -12,7 +12,7 @@ public class SubscriptionList extends BaseListResponse {
     public int page;
     public int total;
 
-    public SubscriptionList(String str) {
+    public SubscriptionList(String str) throws JSONException {
         super(str);
     }
 

@@ -24,11 +24,11 @@ public class Position extends BasicResponse {
     public boolean modifable;
     public boolean fixed_ad_box;
 
-    public Position(String str) {
+    public Position(String str) throws JSONException {
         super(str);
     }
 
-    public Position(JSONObject jo) {
+    public Position(JSONObject jo) throws JSONException {
         super(jo);
     }
 

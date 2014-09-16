@@ -15,6 +15,7 @@ import net.pixnet.sdk.response.User;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +31,46 @@ public class AccountHelper extends DataProxy {
     public static final String URL_ACCOUNT_PASSWD ="https://emma.pixnet.cc/account/password";
     public static final String URL_ACCOUNT_NOTIFICATIONS ="https://emma.pixnet.cc/account/notifications";
     public static final String URL_USER ="https://emma.pixnet.cc/users";
+    public static final String URL_PHONE_VERIFY ="https://emma.pixnet.cc/account/cellphone_verification";
 
     public static enum NotificationType{
         friend,
         system,
         comment,
         appmarket
+    }
+
+    @Override
+    protected boolean handleBasicResponse(String response) {
+        if(super.handleBasicResponse(response))
+            return true;
+        if(listener instanceof AccountHelperListener)
+            return false;
+        return true;
+    }
+
+    public void cellphoneVerification(String phoneNumber, String countryCode){
+        if(phoneNumber.startsWith("0"))
+            phoneNumber=phoneNumber.replaceFirst("0", "");
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("cellphone", phoneNumber));
+        params.add(new BasicNameValuePair("country_code", countryCode));
+
+        performAPIRequest(true, URL_PHONE_VERIFY, Request.Method.POST, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AccountHelperListener) listener).onCellphoneVerification(parsedResponse);
+            }
+        });
     }
 
     /**
@@ -58,14 +93,16 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof AccountHelperListener)
-                        ((AccountHelperListener) listener).onGetAccountInfoResponse(new AccountInfo(response));
+                if(handleBasicResponse(response))
+                    return;
+                AccountInfo parsedResponse;
+                try {
+                    parsedResponse=new AccountInfo(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((AccountHelperListener) listener).onGetAccountInfo(parsedResponse);
             }
         }, params);
 
@@ -116,14 +153,16 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_INFO, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof AccountHelperListener)
-                        ((AccountHelperListener) listener).onUpdateAccountInfoResponse(res);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((AccountHelperListener) listener).onUpdateAccountInfo(parsedResponse);
             }
         }, params);
     }
@@ -149,14 +188,16 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_MIB, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof AccountHelperListener)
-                        ((AccountHelperListener) listener).onGetMIBInfoResponse(new MIB(response));
+                if(handleBasicResponse(response))
+                    return;
+                MIB parsedResponse;
+                try {
+                    parsedResponse=new MIB(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((AccountHelperListener) listener).onGetMIBInfo(parsedResponse);
             }
         }, params);
     }
@@ -192,14 +233,16 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_MIB, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof AccountHelperListener)
-                        ((AccountHelperListener) listener).onUpdateMIBInfoResponse(new MIB(response));
+                if(handleBasicResponse(response))
+                    return;
+                MIB parsedResponse;
+                try {
+                    parsedResponse=new MIB(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((AccountHelperListener) listener).onUpdateMIBInfo(parsedResponse);
             }
         }, params);
     }
@@ -211,14 +254,16 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_MIB_POSTION, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof AccountHelperListener)
-                        ((AccountHelperListener) listener).onGetMIBPositionListInfoResponse(new PositionList(response));
+                if(handleBasicResponse(response))
+                    return;
+                PositionList parsedResponse;
+                try {
+                    parsedResponse=new PositionList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((AccountHelperListener) listener).onGetMIBPositionListInfo(parsedResponse);
             }
         });
     }
@@ -234,14 +279,16 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_MIB_POSTION+"/"+id, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof AccountHelperListener)
-                        ((AccountHelperListener) listener).onGetMIBPositionInfoResponse(new Position(response));
+                if(handleBasicResponse(response))
+                    return;
+                Position parsedResponse;
+                try {
+                    parsedResponse=new Position(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((AccountHelperListener) listener).onGetMIBPositionInfo(parsedResponse);
             }
         });
     }
@@ -264,14 +311,16 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_MIB_POSTION+"/"+id, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof AccountHelperListener)
-                        ((AccountHelperListener) listener).onUpdateMIBPositionInfoResponse(new MIB(response));
+                if(handleBasicResponse(response))
+                    return;
+                MIB parsedResponse;
+                try {
+                    parsedResponse=new MIB(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((AccountHelperListener) listener).onUpdateMIBPositionInfo(parsedResponse);
             }
         }, params);
     }
@@ -283,14 +332,16 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_MIB_PAY, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof AccountHelperListener)
-                        ((AccountHelperListener) listener).onPayMIBResponse(res);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((AccountHelperListener) listener).onPayMIB(parsedResponse);
             }
         });
     }
@@ -310,19 +361,22 @@ public class AccountHelper extends DataProxy {
         List<NameValuePair> params=new ArrayList<NameValuePair>();
         if(statisticsDays > -1 && statisticsDays < 46)
             params.add(new BasicNameValuePair("statistics_days", String.valueOf(statisticsDays)));
-        if(refererDays > -1 && statisticsDays < 8)
+        if(refererDays > -1 && refererDays < 8)
             params.add(new BasicNameValuePair("referer_days", String.valueOf(refererDays)));
 
         performAPIRequest(true, URL_ACCOUNT_ANALYTICS, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof AccountHelperListener)
-                        ((AccountHelperListener) listener).onGetAnalyticDataResponse(new Analytics(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                Analytics parsedResponse;
+                try {
+                    parsedResponse=new Analytics(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AccountHelperListener) listener).onGetAnalyticData(parsedResponse);
             }
         }, params);
     }
@@ -344,13 +398,16 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_PASSWD, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof AccountHelperListener)
-                        ((AccountHelperListener) listener).onUpdatePasswordResponse(res);
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AccountHelperListener) listener).onUpdatePassword(parsedResponse);
             }
         }, params);
     }
@@ -385,13 +442,16 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_NOTIFICATIONS, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof AccountHelperListener)
-                        ((AccountHelperListener) listener).onGetNotificationsResponse(new NotificationList(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                NotificationList parsedResponse;
+                try {
+                    parsedResponse=new NotificationList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AccountHelperListener) listener).onGetNotifications(parsedResponse);
             }
         }, params);
     }
@@ -404,14 +464,16 @@ public class AccountHelper extends DataProxy {
         performAPIRequest(false, URL_USER+"/"+userName, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error==0){
-                    if(listener.onDataResponse(res))
-                        return;
-                    else if(listener instanceof AccountHelperListener)
-                        ((AccountHelperListener) listener).onGetUserInfoResponse(new User(response));
+                if(handleBasicResponse(response))
+                    return;
+                User parsedResponse;
+                try {
+                    parsedResponse=new User(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
                 }
-                else listener.onError(res.message);
+                ((AccountHelperListener) listener).onGetUserInfo(parsedResponse);
             }
         });
     }

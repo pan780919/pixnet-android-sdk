@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class GroupList extends BaseListResponse {
     public ArrayList<Group> friend_groups;
 
-    public GroupList(String str) {
+    public GroupList(String str) throws JSONException {
         super(str);
     }
 

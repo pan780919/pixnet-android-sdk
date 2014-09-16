@@ -13,11 +13,11 @@ public class NotificationList extends BasicResponse{
 
     public List<Notification> notifications;
 
-    public NotificationList(String str) {
+    public NotificationList(String str) throws JSONException {
         super(str);
     }
 
-    public NotificationList(JSONObject jo) {
+    public NotificationList(JSONObject jo) throws JSONException {
         super(jo);
     }
 

@@ -15,7 +15,7 @@ public class ElementList extends BaseListResponse{
     public Set set;
     public List<Element> elements;
 
-    public ElementList(String str) {
+    public ElementList(String str) throws JSONException {
         super(str);
     }
 

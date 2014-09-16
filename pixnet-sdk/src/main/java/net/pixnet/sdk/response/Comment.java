@@ -85,11 +85,11 @@ public class Comment extends BasicResponse {
      */
     public Element element;
 
-    public Comment(String str) {
+    public Comment(String str) throws JSONException {
         super(str);
     }
 
-    public Comment(JSONObject jo) {
+    public Comment(JSONObject jo) throws JSONException {
         super(jo);
     }
 

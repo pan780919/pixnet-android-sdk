@@ -93,7 +93,7 @@ public class Account extends ItemDetailFragment {
                     }
 
                     @Override
-                    public void onGetMIBInfoResponse(MIB response) {
+                    public void onGetMIBInfo(MIB response) {
                         Helper.log(response
                                 .account
                                 .id_number);

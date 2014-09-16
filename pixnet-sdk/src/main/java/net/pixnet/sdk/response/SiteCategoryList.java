@@ -6,14 +6,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Site_CategoryList extends BaseListResponse {
+public class SiteCategoryList extends BaseListResponse {
 
     /**
      * PIXNET categories
      */
     public ArrayList<Category> categories;
 
-    public Site_CategoryList(String str) {
+    public SiteCategoryList(String str) throws JSONException {
         super(str);
     }
 

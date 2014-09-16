@@ -17,16 +17,17 @@ public class AccountHelperListener implements DataProxy.DataProxyListener {
     public boolean onDataResponse(BasicResponse response) {
         return false;
     }
-    public void onGetAccountInfoResponse(AccountInfo response){}
-    public void onUpdateAccountInfoResponse(BasicResponse response){}
-    public void onGetMIBInfoResponse(MIB response){}
-    public void onUpdateMIBInfoResponse(MIB response){}
-    public void onGetMIBPositionListInfoResponse(PositionList response){}
-    public void onGetMIBPositionInfoResponse(Position response){}
-    public void onUpdateMIBPositionInfoResponse(MIB response){}
-    public void onPayMIBResponse(BasicResponse response){}
-    public void onGetAnalyticDataResponse(Analytics response){}
-    public void onUpdatePasswordResponse(BasicResponse response){}
-    public void onGetNotificationsResponse(NotificationList response){}
-    public void onGetUserInfoResponse(User response){}
+    public void onCellphoneVerification(BasicResponse response){}
+    public void onGetAccountInfo(AccountInfo response){}
+    public void onUpdateAccountInfo(BasicResponse response){}
+    public void onGetMIBInfo(MIB response){}
+    public void onUpdateMIBInfo(MIB response){}
+    public void onGetMIBPositionListInfo(PositionList response){}
+    public void onGetMIBPositionInfo(Position response){}
+    public void onUpdateMIBPositionInfo(MIB response){}
+    public void onPayMIB(BasicResponse response){}
+    public void onGetAnalyticData(Analytics response){}
+    public void onUpdatePassword(BasicResponse response){}
+    public void onGetNotifications(NotificationList response){}
+    public void onGetUserInfo(User response){}
 }

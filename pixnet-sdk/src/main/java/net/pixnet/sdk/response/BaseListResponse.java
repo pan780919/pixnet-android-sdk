@@ -9,11 +9,11 @@ public class BaseListResponse extends BasicResponse {
     public int per_page;
     public int page;
 
-    public BaseListResponse(String str) {
+    public BaseListResponse(String str) throws JSONException {
         super(str);
     }
 
-    public BaseListResponse(JSONObject jo) {
+    public BaseListResponse(JSONObject jo) throws JSONException {
         super(jo);
     }
 

@@ -16,7 +16,7 @@ public class ArticleList extends BaseListResponse {
      */
     public ArrayList<Article> articles;
 
-    public ArticleList(String str) {
+    public ArticleList(String str) throws JSONException {
         super(str);
     }
 

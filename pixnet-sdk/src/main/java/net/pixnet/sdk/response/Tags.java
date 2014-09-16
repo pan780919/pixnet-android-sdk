@@ -11,7 +11,7 @@ public class Tags extends BasicResponse {
 
     public List<String> hot, related;
 
-    public Tags(String str) {
+    public Tags(String str) throws JSONException {
         super(str);
     }
 

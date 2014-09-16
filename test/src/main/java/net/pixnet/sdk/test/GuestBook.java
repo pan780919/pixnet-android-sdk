@@ -124,7 +124,7 @@ public class GuestBook extends ItemDetailFragment{
                     case markGuestbookHam:
                         break;
                     case removeGuestbook:
-                        guestBookHelper.removeGuestbook("44152667");
+                        guestBookHelper.deleteGuestbook("44152667");
                         break;
                     default:
                 }

@@ -23,11 +23,11 @@ public class FriendshipList extends BaseListResponse {
      */
     public int next_cursor;
 
-    public FriendshipList(JSONObject jo) {
+    public FriendshipList(JSONObject jo) throws JSONException {
         super(jo);
     }
 
-    public FriendshipList(String str) {
+    public FriendshipList(String str) throws JSONException {
         super(str);
     }
 

@@ -19,7 +19,7 @@ public class NewsList extends BaseListResponse{
      */
     public String next_before_time;
 
-    public NewsList(String str) {
+    public NewsList(String str) throws JSONException {
         super(str);
     }
 

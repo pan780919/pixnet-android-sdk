@@ -10,7 +10,7 @@ import java.util.List;
 public class SetList extends BaseListResponse{
     public List<Set> sets;
 
-    public SetList(String str) {
+    public SetList(String str) throws JSONException {
         super(str);
     }
 

@@ -38,11 +38,11 @@ public class User extends BasicResponse {
      */
     public boolean has_ad;
 
-    public User(JSONObject jo) {
+    public User(JSONObject jo) throws JSONException {
         super(jo);
     }
 
-    public User(String str) {
+    public User(String str) throws JSONException {
         super(str);
     }
 

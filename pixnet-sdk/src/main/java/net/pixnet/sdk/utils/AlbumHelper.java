@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.proxy.Error;
+import net.pixnet.sdk.response.AlbumMainPage;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.CommentList;
 import net.pixnet.sdk.response.Element;
@@ -18,6 +19,7 @@ import net.pixnet.sdk.utils.Request.RequestCallback;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,15 @@ public class AlbumHelper extends DataProxy {
     private static final String URL_FACES="https://emma.pixnet.cc/album/faces";
     private static final String URL_ALBUM_CONIFG="https://emma.pixnet.cc/album/config";
     private static final String URL_ELEMENTS_NEARBY = "https://emma.pixnet.cc/album/elements/nearby";
+
+    @Override
+    protected boolean handleBasicResponse(String response) {
+        if(super.handleBasicResponse(response))
+            return true;
+        if(listener instanceof AlbumHelperListener)
+            return false;
+        return true;
+    }
 
     public static enum ElementType{
         pic,
@@ -60,6 +71,7 @@ public class AlbumHelper extends DataProxy {
         member
     }
 
+
     /**
      * 列出相簿主圖及相片牆, 需要認證
      */
@@ -67,8 +79,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_MAIN, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse();
-                listener.onDataResponse(res);
+                if(handleBasicResponse(response))
+                    return;
+                AlbumMainPage parsedResponse;
+                try {
+                    parsedResponse=new AlbumMainPage(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener) listener).onGetMain(parsedResponse);
             }
         });
     }
@@ -111,8 +131,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(false, URL_SETFOLDERS, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                SetAndFolderList res = new SetAndFolderList(response);
-                listener.onDataResponse(res);
+                if(handleBasicResponse(response))
+                    return;
+                SetAndFolderList parsedResponse;
+                try {
+                    parsedResponse=new SetAndFolderList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener) listener).onGetSetAndFolderList(parsedResponse);
             }
         }, params);
     }
@@ -149,8 +177,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(false, URL_FOLDER+"/"+folderId, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                listener.onDataResponse(new Folder(response));
+                if(handleBasicResponse(response))
+                    return;
+                Folder parsedResponse;
+                try {
+                    parsedResponse=new Folder(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener) listener).onGetFolder(parsedResponse);
             }
         }, params);
     }
@@ -188,8 +224,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(false, URL_FOLDER, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                listener.onDataResponse(new FolderList(response));
+                if(handleBasicResponse(response))
+                    return;
+                FolderList parsedResponse;
+                try {
+                    parsedResponse=new FolderList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener) listener).onGetFolderList(parsedResponse);
             }
         }, params);
     }
@@ -225,8 +269,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(false, URL_SET+"/"+id, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Set res = new Set(response);
-                listener.onDataResponse(res);
+                if(handleBasicResponse(response))
+                    return;
+                Set parsedResponse;
+                try {
+                    parsedResponse=new Set(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener) listener).onGetSet(parsedResponse);
             }
         }, params);
     }
@@ -279,9 +331,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(false, URL_SET, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                SetList res=new SetList(response);
-                listener.onDataResponse(res);
+                if(handleBasicResponse(response))
+                    return;
+                SetList parsedResponse;
+                try {
+                    parsedResponse=new SetList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener) listener).onGetSetList(parsedResponse);
             }
         }, params);
     }
@@ -338,9 +397,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(false, URL_SETS_NEAR, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                SetList res=new SetList(response);
-                listener.onDataResponse(res);
+                if(handleBasicResponse(response))
+                    return;
+                SetList parsedResponse;
+                try {
+                    parsedResponse=new SetList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener) listener).onGetSetListByNear(parsedResponse);
             }
         }, params);
     }
@@ -376,8 +442,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(false, URL_ELEMENTS+"/"+elementId, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                listener.onDataResponse(new Element(response));
+                if(handleBasicResponse(response))
+                    return;
+                Element parsedResponse;
+                try {
+                    parsedResponse=new Element(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener) listener).onGetElement(parsedResponse);
             }
         }, params);
     }
@@ -448,8 +522,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(false, URL_ELEMENTS, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                listener.onDataResponse(new ElementList(response));
+                if(handleBasicResponse(response))
+                    return;
+                ElementList parsedResponse;
+                try {
+                    parsedResponse=new ElementList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener) listener).onGetElementListBySet(parsedResponse);
             }
         }, params);
     }
@@ -496,6 +578,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(false, URL_ELEMENTS_NEARBY, new RequestCallback() {
             @Override
             public void onResponse(String response) {
+                if(handleBasicResponse(response))
+                    return;
+                ElementList parsedResponse;
+                try {
+                    parsedResponse=new ElementList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener) listener).onGetElementListByNear(parsedResponse);
             }
         }, params);
     }
@@ -552,8 +644,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(false, URL_SET_COMMENT, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                listener.onDataResponse(new CommentList(response));
+                if(handleBasicResponse(response))
+                    return;
+                CommentList parsedResponse;
+                try {
+                    parsedResponse=new CommentList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener) listener).onGetCommentListBySet(parsedResponse);
             }
         }, params);
     }
@@ -602,8 +702,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(false, URL_COMMENT, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                listener.onDataResponse(new CommentList(response));
+                if(handleBasicResponse(response))
+                    return;
+                CommentList parsedResponse;
+                try {
+                    parsedResponse=new CommentList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener) listener).onGetCommentListByElement(parsedResponse);
             }
         }, params);
     }
@@ -625,8 +733,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_FOLDER, Method.POST, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                listener.onDataResponse(new Folder(response));
+                if(handleBasicResponse(response))
+                    return;
+                Folder parsedResponse;
+                try {
+                    parsedResponse=new Folder(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener) listener).onAddFolder(parsedResponse);
             }
         }, params);
     }
@@ -690,7 +806,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_SET, Method.POST, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                listener.onDataResponse(new Set(response));
+                if(handleBasicResponse(response))
+                    return;
+                Set parsedResponse;
+                try {
+                    parsedResponse=new Set(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener) listener).onAddSet(parsedResponse);
             }
         }, params);
     }
@@ -726,14 +851,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_FACES, Method.POST, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error!=0){
-                    listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                Element parsedResponse;
+                try {
+                    parsedResponse=new Element(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
                     return;
                 }
-                if(listener.onDataResponse(res))
-                    return;
-                ((AlbumHelperListener)listener).onAddFaceByRecommend(new Element(response));
+                ((AlbumHelperListener)listener).onAddFaceByRecommend(parsedResponse);
             }
         }, params);
     }
@@ -765,14 +892,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_FACES, Method.POST, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error!=0){
-                    listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                Element parsedResponse;
+                try {
+                    parsedResponse=new Element(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
                     return;
                 }
-                if(listener.onDataResponse(res))
-                    return;
-                ((AlbumHelperListener)listener).onAddFaceByElement(new Element(response));
+                ((AlbumHelperListener)listener).onAddFaceByElement(parsedResponse);
             }
         }, params);
     }
@@ -794,8 +923,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_FOLDER+"/"+folderId, Method.POST, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                listener.onDataResponse(new Folder(response));
+                if(handleBasicResponse(response))
+                    return;
+                Folder parsedResponse;
+                try {
+                    parsedResponse=new Folder(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener)listener).onUpdateFolder(parsedResponse);
             }
         }, params);
     }
@@ -861,7 +998,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_SET+"/"+setId, Method.POST, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                listener.onDataResponse(new Set(response));
+                if(handleBasicResponse(response))
+                    return;
+                Set parsedResponse;
+                try {
+                    parsedResponse=new Set(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener)listener).onUpdateSet(parsedResponse);
             }
         }, params);
     }
@@ -900,14 +1046,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_FACES+"/"+faceId, Method.POST, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse(response);
-                if(res.error!=0){
-                    listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                Element parsedResponse;
+                try {
+                    parsedResponse=new Element(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
                     return;
                 }
-                if(listener.onDataResponse(res))
-                    return;
-                ((AlbumHelperListener)listener).onUpdateFace(new Element(response));
+                ((AlbumHelperListener)listener).onUpdateFace(parsedResponse);
             }
         }, params);
     }
@@ -924,8 +1072,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_FOLDER+"/"+folderId, Method.DELETE, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log(response);
-                listener.onDataResponse(new BasicResponse(response));
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener)listener).onDeleteFolder(parsedResponse);
             }
         });
     }
@@ -942,7 +1098,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_SET+"/"+setId, Method.DELETE, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                listener.onDataResponse(new BasicResponse(response));
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener)listener).onDeleteSet(parsedResponse);
             }
         });
     }
@@ -959,7 +1124,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_ELEMENTS+"/"+elementId, Method.DELETE, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                listener.onDataResponse(new BasicResponse(response));
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener)listener).onDeleteElement(parsedResponse);
             }
         });
     }
@@ -976,7 +1150,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_SET_COMMENT+"/"+commentId, Method.DELETE, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                listener.onDataResponse(new BasicResponse(response));
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener)listener).onDeleteCommentFromSet(parsedResponse);
             }
         });
     }
@@ -993,7 +1176,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_COMMENT+"/"+commentId, Method.DELETE, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                listener.onDataResponse(new BasicResponse(response));
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener)listener).onDeleteCommentFromElement(parsedResponse);
             }
         });
     }
@@ -1010,7 +1202,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_FACES+"/"+faceId, Method.DELETE, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                listener.onDataResponse(new BasicResponse(response));
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener)listener).onDeleteFace(parsedResponse);
             }
         });
     }
@@ -1036,8 +1237,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_SORT_SETFOLDERS, Method.POST, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-//                BasicResponse res=new BasicResponse();
-//                listener.onDataResponse(res);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener)listener).onSortSetAndFolders(parsedResponse);
             }
         }, params);
     }
@@ -1072,8 +1281,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_SORT_SETS, Method.POST, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse();
-                listener.onDataResponse(res);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener)listener).onSortSets(parsedResponse);
             }
         }, params);
     }
@@ -1105,8 +1322,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_SORT_ELEMENTS, Method.POST, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse();
-                listener.onDataResponse(res);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener)listener).onSortElementList(parsedResponse);
             }
         }, params);
     }
@@ -1138,8 +1363,16 @@ public class AlbumHelper extends DataProxy {
         performAPIRequest(true, URL_ALBUM_CONIFG, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res=new BasicResponse();
-                listener.onDataResponse(res);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AlbumHelperListener)listener).onGetConfig(parsedResponse);
             }
         });
     }

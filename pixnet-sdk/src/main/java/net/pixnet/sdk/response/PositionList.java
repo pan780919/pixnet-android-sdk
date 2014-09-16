@@ -12,11 +12,11 @@ public class PositionList extends BasicResponse {
     public List<Position> blog;
     public List<Position> article;
 
-    public PositionList(String str) {
+    public PositionList(String str) throws JSONException {
         super(str);
     }
 
-    public PositionList(JSONObject jo) {
+    public PositionList(JSONObject jo) throws JSONException {
         super(jo);
     }
 

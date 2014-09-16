@@ -12,12 +12,13 @@ import net.pixnet.sdk.response.BlogInfo;
 import net.pixnet.sdk.response.CategoryList;
 import net.pixnet.sdk.response.Comment;
 import net.pixnet.sdk.response.CommentList;
-import net.pixnet.sdk.response.Site_CategoryList;
+import net.pixnet.sdk.response.SiteCategoryList;
 import net.pixnet.sdk.response.Tags;
 import net.pixnet.sdk.utils.Request.Method;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,43 +30,14 @@ public class BlogHelper extends DataProxy {
     private static final String URL_COMMENT = "https://emma.pixnet.cc/blog/comments";
     private static final String URL_BLOG = "https://emma.pixnet.cc/blog";
     private static final String URL_TAGS = "https://emma.pixnet.cc/blog/suggested_tags";
-    /**
-     * 預設使用者名稱
-     */
-    private String defaultUserName = "emmademo";
 
-    public String getDefaultUserName() {
-        return defaultUserName;
-    }
-
-    public void setDefaultUserName(String defaultUserName) {
-        this.defaultUserName = defaultUserName;
-    }
-
-    /**
-     * 預設每頁幾筆資料
-     */
-    private int defaultPerPage = 20;
-
-    public int getDefaultPerPage() {
-        return defaultPerPage;
-    }
-
-    public void setDefaultPerPage(int defaultPerPage) {
-        this.defaultPerPage = defaultPerPage;
-    }
-
-    /**
-     * 預設是否每篇文章都要回傳作者資訊, 如果設定為 true, 則就不回傳
-     */
-    private boolean defaultTrimUser = false;
-
-    public boolean isDefaultTrimUser() {
-        return defaultTrimUser;
-    }
-
-    public void setDefaultTrimUser(boolean defaultTrimUser) {
-        this.defaultTrimUser = defaultTrimUser;
+    @Override
+    protected boolean handleBasicResponse(String response) {
+        if(super.handleBasicResponse(response))
+            return true;
+        if(listener instanceof AccountHelperListener)
+            return false;
+        return true;
     }
 
     public void getBlogCategorieList() {
@@ -88,13 +60,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(false, URL_CATEGORY, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onGetBlogCategorieList(new CategoryList(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                CategoryList parsedResponse;
+                try {
+                    parsedResponse=new CategoryList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onGetBlogCategorieList(parsedResponse);
             }
         }, params);
     }
@@ -114,13 +89,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(false, URL_SITE_CATEGORY, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onGetCategorieList(new Site_CategoryList(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                SiteCategoryList parsedResponse;
+                try {
+                    parsedResponse=new SiteCategoryList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onGetCategorieList(parsedResponse);
             }
         }, params);
     }
@@ -154,13 +132,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_CATEGORY, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onAddCategory(res);
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onAddCategory(parsedResponse);
             }
         }, params);
     }
@@ -192,13 +173,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_CATEGORY + "/" + id, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onUpdateCategory(res);
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onUpdateCategory(parsedResponse);
             }
         }, params);
     }
@@ -219,13 +203,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_CATEGORY + "/" + id, Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onDeleteCategory(res);
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onDeleteCategory(parsedResponse);
             }
         }, params);
     }
@@ -240,13 +227,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_CATEGORY + "/position", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onSortCategorieList(res);
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onSortCategorieList(parsedResponse);
             }
         }, params);
     }
@@ -289,13 +279,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(false, URL_ARTICLE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onGetAllArticleList(new ArticleList(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                ArticleList parsedResponse;
+                try {
+                    parsedResponse=new ArticleList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onGetAllArticleList(parsedResponse);
             }
         }, params);
     }
@@ -328,13 +321,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(false, URL_ARTICLE + "/" + id, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onGetArticle(new Article(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                Article parsedResponse;
+                try {
+                    parsedResponse=new Article(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onGetArticle(parsedResponse);
             }
         }, params);
     }
@@ -367,13 +363,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(false, URL_ARTICLE + "/" + id + "/related", new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onGetRelatedArticleList(new ArticleList(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                ArticleList parsedResponse;
+                try {
+                    parsedResponse=new ArticleList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onGetRelatedArticleList(parsedResponse);
             }
         }, params);
     }
@@ -442,13 +441,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_ARTICLE, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onAddArticle(res);
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onAddArticle(parsedResponse);
             }
         }, params);
     }
@@ -513,13 +515,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_ARTICLE + "/" + id, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onUpdateArticle(res);
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onUpdateArticle(parsedResponse);
             }
         }, params);
     }
@@ -533,13 +538,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_ARTICLE + "/" + id, Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onDeleteArticle(res);
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onDeleteArticle(parsedResponse);
             }
         }, params);
     }
@@ -565,13 +573,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(false, URL_ARTICLE + "/latest", new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onGetArticleListByLatest(new ArticleList(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                ArticleList parsedResponse;
+                try {
+                    parsedResponse=new ArticleList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onGetArticleListByLatest(parsedResponse);
             }
         }, params);
     }
@@ -597,13 +608,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(false, URL_ARTICLE + "/hot", new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onGetArticleListByHot(new ArticleList(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                ArticleList parsedResponse;
+                try {
+                    parsedResponse=new ArticleList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onGetArticleListByHot(parsedResponse);
             }
         }, params);
     }
@@ -641,13 +655,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(false, URL_ARTICLE + "/search", new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onSearchArticleList(new ArticleList(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                ArticleList parsedResponse;
+                try {
+                    parsedResponse=new ArticleList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onSearchArticleList(parsedResponse);
             }
         }, params);
     }
@@ -718,13 +735,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(false, URL_COMMENT, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onGetCommentList(new CommentList(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                CommentList parsedResponse;
+                try {
+                    parsedResponse=new CommentList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onGetCommentList(parsedResponse);
             }
         }, params);
     }
@@ -795,13 +815,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true,URL_COMMENT, Request.Method.POST,new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onAddComment(res);
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onAddComment(parsedResponse);
             }
         },params);
     }
@@ -824,13 +847,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(false, URL_COMMENT + "/" + id, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onGetComment(new Comment(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                Comment parsedResponse;
+                try {
+                    parsedResponse=new Comment(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onGetComment(parsedResponse);
             }
         }, params);
     }
@@ -867,13 +893,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_COMMENT + "/" + ids + "/reply", Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onReplyComment(new CommentList(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                CommentList parsedResponse;
+                try {
+                    parsedResponse=new CommentList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onReplyComment(parsedResponse);
             }
         }, params);
     }
@@ -911,13 +940,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, url, Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onSetCommentVisibility(new CommentList(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                CommentList parsedResponse;
+                try {
+                    parsedResponse=new CommentList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onSetCommentVisibility(parsedResponse);
             }
         }, params);
     }
@@ -948,13 +980,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_COMMENT + "/" + ids, Request.Method.DELETE, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onDeleteComment(res);
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onDeleteComment(parsedResponse);
             }
         }, params);
     }
@@ -973,13 +1008,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(false, URL_COMMENT + "/latest", new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onGetCommentListByLatest(new CommentList(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                CommentList parsedResponse;
+                try {
+                    parsedResponse=new CommentList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onGetCommentListByLatest(parsedResponse);
             }
         }, params);
     }
@@ -1015,13 +1053,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, url, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onMarkComment(new CommentList(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                CommentList parsedResponse;
+                try {
+                    parsedResponse=new CommentList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onMarkComment(parsedResponse);
             }
         }, params);
     }
@@ -1041,13 +1082,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(false, URL_BLOG, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onGetBlogInfo(new BlogInfo(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BlogInfo parsedResponse;
+                try {
+                    parsedResponse=new BlogInfo(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onGetBlogInfo(parsedResponse);
             }
         }, params);
     }
@@ -1069,13 +1113,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(true, URL_BLOG, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onSetBlogInfo(res);
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onSetBlogInfo(parsedResponse);
             }
         }, params);
     }
@@ -1098,13 +1145,16 @@ public class BlogHelper extends DataProxy {
         performAPIRequest(false, URL_TAGS, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                BasicResponse res = new BasicResponse(response);
-                if (res.error == 0) {
-                    if (listener.onDataResponse(res))
-                        return;
-                    else if (listener instanceof BlogHelperListener)
-                        ((BlogHelperListener) listener).onGetTags(new Tags(response));
-                } else listener.onError(res.message);
+                if(handleBasicResponse(response))
+                    return;
+                Tags parsedResponse;
+                try {
+                    parsedResponse=new Tags(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).onGetTags(parsedResponse);
             }
         }, params);
     }

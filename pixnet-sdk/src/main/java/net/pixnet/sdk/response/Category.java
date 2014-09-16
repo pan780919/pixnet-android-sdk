@@ -41,7 +41,7 @@ public class Category extends BasicResponse {
      */
     public List<ChildCategory> child_categories;
 
-    public Category(JSONObject jo) {
+    public Category(JSONObject jo) throws JSONException {
         super(jo);
     }
 

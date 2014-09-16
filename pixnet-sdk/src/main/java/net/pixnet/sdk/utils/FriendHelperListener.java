@@ -5,8 +5,8 @@ import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.FriendshipList;
 import net.pixnet.sdk.response.GroupList;
 import net.pixnet.sdk.response.NewsList;
+import net.pixnet.sdk.response.SubscriptionGroupList;
 import net.pixnet.sdk.response.SubscriptionList;
-import net.pixnet.sdk.response.Subscription_groupList;
 
 /**
  * Created by Koi on 2014/8/22.
@@ -30,11 +30,15 @@ public class FriendHelperListener implements DataProxy.DataProxyListener {
     public void onAddSubscription(BasicResponse res){}
     public void onRemoveSubscription(BasicResponse res){}
     public void onJoinSubscriptionGroup(BasicResponse res){}
+    public void onLeaveSubscriptionGroup(BasicResponse res){}
     public void onSortSubscriptionGroupList(BasicResponse res){}
+    public void onAddSubscriptionGroup(BasicResponse res){}
+    public void onUpdateSubscriptionGroup(BasicResponse res){}
+    public void onRemoveSubscriptionGroup(BasicResponse res){}
     public void onGetGroupList(GroupList res){}
     public void onAddGroup(BasicResponse res){}
     public void onUpdateGroup(BasicResponse res){}
     public void onRemoveGroup(BasicResponse res){}
     public void onGetFriendNews(NewsList res){}
-    public void onGetSubscriptionGroupList(Subscription_groupList res){}
+    public void onGetSubscriptionGroupList(SubscriptionGroupList res){}
 }

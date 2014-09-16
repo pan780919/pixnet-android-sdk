@@ -9,7 +9,7 @@ public class License extends BasicResponse {
      */
     public String type;
 
-    public License(JSONObject jo) {
+    public License(JSONObject jo) throws JSONException {
         super(jo);
     }
 

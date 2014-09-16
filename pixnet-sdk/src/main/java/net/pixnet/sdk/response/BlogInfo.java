@@ -33,11 +33,11 @@ public class BlogInfo extends BasicResponse{
      */
     public Hits hits;
 
-    public BlogInfo(JSONObject jo) {
+    public BlogInfo(JSONObject jo) throws JSONException {
         super(jo);
     }
 
-    public BlogInfo(String str) {
+    public BlogInfo(String str) throws JSONException {
         super(str);
     }
 

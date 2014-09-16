@@ -16,7 +16,7 @@ public class BlocksList extends BaseListResponse {
      */
     public ArrayList<Blocks> blocks;
 
-    public BlocksList(String str) {
+    public BlocksList(String str) throws JSONException {
         super(str);
     }
 
