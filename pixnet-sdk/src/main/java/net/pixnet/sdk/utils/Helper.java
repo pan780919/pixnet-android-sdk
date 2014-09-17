@@ -17,8 +17,9 @@ public class Helper {
 	}
 	
 	public static void log(String msg){
-		if(DEBUG)
-			Log.d("DEBUG", msg);
+		if(!DEBUG || msg==null)
+            return;
+        Log.d("DEBUG", msg);
 	}
 
 	public static void putPrefString(Context c, String key, String value){
