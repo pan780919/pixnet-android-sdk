@@ -49,7 +49,45 @@ public class AccountHelper extends DataProxy {
         return true;
     }
 
+    /**
+     * 收到認證碼後，進行認證
+     * @param code
+     */
+    public void cellphoneVerification(String code){
+        if(TextUtils.isEmpty(code)){
+            listener.onError(Error.MISS_PARAMETER+" code");
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("code", code));
+
+        performAPIRequest(true, URL_PHONE_VERIFY, Request.Method.POST, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AccountHelperListener) listener).onCellphoneVerification(parsedResponse);
+            }
+        });
+    }
+
+    /**
+     * 傳送簡訊認證碼
+     * @param phoneNumber
+     * @param countryCode
+     */
     public void cellphoneVerification(String phoneNumber, String countryCode){
+        if(TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(countryCode)){
+            listener.onError(Error.MISS_PARAMETER+" phoneNumber, countryCode");
+            return;
+        }
         if(phoneNumber.startsWith("0"))
             phoneNumber=phoneNumber.replaceFirst("0", "");
         List<NameValuePair> params=new ArrayList<NameValuePair>();
