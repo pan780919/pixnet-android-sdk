@@ -198,6 +198,7 @@ public class Blog extends ItemDetailFragment {
                         blogHelper.addComment("185508579", "test");
                         break;
                     case getComment:
+                        blogHelper.getComment("33785508,33784806,33783552");
                         break;
                     case replyComment:
                         blogHelper.replyComment("multireply test", "33785508", "33784806", "33783552");

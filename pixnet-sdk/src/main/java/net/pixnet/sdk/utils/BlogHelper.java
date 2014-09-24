@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlogHelper extends DataProxy {
-    private static final String URL_CATEGORY = "https://emma.pixnet.cc/blog/categories";
-    private static final String URL_SITE_CATEGORY = "https://emma.pixnet.cc/blog/site_categories";
-    private static final String URL_ARTICLE = "https://emma.pixnet.cc/blog/articles";
-    private static final String URL_COMMENT = "https://emma.pixnet.cc/blog/comments";
-    private static final String URL_BLOG = "https://emma.pixnet.cc/blog";
-    private static final String URL_TAGS = "https://emma.pixnet.cc/blog/suggested_tags";
+    public static final String URL_CATEGORY = "https://emma.pixnet.cc/blog/categories";
+    public static final String URL_SITE_CATEGORY = "https://emma.pixnet.cc/blog/site_categories";
+    public static final String URL_ARTICLE = "https://emma.pixnet.cc/blog/articles";
+    public static final String URL_COMMENT = "https://emma.pixnet.cc/blog/comments";
+    public static final String URL_BLOG = "https://emma.pixnet.cc/blog";
+    public static final String URL_TAGS = "https://emma.pixnet.cc/blog/suggested_tags";
 
     @Override
     protected boolean handleBasicResponse(String response) {

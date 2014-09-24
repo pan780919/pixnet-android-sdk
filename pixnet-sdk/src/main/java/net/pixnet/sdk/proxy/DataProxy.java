@@ -87,16 +87,16 @@ public abstract class DataProxy {
         }
     }
 
-    protected void performAPIRequest(boolean authentication, String url, RequestCallback callback){
+    public void performAPIRequest(boolean authentication, String url, RequestCallback callback){
         performAPIRequest(authentication, url, callback, null);
     }
-    protected void performAPIRequest(boolean authentication, String url, RequestCallback callback, List<NameValuePair> params){
+    public void performAPIRequest(boolean authentication, String url, RequestCallback callback, List<NameValuePair> params){
         performAPIRequest(authentication, url, Method.GET, callback, params);
     }
-    protected void performAPIRequest(boolean authentication, String url, Method method, RequestCallback callback){
+    public void performAPIRequest(boolean authentication, String url, Method method, RequestCallback callback){
         performAPIRequest(authentication, url, method, callback, null);
     }
-    protected void performAPIRequest(boolean authentication, String url, Method method, RequestCallback callback, List<NameValuePair> params){
+    public void performAPIRequest(boolean authentication, String url, Method method, RequestCallback callback, List<NameValuePair> params){
         if(authentication){
             boolean isLogin=PIXNET.isLogin(c);
             if(!isLogin){
