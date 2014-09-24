@@ -77,8 +77,9 @@ public class RequestController {
     }
 
     private void onResponse(Request request, String response){
-        request.getCallback()
-                .onResponse(response);
+        Request.RequestCallback callback=request.getCallback();
+        if(callback!=null)
+            callback.onResponse(response);
         runWorker();
     }
 
