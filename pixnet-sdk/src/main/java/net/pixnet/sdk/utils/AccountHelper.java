@@ -54,7 +54,7 @@ public class AccountHelper extends DataProxy {
             phoneNumber=phoneNumber.replaceFirst("0", "");
         List<NameValuePair> params=new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("cellphone", phoneNumber));
-        params.add(new BasicNameValuePair("country_code", countryCode));
+        params.add(new BasicNameValuePair("calling_code", countryCode));
 
         performAPIRequest(true, URL_PHONE_VERIFY, Request.Method.POST, new Request.RequestCallback() {
             @Override
