@@ -8,6 +8,7 @@ import net.pixnet.sdk.response.BlogInfo;
 import net.pixnet.sdk.response.CategoryList;
 import net.pixnet.sdk.response.Comment;
 import net.pixnet.sdk.response.CommentList;
+import net.pixnet.sdk.response.PeriodArticleList;
 import net.pixnet.sdk.response.SiteCategoryList;
 import net.pixnet.sdk.response.Tags;
 
@@ -39,6 +40,7 @@ public class BlogHelperListener implements DataProxy.DataProxyListener {
     public void onDeleteArticle(BasicResponse res){}
     public void onGetArticleListByLatest(ArticleList res){}
     public void onGetArticleListByHot(ArticleList res){}
+    public void getArticleListByHotWithin(PeriodArticleList res){}
     public void onGetCommentList(CommentList res){}
     public void onAddComment(BasicResponse res){}
     public void onGetComment(Comment res){}

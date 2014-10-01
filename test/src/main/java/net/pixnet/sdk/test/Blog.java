@@ -42,6 +42,7 @@ public class Blog extends ItemDetailFragment {
         removeArticle,
         getArticleListByLatest,
         getArticleListByHot,
+        getArticleListByHotWithin,
         searchArticleList,
 
         getCommentList,
@@ -188,6 +189,9 @@ public class Blog extends ItemDetailFragment {
                     case getArticleListByLatest:
                         break;
                     case getArticleListByHot:
+                        break;
+                    case getArticleListByHotWithin:
+                        blogHelper.getArticleListByHotWithin(1, "20140101-201401001");
                         break;
                     case searchArticleList:
                         break;

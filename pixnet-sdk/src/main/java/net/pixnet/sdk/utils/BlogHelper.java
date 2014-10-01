@@ -12,6 +12,7 @@ import net.pixnet.sdk.response.BlogInfo;
 import net.pixnet.sdk.response.CategoryList;
 import net.pixnet.sdk.response.Comment;
 import net.pixnet.sdk.response.CommentList;
+import net.pixnet.sdk.response.PeriodArticleList;
 import net.pixnet.sdk.response.SiteCategoryList;
 import net.pixnet.sdk.response.Tags;
 import net.pixnet.sdk.utils.Request.Method;
@@ -587,24 +588,33 @@ public class BlogHelper extends DataProxy {
         }, params);
     }
 
+    /**
+     * 列出部落格熱門文章
+     */
     public void getArticleListByHot() {
-        getArticleListByHot(defaultUserName, null, null, defaultTrimUser);
+        getArticleListByHot(defaultUserName, null, 1, defaultTrimUser);
     }
 
-    public void getArticleListByHot(String user, String blog_password, String limit, boolean trim_user) {
-        if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+    /**
+     * 列出部落格熱門文章
+     * @param user 指定要回傳的使用者資訊
+     * @param blogPassword 如果指定使用者的 Blog 被密碼保護，則需要指定這個參數以通過授權
+     * @param limit 回傳筆數
+     * @param trim_user 是否每篇文章都要回傳作者資訊, 如果設定為 true, 則就不回傳
+     */
+    public void getArticleListByHot(String user, String blogPassword, int limit, boolean trim_user) {
+        if (TextUtils.isEmpty(user)) {
+            listener.onError(Error.MISS_PARAMETER + ":user");
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("user", user));
-        if (!TextUtils.isEmpty(blog_password)) {
-            params.add(new BasicNameValuePair("blog_password", blog_password));
-        }
-        if (!TextUtils.isEmpty(limit)) {
-            params.add(new BasicNameValuePair("limit", limit));
-        }
+        if (!TextUtils.isEmpty(blogPassword))
+            params.add(new BasicNameValuePair("blog_password", blogPassword));
+        if (limit>0)
+            params.add(new BasicNameValuePair("limit", String.valueOf(limit)));
         params.add(new BasicNameValuePair("trim_user", trim_user ? "1" : "0"));
+
         performAPIRequest(false, URL_ARTICLE + "/hot", new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
@@ -618,6 +628,52 @@ public class BlogHelper extends DataProxy {
                     return;
                 }
                 ((BlogHelperListener) listener).onGetArticleListByHot(parsedResponse);
+            }
+        }, params);
+    }
+
+    /**
+     * 列出指定時間內的部落格熱門文章
+     * @param limit 回傳筆數
+     * @param period 起始日與結束日 "YYYYmmdd-YYYYmmdd"
+     */
+    public void getArticleListByHotWithin(int limit, String period) {
+        getArticleListByHotWithin(defaultUserName, limit, defaultTrimUser, period);
+    }
+
+    /**
+     * 列出指定時間內的部落格熱門文章
+     * @param user 指定要回傳的使用者資訊
+     * @param limit 回傳筆數
+     * @param trim_user 是否每篇文章都要回傳作者資訊, 如果設定為 true, 則就不回傳
+     * @param period 起始日與結束日 "YYYYmmdd-YYYYmmdd"
+     */
+    public void getArticleListByHotWithin(String user, int limit, boolean trim_user, String period) {
+        if (TextUtils.isEmpty(user) || TextUtils.isEmpty(period)) {
+            listener.onError(Error.MISS_PARAMETER + ":user, date");
+            return;
+        }
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("user", user));
+        if (limit>0)
+            params.add(new BasicNameValuePair("limit", String.valueOf(limit)));
+        params.add(new BasicNameValuePair("trim_user", trim_user ? "1" : "0"));
+
+        String url=URL_ARTICLE + "/hot/" + period;
+
+        performAPIRequest(true, url, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                if(handleBasicResponse(response))
+                    return;
+                PeriodArticleList parsedResponse;
+                try {
+                    parsedResponse=new PeriodArticleList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((BlogHelperListener) listener).getArticleListByHotWithin(parsedResponse);
             }
         }, params);
     }
