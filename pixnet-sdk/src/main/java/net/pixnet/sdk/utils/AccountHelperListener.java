@@ -4,6 +4,7 @@ import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.AccountInfo;
 import net.pixnet.sdk.response.Analytics;
 import net.pixnet.sdk.response.BasicResponse;
+import net.pixnet.sdk.response.CellphoneVerification;
 import net.pixnet.sdk.response.MIB;
 import net.pixnet.sdk.response.NotificationList;
 import net.pixnet.sdk.response.Position;
@@ -17,7 +18,7 @@ public class AccountHelperListener implements DataProxy.DataProxyListener {
     public boolean onDataResponse(BasicResponse response) {
         return false;
     }
-    public void onCellphoneVerification(BasicResponse response){}
+    public void onCellphoneVerification(CellphoneVerification response){}
     public void onGetAccountInfo(AccountInfo response){}
     public void onUpdateAccountInfo(BasicResponse response){}
     public void onGetMIBInfo(MIB response){}

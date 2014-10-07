@@ -7,6 +7,7 @@ import net.pixnet.sdk.proxy.Error;
 import net.pixnet.sdk.response.AccountInfo;
 import net.pixnet.sdk.response.Analytics;
 import net.pixnet.sdk.response.BasicResponse;
+import net.pixnet.sdk.response.CellphoneVerification;
 import net.pixnet.sdk.response.MIB;
 import net.pixnet.sdk.response.NotificationList;
 import net.pixnet.sdk.response.Position;
@@ -66,9 +67,9 @@ public class AccountHelper extends DataProxy {
             public void onResponse(String response) {
                 if(handleBasicResponse(response))
                     return;
-                BasicResponse parsedResponse;
+                CellphoneVerification parsedResponse;
                 try {
-                    parsedResponse=new BasicResponse(response);
+                    parsedResponse=new CellphoneVerification(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
@@ -99,9 +100,9 @@ public class AccountHelper extends DataProxy {
             public void onResponse(String response) {
                 if(handleBasicResponse(response))
                     return;
-                BasicResponse parsedResponse;
+                CellphoneVerification parsedResponse;
                 try {
-                    parsedResponse=new BasicResponse(response);
+                    parsedResponse=new CellphoneVerification(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
