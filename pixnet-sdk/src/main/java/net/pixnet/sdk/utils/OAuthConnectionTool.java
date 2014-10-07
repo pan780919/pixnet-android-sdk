@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.IOException;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,7 +73,7 @@ public class OAuthConnectionTool
     }
 
     @Override
-    public String performRequest(Request request) {
+    public String performRequest(Request request) throws IOException {
         switch (ver) {
             case VER_1:
                 computeNoceAndTimestamp();

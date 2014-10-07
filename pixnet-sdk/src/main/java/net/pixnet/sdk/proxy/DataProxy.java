@@ -67,24 +67,41 @@ public abstract class DataProxy {
 
     protected ConnectionTool getConnectionTool(){
         boolean isLogin=PIXNET.isLogin(c);
+        HttpConnectionTool tool;
         if(isLogin){
-            OAuthConnectionTool tool;
             switch (PIXNET.getOAuthVersion(c)){
                 case VER_1:
                     tool=OAuthConnectionTool.newOaut1ConnectionTool(PIXNET.getConsumerKey(c), PIXNET.getConsumerSecret(c));
-                    tool.setAccessTokenAndSecret(PIXNET.getOauthAccessToken(c), PIXNET.getOauthAccessSecret(c));
-                    return tool;
+                    ((OAuthConnectionTool)tool).setAccessTokenAndSecret(PIXNET.getOauthAccessToken(c), PIXNET.getOauthAccessSecret(c));
+                    break;
                 case VER_2:
                     tool=OAuthConnectionTool.newOauth2ConnectionTool();
-                    tool.setAccessToken(PIXNET.getOauthAccessToken(c));
-                    return tool;
+                    ((OAuthConnectionTool)tool).setAccessToken(PIXNET.getOauthAccessToken(c));
+                    break;
                 default:
-                    return null;
+                    tool = new HttpConnectionTool();
             }
         }
         else{
-            return new HttpConnectionTool();
+            tool = new HttpConnectionTool();
         }
+        if(connectionTimeout>0)
+            tool.timeout_connection=connectionTimeout;
+        if(socketTimeout>0)
+            tool.timeout_socket=socketTimeout;
+        return tool;
+    }
+
+    protected int connectionTimeout=0;
+    public void setConnectionTimeout(int sec){
+        if(sec>0)
+            connectionTimeout=sec;
+    }
+
+    protected int socketTimeout=0;
+    public void setSocketTimeout(int sec) {
+        if(sec>0)
+            socketTimeout = sec;
     }
 
     public void performAPIRequest(boolean authentication, String url, RequestCallback callback){
@@ -117,6 +134,10 @@ public abstract class DataProxy {
     }
 
     protected boolean handleBasicResponse(String response){
+        if(response==null) {
+            listener.onError(Error.NETWORK_ERROR);
+            return true;
+        }
         BasicResponse res;
         try {
             res = new BasicResponse(response);

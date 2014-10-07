@@ -253,8 +253,8 @@ public class AccountHelper extends DataProxy {
      * @param enableVideoAd 是否開啟影音廣告
      * @param name 真實姓名
      */
-    public void updateMIBInfo(String idNumber, String idImageFront, String idImageBack, String email, String cellPhone, String mailAddress, String domicile, boolean enableVideoAd, String name){
-        if(TextUtils.isEmpty(idNumber) || TextUtils.isEmpty(idImageFront) || TextUtils.isEmpty(idImageBack) || TextUtils.isEmpty(email) || TextUtils.isEmpty(cellPhone) || TextUtils.isEmpty(mailAddress) || TextUtils.isEmpty(domicile) || TextUtils.isEmpty(name)){
+    public void updateMIBInfo(String idNumber, String idImageFront, String idImageBack, String email, String telephone, String cellPhone, String mailAddress, String domicile, boolean enableVideoAd, String name){
+        if(TextUtils.isEmpty(idNumber) || TextUtils.isEmpty(idImageFront) || TextUtils.isEmpty(idImageBack) || TextUtils.isEmpty(email) || TextUtils.isEmpty(telephone) || TextUtils.isEmpty(cellPhone) || TextUtils.isEmpty(mailAddress) || TextUtils.isEmpty(domicile) || TextUtils.isEmpty(name)){
             listener.onError(Error.MISS_PARAMETER);
             return;
         }
@@ -263,6 +263,7 @@ public class AccountHelper extends DataProxy {
         params.add(new BasicNameValuePair("id_image_front", idImageFront));
         params.add(new BasicNameValuePair("id_image_back", idImageBack));
         params.add(new BasicNameValuePair("email", email));
+        params.add(new BasicNameValuePair("telephone", telephone));
         params.add(new BasicNameValuePair("cellphone", cellPhone));
         params.add(new BasicNameValuePair("mail_address", mailAddress));
         params.add(new BasicNameValuePair("domicile", domicile));

@@ -2,6 +2,7 @@ package net.pixnet.sdk.utils;
 
 import android.os.AsyncTask;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,7 +94,12 @@ public class RequestController {
             String response;
             request = requestArray[0];
             if (request != null) {
-                response=getHttpConnectionTool().performRequest(request);
+                try {
+                    response=getHttpConnectionTool().performRequest(request);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    response=null;
+                }
             }
             else{
                 response=null;

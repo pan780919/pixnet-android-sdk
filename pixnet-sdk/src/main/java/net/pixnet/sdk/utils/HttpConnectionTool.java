@@ -9,7 +9,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
@@ -130,47 +129,30 @@ public class HttpConnectionTool implements ConnectionTool {
         return url;
     }
 
-    private InputStream request(HttpUriRequest request) {
+    private InputStream request(HttpUriRequest request) throws IOException {
 //        System.out.println("request"+request.toString());
         requestObj = request;
         userStop = false;
         HttpClient client = createHttpClient();
         HttpResponse response = null;
-        try {
-            response = client.execute(request);
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            if (!userStop) {
-                e.printStackTrace();
-            }
-        }
-        if (response == null||userStop) return null;
+        response = client.execute(request);
+        if (response == null || userStop)
+            return null;
 
         HttpEntity entity = response.getEntity();
         InputStream in = null;
-        try {
-            in = entity.getContent();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        in = entity.getContent();
         return in;
     }
 
-    private String getStringFromInputStream(InputStream in) {
+    private String getStringFromInputStream(InputStream in) throws IOException {
         if (in == null) return null;
 
         byte[] data = new byte[1024];
         int length;
         ByteArrayOutputStream mByteArrayOutputStream = new ByteArrayOutputStream();
-        try {
-            while ((length = in.read(data)) != -1)
-                mByteArrayOutputStream.write(data, 0, length);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        while ((length = in.read(data)) != -1)
+            mByteArrayOutputStream.write(data, 0, length);
 
         return new String(mByteArrayOutputStream.toByteArray());
     }
@@ -254,9 +236,9 @@ public class HttpConnectionTool implements ConnectionTool {
     }
 
     @Override
-    public String performRequest(Request request) {
-        Helper.log(request.getMethod().name());
+    public String performRequest(Request request) throws IOException {
         String url=formatUrl(request.getUrl());
+        Helper.log(request.getMethod().name());
         Helper.log(url);
         List<NameValuePair> params=request.getParams();
         List<NameValuePair> headerList=request.getHeaders();
@@ -284,11 +266,7 @@ public class HttpConnectionTool implements ConnectionTool {
                 hur = new HttpPost(url);
                 if (params != null) {
                     HttpEntity entity = null;
-                    try {
-                        entity = new UrlEncodedFormEntity(params, HTTP.UTF_8);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
+                    entity = new UrlEncodedFormEntity(params, HTTP.UTF_8);
                     if (entity != null)
                         ((HttpPost)hur).setEntity(entity);
                 }
