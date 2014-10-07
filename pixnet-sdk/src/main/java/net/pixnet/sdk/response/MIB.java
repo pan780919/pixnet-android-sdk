@@ -11,6 +11,8 @@ import java.util.List;
 
 public class MIB extends BasicResponse {
     public int applied;
+    public double estimated_revenue;
+    public double estimated_revenue_last;
     public int status;
     public int payable_revenue;
     public boolean payable;
@@ -39,6 +41,10 @@ public class MIB extends BasicResponse {
             return jo;
         jo=jo.getJSONObject("mib");
 
+        if(jo.has("estimated_revenue") && !jo.isNull("estimated_revenue"))
+            estimated_revenue=DataProxy.getJsonDouble(jo, "estimated_revenue");
+        if(jo.has("estimated_revenue_last") && !jo.isNull("estimated_revenue_last"))
+            estimated_revenue_last=DataProxy.getJsonDouble(jo, "estimated_revenue_last");
         if(jo.has("applied") && !jo.isNull("applied"))
             applied=jo.getInt("applied");
         if(jo.has("status") && !jo.isNull("status"))
