@@ -14,6 +14,8 @@ public class AccountInfo extends BasicResponse {
         M
     }
 
+    public String area;
+    public String sub_area;
     public String name;
     public String display_name;
     public String avatar;
@@ -50,6 +52,10 @@ public class AccountInfo extends BasicResponse {
             return jo;
         jo=jo.getJSONObject("account");
 
+        if(jo.has("area"))
+            area=jo.getString("area");
+        if(jo.has("sub_area"))
+            sub_area=jo.getString("sub_area");
         if(jo.has("name"))
             name=jo.getString("name");
         if(jo.has("display_name"))
