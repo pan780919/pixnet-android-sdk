@@ -148,10 +148,10 @@ public class AccountHelper extends DataProxy {
     }
 
     /**
-     * @see #updateAccountInfo(String, String, String, net.pixnet.sdk.response.AccountInfo.Gender, String, String, String, String, String)
+     * @see #updateAccountInfo(String, String, String, net.pixnet.sdk.response.AccountInfo.Gender, String, String, String, String, String, String, String)
      */
     public void updateAccountInfo(String password, String displayName){
-        updateAccountInfo(password, displayName, null, null, null, null, null, null, null);
+        updateAccountInfo(password, displayName, null, null, null, null, null, null, null, null, null);
     }
     /**
      * 修改認證使用者資訊, 傳回結果：{@link net.pixnet.sdk.response.BasicResponse}
@@ -159,13 +159,15 @@ public class AccountHelper extends DataProxy {
      * @param displayName 使用者暱稱
      * @param email 信箱
      * @param gender 性別
+     * @param area 縣市
+     * @param subArea 區
      * @param address 住址
      * @param phone 電話
      * @param birthday 生日（YYYYMMDD）
      * @param education 教育程度 (中學以下, 高中/高職, 專科, 大學, 研究所)
      * @param avatar 大頭照 (base64)
      */
-    public void updateAccountInfo(String password, String displayName, String email, AccountInfo.Gender gender, String address, String phone, String birthday, String education, String avatar){
+    public void updateAccountInfo(String password, String displayName, String email, AccountInfo.Gender gender, String area, String subArea, String address, String phone, String birthday, String education, String avatar){
         if(TextUtils.isEmpty(password)){
             listener.onError(Error.MISS_PARAMETER+":password");
             return;
@@ -178,6 +180,10 @@ public class AccountHelper extends DataProxy {
             params.add(new BasicNameValuePair("email", email));
         if(gender!=null)
             params.add(new BasicNameValuePair("gender", gender==AccountInfo.Gender.F?"F":"M"));
+        if(!TextUtils.isEmpty(area))
+            params.add(new BasicNameValuePair("area", area));
+        if(!TextUtils.isEmpty(subArea))
+            params.add(new BasicNameValuePair("sub_area", subArea));
         if(!TextUtils.isEmpty(address))
             params.add(new BasicNameValuePair("address", address));
         if(!TextUtils.isEmpty(phone))
