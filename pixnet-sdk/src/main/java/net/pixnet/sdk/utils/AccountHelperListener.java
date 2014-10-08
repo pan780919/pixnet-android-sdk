@@ -30,5 +30,6 @@ public class AccountHelperListener implements DataProxy.DataProxyListener {
     public void onGetAnalyticData(Analytics response){}
     public void onUpdatePassword(BasicResponse response){}
     public void onGetNotifications(NotificationList response){}
+    public void markNotificationAsRead(BasicResponse response){}
     public void onGetUserInfo(User response){}
 }

@@ -497,6 +497,33 @@ public class AccountHelper extends DataProxy {
     }
 
     /**
+     * 將通知設為已讀
+     * @param id notification id
+     */
+    public void markNotificationAsRead(String id){
+        if(TextUtils.isEmpty(id)){
+            listener.onError(Error.MISS_PARAMETER);
+            return;
+        }
+        String url=URL_ACCOUNT_NOTIFICATIONS+"/"+id+"/read";
+        performAPIRequest(true, url, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((AccountHelperListener) listener).markNotificationAsRead(parsedResponse);
+            }
+        });
+    }
+
+    /**
      * 讀取使用者公開資訊, 傳回結果：{@link net.pixnet.sdk.response.User}
      * @param userName 使用者名稱
      */
