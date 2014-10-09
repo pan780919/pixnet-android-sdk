@@ -119,7 +119,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void getSetAndFolderList(String userName, int perPage, int page, boolean trimUser){
         if(userName==null || TextUtils.isEmpty(userName)){
-            listener.onError(Error.MISS_PARAMETER+":userName");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -166,7 +166,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void getFolder(String folderId, String userName, int perPage, int page){
         if(TextUtils.isEmpty(userName)) {
-            listener.onError(Error.MISS_PARAMETER+":userName");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -212,7 +212,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void getFolderList(String userName, int perPage, int page, boolean trimUser){
         if(TextUtils.isEmpty(userName)) {
-            listener.onError(Error.MISS_PARAMETER+":userName");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -258,7 +258,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void getSet(String userName, String id, int perPage, int page){
         if(userName==null || TextUtils.isEmpty(userName)){
-            listener.onError(Error.MISS_PARAMETER+":userName");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -317,7 +317,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void getSetList(String userName, String parentId, boolean trimUser, int perPage, int page){
         if(TextUtils.isEmpty(userName)){
-            listener.onError(Error.MISS_PARAMETER+":userName");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -382,7 +382,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void getSetListByNear(String userName, double lat, double lng, int minDistance, int maxDistance, int perPage, int page, boolean trimUser){
         if(TextUtils.isEmpty(userName)){
-            listener.onError(Error.MISS_PARAMETER+":userName");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -427,7 +427,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void getElement(String elementId, String userName, boolean withSet, boolean useIframe, int iframeWidth, int iframeHeight){
         if(TextUtils.isEmpty(elementId) || TextUtils.isEmpty(userName)){
-            listener.onError(Error.MISS_PARAMETER+":elementId, userName");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -496,11 +496,11 @@ public class AlbumHelper extends DataProxy {
      */
     public void getElementListBySet(String userName, String setId, ElementType type, int perPage, int page, String password, boolean withDetail, boolean trimUser, boolean useIframe, int iframeWidth, int iframeHeight){
         if(TextUtils.isEmpty(userName)){
-            listener.onError(Error.MISS_PARAMETER+":userName");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         if(TextUtils.isEmpty(setId)){
-            listener.onError(Error.MISS_PARAMETER+":setId");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -551,7 +551,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void getElementListByNear(String userName, double lat, double lng, int distanceMin, int distanceMax, int perPage, int page, boolean withDetail, ElementType type, boolean trimUesr){
         if(TextUtils.isEmpty(userName)){
-            listener.onError(Error.MISS_PARAMETER+":userName");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         if(lat<0 || lng<0){
@@ -630,7 +630,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void getCommentListBySet(String userName, String setId, String password, int perPage, int page){
         if(TextUtils.isEmpty(userName) || TextUtils.isEmpty(setId)){
-            listener.onError(Error.MISS_PARAMETER+":userName, setId");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -687,7 +687,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void getCommentListByElement(String userName, String id, boolean isSet, String password, int perPage, int page){
         if(TextUtils.isEmpty(userName) || TextUtils.isEmpty(id)){
-            listener.onError(Error.MISS_PARAMETER+":userName, id");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -723,7 +723,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void addFolder(String title, String description){
         if(TextUtils.isEmpty(title) || TextUtils.isEmpty(description)){
-            listener.onError(Error.MISS_PARAMETER+":title, description");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -771,7 +771,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void addSet(String title, String description, Permission permission, String categoryId, boolean isLockRight, boolean allowCC, CommentPermission canComment, String password, String passwordHint, List<String> friendGroupIds, boolean allowCommercialUsr, boolean allowDerivatoin, String parentId){
         if(TextUtils.isEmpty(title) || TextUtils.isEmpty(description)){
-            listener.onError(Error.MISS_PARAMETER+":title, description");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -842,7 +842,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void addFaceByRecommend(String userName, final String recommendId){
         if(TextUtils.isEmpty(userName) || TextUtils.isEmpty(recommendId)){
-            listener.onError(Error.MISS_PARAMETER + ":userName, recommendId");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -875,7 +875,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void addFaceByElement(String userName, String elementId, int x, int y, int width, int height){
         if(TextUtils.isEmpty(userName) || TextUtils.isEmpty(elementId)){
-            listener.onError(Error.MISS_PARAMETER + ":userName, recommendId");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         if(x<0 || y<0 || width<1 || height<1){
@@ -913,7 +913,7 @@ public class AlbumHelper extends DataProxy {
     */
     public void updateFolder(String folderId, String title, String description){
         if(TextUtils.isEmpty(folderId) || TextUtils.isEmpty(title) || TextUtils.isEmpty(description)){
-            listener.onError(Error.MISS_PARAMETER+":folderId, title, description");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -963,7 +963,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void updateSet(String setId, String title, String description, Permission permission, String categoryId, boolean isLockRight, boolean allowCC, CommentPermission canComment, String password, String passwordHint, List<String> friendGroupIds, boolean allowCommercialUsr, boolean allowDerivatoin, String parentId){
         if(TextUtils.isEmpty(title) || TextUtils.isEmpty(description)){
-            listener.onError(Error.MISS_PARAMETER+":title, description");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -1029,7 +1029,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void updateFace(String faceId, String userName, String elementId, int x, int y, int width, int height){
         if(TextUtils.isEmpty(faceId) || TextUtils.isEmpty(userName) || TextUtils.isEmpty(elementId)){
-            listener.onError(Error.MISS_PARAMETER + ": faceId, userName, recommendId");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         if(x<0 || y<0 || width<1 || height<1){
@@ -1066,7 +1066,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void deleteFolder(String folderId){
         if(TextUtils.isEmpty(folderId)){
-            listener.onError(Error.MISS_PARAMETER+":folderId");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         performAPIRequest(true, URL_FOLDER+"/"+folderId, Method.DELETE, new RequestCallback() {
@@ -1092,7 +1092,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void deleteSet(String setId){
         if(TextUtils.isEmpty(setId)){
-            listener.onError(Error.MISS_PARAMETER+":setId");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         performAPIRequest(true, URL_SET+"/"+setId, Method.DELETE, new RequestCallback() {
@@ -1118,7 +1118,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void deleteElement(String elementId){
         if(TextUtils.isEmpty(elementId)){
-            listener.onError(Error.MISS_PARAMETER+":elementId");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         performAPIRequest(true, URL_ELEMENTS+"/"+elementId, Method.DELETE, new RequestCallback() {
@@ -1144,7 +1144,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void deleteCommentFromSet(String commentId){
         if(TextUtils.isEmpty(commentId)){
-            listener.onError(Error.MISS_PARAMETER+":commentId");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         performAPIRequest(true, URL_SET_COMMENT+"/"+commentId, Method.DELETE, new RequestCallback() {
@@ -1170,7 +1170,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void deleteCommentFromElement(String commentId){
         if(TextUtils.isEmpty(commentId)){
-            listener.onError(Error.MISS_PARAMETER+":commentId");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         performAPIRequest(true, URL_COMMENT+"/"+commentId, Method.DELETE, new RequestCallback() {
@@ -1196,7 +1196,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void deleteFace(String faceId){
         if(TextUtils.isEmpty(faceId)){
-            listener.onError(Error.MISS_PARAMETER+":faceId");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         performAPIRequest(true, URL_FACES+"/"+faceId, Method.DELETE, new RequestCallback() {
@@ -1222,7 +1222,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void sortSetAndFolders(List<String> ids){
         if(ids==null || ids.size()<1){
-            listener.onError(Error.MISS_PARAMETER+":ids");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         String idsString="";
@@ -1265,7 +1265,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void sortSets(String parentId, List<String> ids){
         if(TextUtils.isEmpty(parentId) || ids==null || ids.size()<1){
-            listener.onError(Error.MISS_PARAMETER+":parentId, ids");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         String idsString="";
@@ -1302,7 +1302,7 @@ public class AlbumHelper extends DataProxy {
      */
     public void sortElementList(String setId, List<String> ids){
         if(TextUtils.isEmpty(setId) || ids==null){
-            listener.onError(Error.MISS_PARAMETER+":setId, ids");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         if(ids.size()<1){

@@ -51,32 +51,24 @@ public class AccountHelper extends DataProxy {
     }
 
     /**
+     * 取得手機驗證狀態
+     */
+    public void cellphoneVerification(){
+        performCellphoneVerification(null);
+    }
+
+    /**
      * 收到認證碼後，進行認證
      * @param code
      */
     public void cellphoneVerification(String code){
         if(TextUtils.isEmpty(code)){
-            listener.onError(Error.MISS_PARAMETER+" code");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("code", code));
-
-        performAPIRequest(true, URL_PHONE_VERIFY, Request.Method.POST, new Request.RequestCallback() {
-            @Override
-            public void onResponse(String response) {
-                if(handleBasicResponse(response))
-                    return;
-                CellphoneVerification parsedResponse;
-                try {
-                    parsedResponse=new CellphoneVerification(response);
-                } catch (JSONException e) {
-                    listener.onError(Error.DATA_PARSE_FAILED);
-                    return;
-                }
-                ((AccountHelperListener) listener).onCellphoneVerification(parsedResponse);
-            }
-        });
+        performCellphoneVerification(params);
     }
 
     /**
@@ -86,7 +78,7 @@ public class AccountHelper extends DataProxy {
      */
     public void cellphoneVerification(String phoneNumber, String countryCode){
         if(TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(countryCode)){
-            listener.onError(Error.MISS_PARAMETER+" phoneNumber, countryCode");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         if(phoneNumber.startsWith("0"))
@@ -94,8 +86,11 @@ public class AccountHelper extends DataProxy {
         List<NameValuePair> params=new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("cellphone", phoneNumber));
         params.add(new BasicNameValuePair("calling_code", countryCode));
+        performCellphoneVerification(params);
+    }
 
-        performAPIRequest(true, URL_PHONE_VERIFY, Request.Method.POST, new Request.RequestCallback() {
+    private void performCellphoneVerification(List<NameValuePair> params){
+        performAPIRequest(true, URL_PHONE_VERIFY, params==null?Request.Method.GET:Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 if(handleBasicResponse(response))
@@ -109,7 +104,7 @@ public class AccountHelper extends DataProxy {
                 }
                 ((AccountHelperListener) listener).onCellphoneVerification(parsedResponse);
             }
-        });
+        }, params);
     }
 
     /**
@@ -169,7 +164,7 @@ public class AccountHelper extends DataProxy {
      */
     public void updateAccountInfo(String password, String displayName, String email, AccountInfo.Gender gender, String area, String subArea, String address, String phone, String birthday, String education, String avatar){
         if(TextUtils.isEmpty(password)){
-            listener.onError(Error.MISS_PARAMETER+":password");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -319,7 +314,7 @@ public class AccountHelper extends DataProxy {
      */
     public void getMIBPostionInfo(String id){
         if(TextUtils.isEmpty(id)){
-            listener.onError(Error.MISS_PARAMETER+":id");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         performAPIRequest(true, URL_ACCOUNT_MIB_POSTION+"/"+id, new Request.RequestCallback() {
@@ -347,7 +342,7 @@ public class AccountHelper extends DataProxy {
      */
     public void updateMIBPositionInfo(String id, boolean enabled, boolean fixed){
         if(TextUtils.isEmpty(id)){
-            listener.onError(Error.MISS_PARAMETER+":id");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -434,7 +429,7 @@ public class AccountHelper extends DataProxy {
      */
     public void updatePassword(String oldPassword, String newPassword){
         if(TextUtils.isEmpty(oldPassword) || TextUtils.isEmpty(newPassword)){
-            listener.onError(Error.MISS_PARAMETER+":oldPassword, newPassword");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();

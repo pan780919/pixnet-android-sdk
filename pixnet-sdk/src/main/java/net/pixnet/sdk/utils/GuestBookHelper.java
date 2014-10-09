@@ -36,7 +36,7 @@ public class GuestBookHelper extends DataProxy {
 
     public void getGuestbookList(String user, String filter, String cursor, int per_page) {
         if (TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -69,15 +69,15 @@ public class GuestBookHelper extends DataProxy {
 
     public void addGuestbook(String user, String title, String body, String auther, String url, String email, boolean is_open) {
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (title == null || TextUtils.isEmpty(title)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":title");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (body == null || TextUtils.isEmpty(body)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":body");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -115,11 +115,11 @@ public class GuestBookHelper extends DataProxy {
 
     public void getGuestbook(String user, String id) {
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -144,11 +144,11 @@ public class GuestBookHelper extends DataProxy {
 
     public void replyGuestbook(String id, String reply) {
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (reply == null || TextUtils.isEmpty(reply)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":reply");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -173,7 +173,7 @@ public class GuestBookHelper extends DataProxy {
 
     public void setGuestbookVisibility(String id, boolean visible) {
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -202,7 +202,7 @@ public class GuestBookHelper extends DataProxy {
 
     public void markGuestbookToSpam(String id) {
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -225,7 +225,7 @@ public class GuestBookHelper extends DataProxy {
 
     public void markGuestbookHam(String id) {
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -248,7 +248,7 @@ public class GuestBookHelper extends DataProxy {
 
     public void deleteGuestbook(String id) {
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();

@@ -54,7 +54,7 @@ public class BlockHelper extends DataProxy {
      */
     public void addBlock(String... user) {
         if(user==null || user.length<1){
-            listener.onError(Error.MISS_PARAMETER + ":user");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         String userstr="";
@@ -66,7 +66,7 @@ public class BlockHelper extends DataProxy {
             }
         }
         if(userstr.length()<1){
-            listener.onError(Error.MISS_PARAMETER + ":user");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -95,7 +95,7 @@ public class BlockHelper extends DataProxy {
      */
     public void deleteBlock(String user) {
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();

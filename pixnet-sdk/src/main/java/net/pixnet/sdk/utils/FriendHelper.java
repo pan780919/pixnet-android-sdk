@@ -84,7 +84,7 @@ public class FriendHelper extends DataProxy {
 
     public void addGroup(String name) {
         if (name == null || TextUtils.isEmpty(name)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":name");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -108,11 +108,11 @@ public class FriendHelper extends DataProxy {
 
     public void updateGroup(String id, String name) {
         if (name == null || TextUtils.isEmpty(name)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":name");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -136,7 +136,7 @@ public class FriendHelper extends DataProxy {
 
     public void removeGroup(String id) {
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -184,7 +184,7 @@ public class FriendHelper extends DataProxy {
 
     public void addFriendship(String user_name) {
         if (user_name == null || TextUtils.isEmpty(user_name)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user_name");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -208,7 +208,7 @@ public class FriendHelper extends DataProxy {
 
     public void removeFriendship(String user_name) {
         if (user_name == null || TextUtils.isEmpty(user_name)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user_name");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -232,11 +232,11 @@ public class FriendHelper extends DataProxy {
 
     public void addFriendshipToGroup(String user_name, String group_id) {
         if (user_name == null || TextUtils.isEmpty(user_name)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user_name");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (group_id == null || TextUtils.isEmpty(group_id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":group_id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -261,11 +261,11 @@ public class FriendHelper extends DataProxy {
 
     public void removeFriendshipFromGroup(String user_name, String group_id) {
         if (user_name == null || TextUtils.isEmpty(user_name)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user_name");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (group_id == null || TextUtils.isEmpty(group_id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":group_id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -311,7 +311,7 @@ public class FriendHelper extends DataProxy {
 
     public void addSubscription(String user, String group_id) {
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -337,7 +337,7 @@ public class FriendHelper extends DataProxy {
 
     public void removeSubscription(String user) {
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -361,11 +361,11 @@ public class FriendHelper extends DataProxy {
 
     public void joinSubscriptionGroup(String user, String group_ids) {
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (group_ids == null || TextUtils.isEmpty(group_ids)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":group_ids");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -390,11 +390,11 @@ public class FriendHelper extends DataProxy {
 
     public void leaveSubscriptionGroup(String user, String group_ids) {
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (group_ids == null || TextUtils.isEmpty(group_ids)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":group_id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -437,7 +437,7 @@ public class FriendHelper extends DataProxy {
 
     public void addSubscriptionGroup(String name) {
         if (name == null || TextUtils.isEmpty(name)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":name");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -461,11 +461,11 @@ public class FriendHelper extends DataProxy {
 
     public void updateSubscriptionGroup(String name, String id) {
         if (name == null || TextUtils.isEmpty(name)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":name");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -489,7 +489,7 @@ public class FriendHelper extends DataProxy {
 
     public void removeSubscriptionGroup(String id) {
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -512,7 +512,7 @@ public class FriendHelper extends DataProxy {
 
     public void sortSubscriptionGroupList(String ids) {
         if (ids == null || TextUtils.isEmpty(ids)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":ids");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();

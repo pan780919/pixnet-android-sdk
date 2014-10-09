@@ -51,7 +51,7 @@ public class BlogHelper extends DataProxy {
 
     public void getBlogCategorieList(String user, String blog_password) {
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -110,7 +110,7 @@ public class BlogHelper extends DataProxy {
 
     public void addCategory(String name, String type, String description, String show_index, String site_category_id, String site_category_done) {
         if (name == null || TextUtils.isEmpty(name)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":name");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -149,7 +149,7 @@ public class BlogHelper extends DataProxy {
 
     public void updateCategory(String id, String name, String type, String description, String show_index, String site_category_id, String site_category_done) {
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -194,7 +194,7 @@ public class BlogHelper extends DataProxy {
 
     public void deleteCategory(String id, String type) {
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -220,7 +220,7 @@ public class BlogHelper extends DataProxy {
 
     public void sortCategorieList(String ids) {
         if (ids == null || TextUtils.isEmpty(ids)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":ids");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -256,7 +256,7 @@ public class BlogHelper extends DataProxy {
 
     public void getAllArticleList(String user, String blog_password, int page, int per_page, String category_id, String status, String is_top, boolean trim_user) {
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -304,11 +304,11 @@ public class BlogHelper extends DataProxy {
 
     public void getArticle(String id, String user, String blog_password, String article_password) {
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -346,11 +346,11 @@ public class BlogHelper extends DataProxy {
 
     public void getRelatedArticleList(String id, String user, String with_body, String limit) {
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -384,11 +384,11 @@ public class BlogHelper extends DataProxy {
 
     public void addArticle(String title, String body, String status, String public_at, String category_id, String site_category_id, String use_nl2br, String comment_perm, String comment_hidden, String tags, String thumb, String trackback, String password, String password_hint, String friend_group_ids, String notify_twitter, String notify_facebook) {
         if (title == null || TextUtils.isEmpty(title)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":title");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (body == null || TextUtils.isEmpty(body)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":body");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -458,7 +458,7 @@ public class BlogHelper extends DataProxy {
 
     public void updateArticle(String id, String title, String body, String status, String public_at, String category_id, String site_category_id, String use_nl2br, String comment_perm, String comment_hidden, String tags, String thumb, String trackback, String password, String password_hint, String friend_group_ids, String notify_twitter, String notify_facebook) {
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -532,7 +532,7 @@ public class BlogHelper extends DataProxy {
 
     public void deleteArticle(String id) {
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -559,7 +559,7 @@ public class BlogHelper extends DataProxy {
 
     public void getArticleListByLatest(String user, String blog_password, String limit, boolean trim_user) {
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -604,7 +604,7 @@ public class BlogHelper extends DataProxy {
      */
     public void getArticleListByHot(String user, String blogPassword, int limit, boolean trim_user) {
         if (TextUtils.isEmpty(user)) {
-            listener.onError(Error.MISS_PARAMETER + ":user");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -650,7 +650,7 @@ public class BlogHelper extends DataProxy {
      */
     public void getArticleListByHotWithin(String user, int limit, boolean trim_user, String period) {
         if (TextUtils.isEmpty(user) || TextUtils.isEmpty(period)) {
-            listener.onError(Error.MISS_PARAMETER + ":user, date");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -688,11 +688,11 @@ public class BlogHelper extends DataProxy {
 
     public void searchArticleList(String key, String user, String site, String type, int page, int per_page) {
         if (key == null || TextUtils.isEmpty(key)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":key");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -765,7 +765,7 @@ public class BlogHelper extends DataProxy {
      */
     public void getCommentList(String user, String article_id, String blog_password, String article_password, String filter, String sort, int page, int per_page) {
         if (TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -832,15 +832,15 @@ public class BlogHelper extends DataProxy {
      */
     public void addComment(String article_id, String body, String user, String author, String title, String url, String is_open, String email, String blog_password, String article_password) {
         if (article_id == null || TextUtils.isEmpty(article_id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":article_id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (body == null || TextUtils.isEmpty(body)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":body");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -891,11 +891,11 @@ public class BlogHelper extends DataProxy {
 
     public void getComment(String id, String user) {
         if (id == null || TextUtils.isEmpty(id)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":id");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -924,11 +924,11 @@ public class BlogHelper extends DataProxy {
      */
     public void replyComment(String body, String... id) {
         if(id==null || id.length<1){
-            listener.onError(Error.MISS_PARAMETER + ":id");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         if (body == null || TextUtils.isEmpty(body)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":body");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         String ids="";
@@ -940,7 +940,7 @@ public class BlogHelper extends DataProxy {
             }
         }
         if(ids.length()<1){
-            listener.onError(Error.MISS_PARAMETER + ":id");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -970,7 +970,7 @@ public class BlogHelper extends DataProxy {
      */
     public void setCommentVisibility(boolean visible, String... id) {
         if(id==null || id.length<1){
-            listener.onError(Error.MISS_PARAMETER + ":id");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         String ids="";
@@ -982,7 +982,7 @@ public class BlogHelper extends DataProxy {
             }
         }
         if(ids.length()<1){
-            listener.onError(Error.MISS_PARAMETER + ":id");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -1016,7 +1016,7 @@ public class BlogHelper extends DataProxy {
      */
     public void deleteComment(String... id) {
         if(id==null || id.length<1){
-            listener.onError(Error.MISS_PARAMETER + ":id");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         String ids="";
@@ -1028,7 +1028,7 @@ public class BlogHelper extends DataProxy {
             }
         }
         if(ids.length()<1){
-            listener.onError(Error.MISS_PARAMETER + ":id");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -1056,7 +1056,7 @@ public class BlogHelper extends DataProxy {
 
     public void getCommentListByLatest(String user) {
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -1085,7 +1085,7 @@ public class BlogHelper extends DataProxy {
      */
     public void markComment(boolean isSpam, String... id) {
         if(id==null || id.length<1){
-            listener.onError(Error.MISS_PARAMETER + ":id");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         String ids="";
@@ -1097,7 +1097,7 @@ public class BlogHelper extends DataProxy {
             }
         }
         if(ids.length()<1){
-            listener.onError(Error.MISS_PARAMETER + ":id");
+            listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -1129,7 +1129,7 @@ public class BlogHelper extends DataProxy {
 
     public void getBlogInfo(String user) {
         if (user == null || TextUtils.isEmpty(user)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":user");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -1193,7 +1193,7 @@ public class BlogHelper extends DataProxy {
      */
     public void getTags(String userName){
         if (TextUtils.isEmpty(userName)) {
-            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER + ":userName");
+            listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
         }
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
