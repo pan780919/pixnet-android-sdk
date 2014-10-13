@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.utils.ConnectionTool;
+import net.pixnet.sdk.utils.FileNameValuePair;
 import net.pixnet.sdk.utils.HttpConnectionTool;
 import net.pixnet.sdk.utils.OAuthConnectionTool;
 import net.pixnet.sdk.utils.Request;
@@ -114,6 +115,9 @@ public abstract class DataProxy {
         performAPIRequest(authentication, url, method, callback, null);
     }
     public void performAPIRequest(boolean authentication, String url, Method method, RequestCallback callback, List<NameValuePair> params){
+        performAPIRequest(authentication, url, method, callback, params, null);
+    }
+    public void performAPIRequest(boolean authentication, String url, Method method, RequestCallback callback, List<NameValuePair> params, List<FileNameValuePair> files){
         if(authentication){
             boolean isLogin=PIXNET.isLogin(c);
             if(!isLogin){
@@ -126,6 +130,8 @@ public abstract class DataProxy {
         r.setMethod(method);
         if(params!=null)
             r.setParams(params);
+        if(files!=null)
+            r.setFiles(files);
         r.setCallback(callback);
 
         RequestController rc=RequestController.getInstance();

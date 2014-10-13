@@ -1,5 +1,7 @@
 package net.pixnet.sdk.utils;
 
+import net.pixnet.sdk.utils.HttpConnectionTool.FileNameValuePair;
+
 import org.apache.http.NameValuePair;
 
 import java.util.List;
@@ -13,6 +15,7 @@ public class Request {
     private Method method = Method.GET;
     private List<NameValuePair> params;
     private List<NameValuePair> headers;
+    private List<FileNameValuePair> files;
     private RequestCallback callback;
 
     public enum Method{
@@ -68,6 +71,14 @@ public class Request {
 
     public List<NameValuePair> getHeaders() {
         return headers;
+    }
+
+    public List<FileNameValuePair> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<FileNameValuePair> files) {
+        this.files = files;
     }
 
     public interface RequestCallback {

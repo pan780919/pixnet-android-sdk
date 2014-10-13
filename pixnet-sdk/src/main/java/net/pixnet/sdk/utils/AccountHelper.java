@@ -2,7 +2,7 @@ package net.pixnet.sdk.utils;
 
 import android.text.TextUtils;
 
-import net.pixnet.sdk.proxy.*;
+import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.proxy.Error;
 import net.pixnet.sdk.response.AccountInfo;
 import net.pixnet.sdk.response.Analytics;
@@ -18,6 +18,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -254,15 +255,13 @@ public class AccountHelper extends DataProxy {
      * @param enableVideoAd 是否開啟影音廣告
      * @param name 真實姓名
      */
-    public void updateMIBInfo(String idNumber, String idImageFront, String idImageBack, String email, String telephone, String cellPhone, String mailAddress, String domicile, boolean enableVideoAd, String name){
-        if(TextUtils.isEmpty(idNumber) || TextUtils.isEmpty(idImageFront) || TextUtils.isEmpty(idImageBack) || TextUtils.isEmpty(email) || TextUtils.isEmpty(telephone) || TextUtils.isEmpty(cellPhone) || TextUtils.isEmpty(mailAddress) || TextUtils.isEmpty(domicile) || TextUtils.isEmpty(name)){
+    public void updateMIBInfo(String idNumber, File idImageFront, File idImageBack, String email, String telephone, String cellPhone, String mailAddress, String domicile, boolean enableVideoAd, String name){
+        if(TextUtils.isEmpty(idNumber) || idImageFront==null || idImageBack==null || TextUtils.isEmpty(email) || TextUtils.isEmpty(telephone) || TextUtils.isEmpty(cellPhone) || TextUtils.isEmpty(mailAddress) || TextUtils.isEmpty(domicile) || TextUtils.isEmpty(name)){
             listener.onError(Error.MISS_PARAMETER);
             return;
         }
         List<NameValuePair> params=new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("id_number", idNumber));
-        params.add(new BasicNameValuePair("id_image_front", idImageFront));
-        params.add(new BasicNameValuePair("id_image_back", idImageBack));
         params.add(new BasicNameValuePair("email", email));
         params.add(new BasicNameValuePair("telephone", telephone));
         params.add(new BasicNameValuePair("cellphone", cellPhone));
@@ -270,6 +269,10 @@ public class AccountHelper extends DataProxy {
         params.add(new BasicNameValuePair("domicile", domicile));
         params.add(new BasicNameValuePair("enable_video_ad", enableVideoAd?"1":"0"));
         params.add(new BasicNameValuePair("name", name));
+
+        List<FileNameValuePair> files=new ArrayList<FileNameValuePair>();
+        files.add(new FileNameValuePair("id_image_front", idImageFront));
+        files.add(new FileNameValuePair("id_image_back", idImageBack));
 
         performAPIRequest(true, URL_ACCOUNT_MIB, Request.Method.POST, new Request.RequestCallback() {
             @Override
@@ -285,7 +288,7 @@ public class AccountHelper extends DataProxy {
                 }
                 ((AccountHelperListener) listener).onUpdateMIBInfo(parsedResponse);
             }
-        }, params);
+        }, params, files);
     }
 
     /**
