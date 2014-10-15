@@ -1,7 +1,5 @@
 package net.pixnet.sdk.utils;
 
-import net.pixnet.sdk.utils.HttpConnectionTool.FileNameValuePair;
-
 import org.apache.http.NameValuePair;
 
 import java.util.List;

@@ -8,13 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import net.pixnet.sdk.PIXNET;
-import net.pixnet.sdk.proxy.*;
-import net.pixnet.sdk.proxy.Error;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.MIB;
-import net.pixnet.sdk.utils.AccountHelper;
-import net.pixnet.sdk.utils.AccountHelperListener;
 import net.pixnet.sdk.utils.Helper;
+import net.pixnet.sdk.utils.PixnetApiHelper;
+import net.pixnet.sdk.utils.PixnetApiResponseListener;
 
 public class Account extends ItemDetailFragment {
 
@@ -80,7 +78,7 @@ public class Account extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AccountHelper account=PIXNET.getAccountHelper(getActivity(), new AccountHelperListener() {
+                PixnetApiHelper apiHelper=PIXNET.getApiHelper(getActivity(), new PixnetApiResponseListener() {
                     @Override
                     public void onError(String msg) {
                         Helper.log("error:" + msg);
@@ -102,36 +100,36 @@ public class Account extends ItemDetailFragment {
                 });
                 switch (Apis.values()[position]){
                     case getAccountInfo:
-                        account.getAccountInfo(true, null, true, true, true);
+                        apiHelper.getAccountInfo(true, null, true, true, true);
                         break;
                     case updateAccountInfo:
-                        account.updateAccountInfo("121111", "UncleBen");
+                        apiHelper.updateAccountInfo("121111", "UncleBen");
                         break;
                     case getMIBInfo:
-                        account.getMIBInfo();
+                        apiHelper.getMIBInfo();
                         break;
                     case updateMIBInfo:
                         break;
                     case getMIBPositionInfo:
-                        account.getMIBPostionInfo("790");
+                        apiHelper.getMIBPostionInfo("790");
                         break;
                     case updateMIBPositionInfo:
-                        account.updateMIBPositionInfo("790", true, true);
+                        apiHelper.updateMIBPositionInfo("790", true, true);
                         break;
                     case payMIB:
-                        account.payMIB();
+                        apiHelper.payMIB();
                         break;
                     case getAnalyticData:
-                        account.getAnalyticData();
+                        apiHelper.getAnalyticData();
                         break;
                     case updatePassword:
-                        account.updatePassword("121111", "221111");
+                        apiHelper.updatePassword("121111", "221111");
                         break;
                     case getNotificationList:
-                        account.getNotifications();
+                        apiHelper.getNotifications();
                         break;
                     case getUserInfo:
-                        account.getUserInfo("ben68");
+                        apiHelper.getUserInfo("ben68");
                         break;
                     default:
                 }

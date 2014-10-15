@@ -10,8 +10,9 @@ import android.widget.TextView;
 import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
-import net.pixnet.sdk.utils.BlockHelper;
 import net.pixnet.sdk.utils.Helper;
+import net.pixnet.sdk.utils.PixnetApiHelper;
+import net.pixnet.sdk.utils.PixnetApiResponseListener;
 
 /**
  * Created by Koi on 2014/8/15.
@@ -65,7 +66,7 @@ public class Block extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final BlockHelper blockHelper = PIXNET.getBlockHelper(getActivity(), new DataProxy.DataProxyListener() {
+                PixnetApiHelper apiHelper = PIXNET.getApiHelper(getActivity(), new PixnetApiResponseListener() {
                     @Override
                     public void onError(String msg) {
                         Helper.log("error:" + msg);
@@ -79,18 +80,18 @@ public class Block extends ItemDetailFragment {
                         return true;
                     }
                 });
-                blockHelper.setDefaultUserName("emmademo");
-                blockHelper.setDefaultPerPage(2);
-                blockHelper.setDefaultTrimUser(false);
+                apiHelper.setDefaultUserName("emmademo");
+                apiHelper.setDefaultPerPage(2);
+                apiHelper.setDefaultTrimUser(false);
                 switch (Apis.values()[position]) {
                     case getBlockList:
-                        blockHelper.getBlockList();
+                        apiHelper.getBlockList();
                         break;
                     case addBlock:
-                        blockHelper.addBlock("wolflsi", "giddens");
+                        apiHelper.addBlock("wolflsi", "giddens");
                         break;
                     case removeBlock:
-                        blockHelper.deleteBlock("giddens");
+                        apiHelper.deleteBlock("giddens");
                         break;
                     default:
                 }

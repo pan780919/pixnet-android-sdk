@@ -8,10 +8,10 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import net.pixnet.sdk.PIXNET;
-import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
-import net.pixnet.sdk.utils.AlbumHelper;
 import net.pixnet.sdk.utils.Helper;
+import net.pixnet.sdk.utils.PixnetApiHelper;
+import net.pixnet.sdk.utils.PixnetApiResponseListener;
 
 public class Album extends ItemDetailFragment {
 
@@ -112,7 +112,7 @@ public class Album extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AlbumHelper albumHelper =PIXNET.getAlbumHelper(getActivity(), "emmademo", new DataProxy.DataProxyListener() {
+                PixnetApiHelper apiHelper =PIXNET.getApiHelper(getActivity(), new PixnetApiResponseListener() {
                     @Override
                     public void onError(String msg) {
                         Helper.log("error:" + msg);
@@ -125,68 +125,69 @@ public class Album extends ItemDetailFragment {
                         return true;
                     }
                 });
-                albumHelper.setDefaultPerPage(2);
-                albumHelper.setDefaultTrimUser(true);
+                apiHelper.setDefaultUserName("emmedemo");
+                apiHelper.setDefaultPerPage(2);
+                apiHelper.setDefaultTrimUser(true);
                 switch (Apis.values()[position]){
                     case main:
-                        albumHelper.getMain();
+                        apiHelper.getMain();
                         break;
                     case getSetAndFolderList:
-                        albumHelper.getSetAndFolderList();
+                        apiHelper.getSetAndFolderList();
                         break;
                     case sortSetAndFolders:
-                        albumHelper.sortSetAndFolders(null);
+                        apiHelper.sortSetAndFolders(null);
                         break;
                     case getSetList:
-                        albumHelper.getSetList();
+                        apiHelper.getSetList();
                         break;
                     case getSet:
-                        albumHelper.getSet("34260");
+                        apiHelper.getSet("34260");
                         break;
                     case getElementListBySet:
-                        albumHelper.getElementListBySet("34260");
+                        apiHelper.getElementListBySet("34260");
 //                        ben68
 //                        albumHelper.getElementListBySet("5024073");
                         break;
                     case getCommentListBySet:
-                        albumHelper.getCommentListBySet("34258");
+                        apiHelper.getCommentListBySet("34258");
                         break;
                     case addSet:
-                        albumHelper.addSet("testSet", "setDescription");
+                        apiHelper.addSet("testSet", "setDescription");
                         break;
                     case updateSet:
                         break;
                     case deleteSet:
-                        albumHelper.deleteSet("5024067");
+                        apiHelper.deleteSet("5024067");
                         break;
                     case sortSets:
                         break;
                     case getSetListByNear:
-                        albumHelper.getSetListByNear(23.9738759, 120.982024);
+                        apiHelper.getSetListByNear(23.9738759, 120.982024);
                         break;
                     case getFolderList:
-                        albumHelper.getFolderList();
+                        apiHelper.getFolderList();
                         break;
                     case getFolder:
-                        albumHelper.getFolder("4953822");
+                        apiHelper.getFolder("4953822");
                         break;
                     case addFolder:
-                        albumHelper.addFolder("testFolder", "this is a test folder");
+                        apiHelper.addFolder("testFolder", "this is a test folder");
                         break;
                     case updateFolder:
-                        albumHelper.updateFolder("5028546", "modify test", "this is a modified folder");
+                        apiHelper.updateFolder("5028546", "modify test", "this is a modified folder");
                         break;
                     case deleteFolder:
-                        albumHelper.deleteFolder("5028546");
+                        apiHelper.deleteFolder("5028546");
                         break;
                     case getElement:
-                        albumHelper.getElement("413994");
+                        apiHelper.getElement("413994");
 //                        ben68
 //                        albumHelper.getElement("174125439");
 //                        albumHelper.getElement("174125448");
                         break;
                     case getCommentListByElement:
-                        albumHelper.getCommentListByElement("413994");
+                        apiHelper.getCommentListByElement("413994");
                         break;
                     case addElement:
                         break;
@@ -219,13 +220,13 @@ public class Album extends ItemDetailFragment {
                     case deleteCommentFromElement:
                         break;
                     case addFaceByRecommendId:
-                        albumHelper.addFaceByRecommend("emmademo", "800");
+                        apiHelper.addFaceByRecommend("emmademo", "800");
                         break;
                     case addFaceByElementId:
-                        albumHelper.addFaceByElement("ben68", "174125448", 10, 10, 200, 200);
+                        apiHelper.addFaceByElement("ben68", "174125448", 10, 10, 200, 200);
                         break;
                     case updateFace:
-                        albumHelper.updateFace("76914", "ben68", "174125448", 20, 20, 100, 100);
+                        apiHelper.updateFace("76914", "ben68", "174125448", 20, 20, 100, 100);
                         break;
                     case deleteFace:
                         break;

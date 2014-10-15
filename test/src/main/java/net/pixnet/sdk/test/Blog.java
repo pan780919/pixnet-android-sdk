@@ -1,9 +1,6 @@
 package net.pixnet.sdk.test;
 
-import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -14,11 +11,8 @@ import net.pixnet.sdk.PIXNET;
 import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.Article;
 import net.pixnet.sdk.response.BasicResponse;
-import net.pixnet.sdk.utils.AccountHelper;
-import net.pixnet.sdk.utils.BlogHelper;
 import net.pixnet.sdk.utils.Helper;
-
-import static net.pixnet.sdk.utils.AccountHelper.*;
+import net.pixnet.sdk.utils.PixnetApiHelper;
 
 /**
  * Created by Koi on 2014/8/15.
@@ -101,7 +95,7 @@ public class Blog extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BlogHelper blogHelper = PIXNET.getBlogHelper(getActivity(), "emmademo", new DataProxy.DataProxyListener() {
+                PixnetApiHelper apiHelper = PIXNET.getApiHelper(getActivity(), new DataProxy.DataProxyListener() {
                     @Override
                     public void onError(String msg) {
                         Helper.log("error:" + msg);
@@ -115,21 +109,21 @@ public class Blog extends ItemDetailFragment {
                         return true;
                     }
                 });
-                blogHelper.setDefaultUserName("ben68");
-                blogHelper.setDefaultPerPage(8);
-                blogHelper.setDefaultTrimUser(false);
+                apiHelper.setDefaultUserName("emmademo");
+                apiHelper.setDefaultPerPage(8);
+                apiHelper.setDefaultTrimUser(false);
                 switch (Apis.values()[position]) {
                     case getBlogInfo:
-                        blogHelper.getBlogInfo();
+                        apiHelper.getBlogInfo();
                         break;
                     case setBlogInfo:
-                        blogHelper.setBlogInfo("Test Name", "Test description", null, null);
+                        apiHelper.setBlogInfo("Test Name", "Test description", null, null);
                         break;
                     case getBlogCategorieList:
-                         blogHelper.getBlogCategorieList();
+                         apiHelper.getBlogCategorieList();
                         break;
                     case addCategory:
-                        blogHelper.addCategory("Test");
+                        apiHelper.addCategory("Test");
                         break;
                     case updateCategory:
                         break;
@@ -138,10 +132,10 @@ public class Blog extends ItemDetailFragment {
                     case sortCategorieList:
                         break;
                     case getAllArticleList:
-                        blogHelper.getAllArticleList();
+                        apiHelper.getAllArticleList();
                         break;
                     case getArticle:
-                        blogHelper.setListener(new DataProxy.DataProxyListener() {
+                        apiHelper.setListener(new DataProxy.DataProxyListener() {
                             @Override
                             public void onError(String msg) {
 
@@ -149,18 +143,18 @@ public class Blog extends ItemDetailFragment {
 
                             @Override
                             public boolean onDataResponse(BasicResponse response) {
-                                Article article = (Article)response;
+                                Article article = (Article) response;
                                 Helper.log(response.getRawData());
                                 Bundle bundle = new Bundle();
-                                if(article.body!=null){
-                                    bundle.putString("body",article.body);
-                                    bundle.putString("title",article.title);
-                                    bundle.putString("user",article.user.name);
+                                if (article.body != null) {
+                                    bundle.putString("body", article.body);
+                                    bundle.putString("title", article.title);
+                                    bundle.putString("user", article.user.name);
                                 }
                                 ShowArticleFragment newFragment = new ShowArticleFragment();
                                 newFragment.setArguments(bundle);
                                 android.support.v4.app.FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                                ft.replace(R.id.item_detail_container,newFragment);
+                                ft.replace(R.id.item_detail_container, newFragment);
                                 ft.addToBackStack(null);
                                 ft.commit();
                                 //bundle.putInt("error",article.error);
@@ -171,47 +165,47 @@ public class Blog extends ItemDetailFragment {
                                 return true;
                             }
                         });
-                        blogHelper.getArticle("165129609");
+                        apiHelper.getArticle("165129609");
 
                         break;
                     case getRelatedArticleList:
-                        blogHelper.getRelatedArticleList("61695293");
+                        apiHelper.getRelatedArticleList("61695293");
                         break;
                     case addArticle:
-                        blogHelper.addArticle("TestTitle","TestBody");
+                        apiHelper.addArticle("TestTitle", "TestBody");
                         break;
                     case updateArticle:
-                        blogHelper.updateArticle("174157501","TestUpdateTitle","Body",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+                        apiHelper.updateArticle("174157501", "TestUpdateTitle", "Body", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
                         break;
                     case removeArticle:
-                        blogHelper.deleteArticle("174156916");
+                        apiHelper.deleteArticle("174156916");
                         break;
                     case getArticleListByLatest:
                         break;
                     case getArticleListByHot:
                         break;
                     case getArticleListByHotWithin:
-                        blogHelper.getArticleListByHotWithin(1, "20140101-201401001");
+                        apiHelper.getArticleListByHotWithin(1, "20140101-201401001");
                         break;
                     case searchArticleList:
                         break;
                     case getCommentList:
-                        blogHelper.getCommentList();
+                        apiHelper.getCommentList();
                         break;
                     case addComment:
-                        blogHelper.addComment("185508579", "test");
+                        apiHelper.addComment("185508579", "test");
                         break;
                     case getComment:
-                        blogHelper.getComment("33785508,33784806,33783552");
+                        apiHelper.getComment("33785508,33784806,33783552");
                         break;
                     case replyComment:
-                        blogHelper.replyComment("multireply test", "33785508", "33784806", "33783552");
+                        apiHelper.replyComment("multireply test", "33785508", "33784806", "33783552");
                         break;
                     case setCommentVisibility:
-                        blogHelper.setCommentVisibility(false, "33785508", "33784806", "33783552");
+                        apiHelper.setCommentVisibility(false, "33785508", "33784806", "33783552");
                         break;
                     case markComment:
-                        blogHelper.markComment(false, "33785508", "33784806", "33783552");
+                        apiHelper.markComment(false, "33785508", "33784806", "33783552");
                         break;
                     case removeComment:
                         //blogHelper.deleteComment("33802053", "33802059", "33802065");
@@ -219,10 +213,10 @@ public class Blog extends ItemDetailFragment {
                     case getCommentListByLatest:
                         break;
                     case getCategorieList:
-                        blogHelper.getCategorieList();
+                        apiHelper.getCategorieList();
                         break;
                     case getTags:
-                        blogHelper.getTags();
+                        apiHelper.getTags();
                         break;
                     default:
                 }

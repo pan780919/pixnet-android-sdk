@@ -5,17 +5,11 @@ import android.content.Context;
 import android.view.WindowManager;
 import android.webkit.WebView;
 
-import net.pixnet.sdk.utils.AccountHelper;
-import net.pixnet.sdk.utils.AlbumHelper;
-import net.pixnet.sdk.utils.BlockHelper;
-import net.pixnet.sdk.utils.BlogHelper;
-import net.pixnet.sdk.utils.FriendHelper;
-import net.pixnet.sdk.utils.GuestBookHelper;
-import net.pixnet.sdk.utils.Helper;
-import net.pixnet.sdk.utils.MainPageHelper;
-import net.pixnet.sdk.utils.OAuthLoginHelper;
-import net.pixnet.sdk.utils.OAuthConnectionTool.OAuthVersion;
 import net.pixnet.sdk.proxy.DataProxy.DataProxyListener;
+import net.pixnet.sdk.utils.Helper;
+import net.pixnet.sdk.utils.OAuthConnectionTool.OAuthVersion;
+import net.pixnet.sdk.utils.OAuthLoginHelper;
+import net.pixnet.sdk.utils.PixnetApiHelper;
 
 public class PIXNET {
     private static final String URL_OAUTH2_AUTH = "https://emma.pixnet.cc/oauth2/authorize";
@@ -23,91 +17,11 @@ public class PIXNET {
     private static final String URL_OAUTH1_REQUEST = "http://emma.pixnet.cc/oauth/request_token";
     private static final String URL_OAUTH1_ACCESS = "http://emma.pixnet.cc/oauth/access_token";
 
-    public static MainPageHelper getMainPageHelper(Context c, DataProxyListener listener){
-        MainPageHelper helper = new MainPageHelper();
+    public static PixnetApiHelper getApiHelper(Context c, DataProxyListener listener){
+        PixnetApiHelper helper = new PixnetApiHelper();
         helper.setContext(c);
         helper.setListener(listener);
         return helper;
-    }
-
-    /**
-     * 取得 FriendHelper 來存取痞客邦與好友相關的 API
-     * @param c Context
-     * @param listener 使用 {@link net.pixnet.sdk.utils.FriendHelperListener} 獲得格式化的資訊，或使用 {@link net.pixnet.sdk.proxy.DataProxy.DataProxyListener} 自行處理原始資料
-     * @return {@link net.pixnet.sdk.utils.FriendHelper}
-     */
-    public static FriendHelper getFriendHelper(Context c, DataProxyListener listener) {
-        FriendHelper friendHelper = new FriendHelper();
-        friendHelper.setContext(c);
-        friendHelper.setListener(listener);
-        return friendHelper;
-    }
-
-    /**
-     * 取得 GuestBookHelper 來存取痞客邦與留言板相關的 API
-     * @param c Context
-     * @param listener 使用 {@link net.pixnet.sdk.utils.GuestBookHelperListener} 獲得格式化的資訊，或使用 {@link net.pixnet.sdk.proxy.DataProxy.DataProxyListener} 自行處理原始資料
-     * @return {@link net.pixnet.sdk.utils.GuestBookHelper}
-     */
-    public static GuestBookHelper getGuestBookHelper(Context c, DataProxyListener listener) {
-        GuestBookHelper guestBookHelper = new GuestBookHelper();
-        guestBookHelper.setContext(c);
-        guestBookHelper.setListener(listener);
-        return guestBookHelper;
-    }
-
-    /**
-     * 取得 BlockHelper 來存取痞客邦與黑名單相關的 API
-     * @param c Context
-     * @param listener 使用 {@link net.pixnet.sdk.utils.BlockHelperListener} 獲得格式化的資訊，或使用 {@link net.pixnet.sdk.proxy.DataProxy.DataProxyListener} 自行處理原始資料
-     * @return {@link net.pixnet.sdk.utils.BlockHelper}
-     */
-    public static BlockHelper getBlockHelper(Context c, DataProxyListener listener) {
-        BlockHelper blockHelper = new BlockHelper();
-        blockHelper.setContext(c);
-        blockHelper.setListener(listener);
-        return blockHelper;
-    }
-
-    /**
-     * 取得 BlogHelper 來存取痞客邦與部落格相關的 API
-     * @param c Context
-     * @param listener 使用 {@link net.pixnet.sdk.utils.BlogHelperListener} 獲得格式化的資訊，或使用 {@link net.pixnet.sdk.proxy.DataProxy.DataProxyListener} 自行處理原始資料
-     * @return {@link net.pixnet.sdk.utils.BlockHelper}
-     */
-    public static BlogHelper getBlogHelper(Context c, String name, DataProxyListener listener) {
-        BlogHelper blogHelper = new BlogHelper();
-        blogHelper.setContext(c);
-        blogHelper.setDefaultUserName(name);
-        blogHelper.setListener(listener);
-        return blogHelper;
-    }
-
-    /**
-     * 取得 AlbumHelper 來存取痞客邦與相簿相關的 API
-     * @param c Context
-     * @param listener 使用 {@link net.pixnet.sdk.utils.AlbumHelperListener} 獲得格式化的資訊，或使用 {@link net.pixnet.sdk.proxy.DataProxy.DataProxyListener} 自行處理原始資料
-     * @return {@link net.pixnet.sdk.utils.AlbumHelper}
-     */
-    public static AlbumHelper getAlbumHelper(Context c, String name, DataProxyListener listener) {
-        AlbumHelper albumHelper = new AlbumHelper();
-        albumHelper.setContext(c);
-        albumHelper.setDefaultUserName(name);
-        albumHelper.setListener(listener);
-        return albumHelper;
-    }
-
-    /**
-     * 取得 AccountHelper 來存取痞客邦與使用者帳號相關的 API
-     * @param c Context
-     * @param listener 使用 {@link net.pixnet.sdk.utils.AccountHelperListener} 獲得格式化的資訊，或使用 {@link net.pixnet.sdk.proxy.DataProxy.DataProxyListener} 自行處理原始資料
-     * @return {@link net.pixnet.sdk.utils.AccountHelperListener}
-     */
-    public static AccountHelper getAccountHelper(Context c, DataProxyListener listener) {
-        AccountHelper account = new AccountHelper();
-        account.setContext(c);
-        account.setListener(listener);
-        return account;
     }
 
     public static void oAuth1Login(final Context context, final OnAccessTokenGotListener listener) {

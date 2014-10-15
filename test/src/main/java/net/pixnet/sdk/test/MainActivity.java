@@ -7,17 +7,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import net.pixnet.sdk.PIXNET;
-import net.pixnet.sdk.response.SetList;
-import net.pixnet.sdk.utils.Helper;
-import net.pixnet.sdk.utils.MainPageHelper;
-import net.pixnet.sdk.utils.MainPageHelperListener;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 
 public class MainActivity extends ActionBarActivity{
 

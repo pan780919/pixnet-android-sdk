@@ -8,10 +8,10 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import net.pixnet.sdk.PIXNET;
-import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
-import net.pixnet.sdk.utils.FriendHelper;
 import net.pixnet.sdk.utils.Helper;
+import net.pixnet.sdk.utils.PixnetApiHelper;
+import net.pixnet.sdk.utils.PixnetApiResponseListener;
 
 /**
  * Created by Koi on 2014/8/15.
@@ -88,7 +88,7 @@ public class Friend extends ItemDetailFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FriendHelper friendHelper = PIXNET.getFriendHelper(getActivity(), new DataProxy.DataProxyListener() {
+                PixnetApiHelper friendHelper = PIXNET.getApiHelper(getActivity(), new PixnetApiResponseListener() {
                     @Override
                     public void onError(String msg) {
                         Helper.log("error:" + msg);
