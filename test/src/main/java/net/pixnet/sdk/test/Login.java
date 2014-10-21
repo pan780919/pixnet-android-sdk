@@ -8,8 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import net.pixnet.sdk.PIXNET;
-import net.pixnet.sdk.proxy.DataProxy;
-import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.utils.Helper;
 
 public class Login extends ItemDetailFragment {
@@ -80,7 +78,7 @@ public class Login extends ItemDetailFragment {
                             public void onError(String msg) {
                                 Helper.toast(getActivity(), msg);
                             }
-                        }, "ben68", "121111");
+                        }, "ben68", "221111");
                         break;
                     case LOGIN_1:
                         PIXNET.oAuth1Login(getActivity(), new PIXNET.OnAccessTokenGotListener() {

@@ -82,6 +82,8 @@ public class OAuthLoginHelper {
         request.setCallback(new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
+                Helper.log("onResponse");
+                Helper.log(response);
                 HashMap<String, String> resParams = HttpConnectionTool.parseParamsByResponse(response);
                 String token = resParams.get("oauth_token");
                 String secret = resParams.get("oauth_token_secret");

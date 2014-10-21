@@ -99,14 +99,17 @@ public class PIXNET {
         OAuthLoginHelper loginHelper = OAuthLoginHelper.newXAuthLoginHelper(getConsumerKey(context), getConsumerSecret(context), URL_OAUTH1_ACCESS, new OAuthLoginHelper.OAuthLoginListener() {
             @Override
             public void onRequestUrlGot() {
+                Helper.log("onRequestUrlGot");
             }
 
             @Override
             public void onVerify() {
+                Helper.log("onVerify");
             }
 
             @Override
             public void onAccessTokenGot(String token, String secret) {
+                Helper.log("onAccessTokenGot");
                 listener.onAccessTokenGot(token, secret);
                 setOauthVersion(context, OAuthVersion.VER_1);
                 setOauthAccessTokenAndSecret(context, token, secret);

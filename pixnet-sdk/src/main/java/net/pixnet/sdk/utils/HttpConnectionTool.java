@@ -10,6 +10,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -39,6 +40,13 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
+
+import oauth.signpost.OAuthConsumer;
+import oauth.signpost.basic.DefaultOAuthConsumer;
+import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthExpectationFailedException;
+import oauth.signpost.exception.OAuthMessageSignerException;
 
 /**
  * http connection tools
@@ -266,22 +274,23 @@ public class HttpConnectionTool implements ConnectionTool {
                 break;
             case POST:
                 hur = new HttpPost(url);
-                MultipartEntityBuilder entityBuilder;
-                if(params!=null || files!=null) {
+                HttpEntity entity = null;
+                if(files!=null){
+                    MultipartEntityBuilder entityBuilder;
                     entityBuilder = MultipartEntityBuilder.create();
                     entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
                     if (params != null)
                         for(NameValuePair v : params)
                             entityBuilder.addTextBody(v.getName(), v.getValue());
-                    if(files!=null)
-                        for (FileNameValuePair v : files)
-                            entityBuilder.addBinaryBody(v.getName(), v.getValue());
-
-                    HttpEntity entity = entityBuilder.build();
-//                    entity = new UrlEncodedFormEntity(params, HTTP.UTF_8);
-                    if (entity != null)
-                        ((HttpPost)hur).setEntity(entity);
+                    for (FileNameValuePair v : files)
+                        entityBuilder.addBinaryBody(v.getName(), v.getValue());
+                    entity = entityBuilder.build();
                 }
+                else if(params!=null) {
+                    entity = new UrlEncodedFormEntity(params, HTTP.UTF_8);
+                }
+                if (entity != null)
+                    ((HttpPost)hur).setEntity(entity);
                 break;
             case PUT:
                 url = appendQueryString(url, params);

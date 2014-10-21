@@ -3,9 +3,6 @@ package net.pixnet.sdk.utils;
 import android.util.Base64;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
@@ -17,6 +14,9 @@ import java.util.Random;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
+import oauth.signpost.OAuthConsumer;
+import oauth.signpost.basic.DefaultOAuthConsumer;
 
 /**
  * OAuth connection tool
@@ -76,14 +76,15 @@ public class OAuthConnectionTool
     public String performRequest(Request request) throws IOException {
         switch (ver) {
             case VER_1:
-                computeNoceAndTimestamp();
-                String signatrue = getSignatrue(request.getMethod().name(), request.getUrl(), request.getParams());
-                String headerStr = getHeaderString(signatrue);
-                List<NameValuePair> headers = getHeader(headerStr);
-                request.setHeaders(headers);
+                appendHeader(request);
+//                computeNoceAndTimestamp();
+//                String signatrue = getSignatrue(request.getMethod().name(), request.getUrl(), request.getParams());
+//                String headerStr = getHeaderString(signatrue);
+//                List<NameValuePair> headers = getHeader(headerStr);
+//                request.setHeaders(headers);
                 break;
             case VER_2:
-                ArrayList<NameValuePair> params=(ArrayList<NameValuePair>)request.getParams();
+                List<NameValuePair> params=request.getParams();
                 if(params==null)
                     params=new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("access_token", accessToken));
@@ -94,16 +95,25 @@ public class OAuthConnectionTool
         return super.performRequest(request);
     }
 
+    private void appendHeader(Request request){
+        computeNoceAndTimestamp();
+        String signatrue = getSignatrue(request.getMethod().name(), request.getUrl(), request.getParams());
+        String headerStr = getHeaderString(signatrue);
+
+        List<NameValuePair> headers =request.getHeaders();
+        if(headers==null)
+            headers= new ArrayList<NameValuePair>();
+        headers.add(new BasicNameValuePair("Authorization", headerStr));
+        if(request.getFiles()!=null)
+            headers.add(new BasicNameValuePair("Content-Type", "multipart/form-data"));
+        else headers.add(new BasicNameValuePair("Content-Type", "application/x-www-form-urlencoded"));
+
+        request.setHeaders(headers);
+    }
+
     private void computeNoceAndTimestamp() {
         nonce = getNonce();
         timestamp = getTimeStamp();
-    }
-
-    private List<NameValuePair> getHeader(String headerStr) {
-        List<NameValuePair> headers = new ArrayList<NameValuePair>();
-        headers.add(new BasicNameValuePair("Authorization", headerStr));
-        headers.add(new BasicNameValuePair("Content-Type", "application/x-www-form-urlencoded"));
-        return headers;
     }
 
     private String getSignatrue(String method, String url, List<NameValuePair> params) {
