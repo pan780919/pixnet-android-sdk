@@ -76,6 +76,8 @@ public class OAuthLoginHelper {
         params.add(new BasicNameValuePair("x_auth_password", passwd));
         params.add(new BasicNameValuePair("x_auth_username", userName));
 
+        List<FileNameValuePair> files=new ArrayList<FileNameValuePair>();
+
         Request request = new Request(xauthUrl_access);
         request.setMethod(Request.Method.POST);
         request.setParams(params);

@@ -103,7 +103,7 @@ public class Account extends ItemDetailFragment {
                         apiHelper.getAccountInfo(true, null, true, true, true);
                         break;
                     case updateAccountInfo:
-                        apiHelper.updateAccountInfo("121111", "UncleBen");
+                        apiHelper.updateAccountInfo("221111", "UncleBen2");
                         break;
                     case getMIBInfo:
                         apiHelper.getMIBInfo();
@@ -123,7 +123,7 @@ public class Account extends ItemDetailFragment {
                         apiHelper.getAnalyticData();
                         break;
                     case updatePassword:
-                        apiHelper.updatePassword("121111", "221111");
+                        apiHelper.updatePassword("221111", "121111");
                         break;
                     case getNotificationList:
                         apiHelper.getNotifications();

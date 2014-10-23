@@ -1,8 +1,10 @@
 package net.pixnet.sdk.utils;
 
+import android.text.TextUtils;
 import android.util.Base64;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
@@ -17,6 +19,10 @@ import javax.crypto.spec.SecretKeySpec;
 
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.basic.DefaultOAuthConsumer;
+import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthExpectationFailedException;
+import oauth.signpost.exception.OAuthMessageSignerException;
 
 /**
  * OAuth connection tool
@@ -76,7 +82,7 @@ public class OAuthConnectionTool
     public String performRequest(Request request) throws IOException {
         switch (ver) {
             case VER_1:
-                appendHeader(request);
+//                appendHeader(request);
 //                computeNoceAndTimestamp();
 //                String signatrue = getSignatrue(request.getMethod().name(), request.getUrl(), request.getParams());
 //                String headerStr = getHeaderString(signatrue);
@@ -95,6 +101,42 @@ public class OAuthConnectionTool
         return super.performRequest(request);
     }
 
+    @Override
+    protected void onRequestReady(HttpUriRequest hur) {
+        OAuthConsumer consumer = new CommonsHttpOAuthConsumer(key, secret);
+        if(!TextUtils.isEmpty(accessToken))
+            consumer.setTokenWithSecret(accessToken, tokenSecret);
+        try {
+            consumer.sign(hur);
+        } catch (OAuthMessageSignerException e) {
+            e.printStackTrace();
+        } catch (OAuthExpectationFailedException e) {
+            e.printStackTrace();
+        } catch (OAuthCommunicationException e) {
+            e.printStackTrace();
+        }
+    }
+//
+//    @Override
+//    protected HttpUriRequest getRequest(Request request) {
+//        HttpUriRequest httpUriRequest=super.getRequest(request);
+//        if(ver==OAuthVersion.VER_1) {
+//            OAuthConsumer consumer = new CommonsHttpOAuthConsumer(key, secret);
+//            if(!TextUtils.isEmpty(accessToken))
+//                consumer.setTokenWithSecret(accessToken, tokenSecret);
+//            try {
+//                consumer.sign(httpUriRequest);
+//            } catch (OAuthMessageSignerException e) {
+//                e.printStackTrace();
+//            } catch (OAuthExpectationFailedException e) {
+//                e.printStackTrace();
+//            } catch (OAuthCommunicationException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return httpUriRequest;
+//    }
+
     private void appendHeader(Request request){
         computeNoceAndTimestamp();
         String signatrue = getSignatrue(request.getMethod().name(), request.getUrl(), request.getParams());
@@ -104,9 +146,10 @@ public class OAuthConnectionTool
         if(headers==null)
             headers= new ArrayList<NameValuePair>();
         headers.add(new BasicNameValuePair("Authorization", headerStr));
-        if(request.getFiles()!=null)
-            headers.add(new BasicNameValuePair("Content-Type", "multipart/form-data"));
-        else headers.add(new BasicNameValuePair("Content-Type", "application/x-www-form-urlencoded"));
+//        if(request.getFiles()!=null)
+//            headers.add(new BasicNameValuePair("Content-Type", "multipart/form-data"));
+//        else
+        headers.add(new BasicNameValuePair("Content-Type", "application/x-www-form-urlencoded"));
 
         request.setHeaders(headers);
     }

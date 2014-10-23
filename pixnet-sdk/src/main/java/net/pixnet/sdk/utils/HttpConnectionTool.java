@@ -21,6 +21,7 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -138,8 +139,7 @@ public class HttpConnectionTool implements ConnectionTool {
         return url;
     }
 
-    private InputStream request(HttpUriRequest request) throws IOException {
-//        System.out.println("request"+request.toString());
+    protected InputStream request(HttpUriRequest request) throws IOException {
         requestObj = request;
         userStop = false;
         HttpClient client = createHttpClient();
@@ -147,11 +147,7 @@ public class HttpConnectionTool implements ConnectionTool {
         response = client.execute(request);
         if (response == null || userStop)
             return null;
-
-        HttpEntity entity = response.getEntity();
-        InputStream in = null;
-        in = entity.getContent();
-        return in;
+        return  response.getEntity().getContent();
     }
 
     private String getStringFromInputStream(InputStream in) throws IOException {
@@ -253,6 +249,11 @@ public class HttpConnectionTool implements ConnectionTool {
         List<NameValuePair> headerList=request.getHeaders();
         List<FileNameValuePair> files=request.getFiles();
 
+        Request.Method method = request.getMethod();
+        if(method != Request.Method.POST)
+            url=appendQueryString(url, params);
+        HttpUriRequest hur = getRequest(request);
+
         Header[] headers=null;
         if(headerList!=null){
             int i=0, len=headerList.size();
@@ -265,48 +266,53 @@ public class HttpConnectionTool implements ConnectionTool {
                 }
             }
         }
-
-        HttpUriRequest hur;
-        switch (request.getMethod()){
-            case GET:
-                url=appendQueryString(url, params);
-                hur = new HttpGet(url);
-                break;
-            case POST:
-                hur = new HttpPost(url);
-                HttpEntity entity = null;
-                if(files!=null){
-                    MultipartEntityBuilder entityBuilder;
-                    entityBuilder = MultipartEntityBuilder.create();
-                    entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-                    if (params != null)
-                        for(NameValuePair v : params)
-                            entityBuilder.addTextBody(v.getName(), v.getValue());
-                    for (FileNameValuePair v : files)
-                        entityBuilder.addBinaryBody(v.getName(), v.getValue());
-                    entity = entityBuilder.build();
-                }
-                else if(params!=null) {
-                    entity = new UrlEncodedFormEntity(params, HTTP.UTF_8);
-                }
-                if (entity != null)
-                    ((HttpPost)hur).setEntity(entity);
-                break;
-            case PUT:
-                url = appendQueryString(url, params);
-                hur=new HttpPut(url);
-                break;
-            case DELETE:
-                url = appendQueryString(url, params);
-                hur=new HttpDelete(url);
-                break;
-            default:
-                hur=null;
-        }
-
         if (headers != null)
             hur.setHeaders(headers);
+
+        if(method == Request.Method.POST) {
+            if (params != null) {
+                HttpEntity entity = new UrlEncodedFormEntity(params, HTTP.UTF_8);
+                ((HttpPost) hur).setEntity(entity);
+            }
+        }
+
+        onRequestReady(hur);
+
+        if(method == Request.Method.POST && files!=null) {
+                MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+                entityBuilder.setMode(HttpMultipartMode.STRICT);
+                if (params != null)
+                    for(NameValuePair v : params)
+                        entityBuilder.addTextBody(v.getName(), v.getValue());
+//                entityBuilder.addBinaryBody("abc", new byte[10], ContentType.DEFAULT_BINARY, "file1");
+                for (FileNameValuePair v : files)
+                    entityBuilder.addBinaryBody(v.getName(), v.getValue(), ContentType.DEFAULT_BINARY, v.getValue().getName());
+                HttpEntity entity = entityBuilder.build();
+                if (entity != null)
+                    ((HttpPost)hur).setEntity(entity);
+//            }
+        }
+
         InputStream in = request(hur);
         return getStringFromInputStream(in);
+    }
+
+    protected void onRequestReady(HttpUriRequest hur) {}
+
+    protected HttpUriRequest getRequest(Request request){
+        Request.Method method=request.getMethod();
+        String url=method==Request.Method.POST?request.getUrl():appendQueryString(request.getUrl(), request.getParams());
+        switch (request.getMethod()){
+            case GET:
+                return new HttpGet(url);
+            case POST:
+                return new HttpPost(url);
+            case PUT:
+                return new HttpPut(url);
+            case DELETE:
+                return new HttpDelete(url);
+            default:
+                return null;
+        }
     }
 }
