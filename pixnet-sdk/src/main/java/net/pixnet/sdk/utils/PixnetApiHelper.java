@@ -249,7 +249,7 @@ public class PixnetApiHelper extends DataProxy {
     }
 
     /**
-     * @see #updateAccountInfo(String, String, String, net.pixnet.sdk.response.AccountInfo.Gender, String, String, String, String, String, String, String)
+     * @see #updateAccountInfo(String, String, String, net.pixnet.sdk.response.AccountInfo.Gender, String, String, String, String, String, String, java.io.File)
      */
     public void updateAccountInfo(String password, String displayName){
         updateAccountInfo(password, displayName, null, null, null, null, null, null, null, null, null);
@@ -268,7 +268,7 @@ public class PixnetApiHelper extends DataProxy {
      * @param education 教育程度 (中學以下, 高中/高職, 專科, 大學, 研究所)
      * @param avatar 大頭照 (base64)
      */
-    public void updateAccountInfo(String password, String displayName, String email, AccountInfo.Gender gender, String area, String subArea, String address, String phone, String birthday, String education, String avatar){
+    public void updateAccountInfo(String password, String displayName, String email, AccountInfo.Gender gender, String area, String subArea, String address, String phone, String birthday, String education, File avatar){
         if(TextUtils.isEmpty(password)){
             listener.onError(Error.MISS_PARAMETER);
             return;
@@ -293,8 +293,11 @@ public class PixnetApiHelper extends DataProxy {
             params.add(new BasicNameValuePair("birth", birthday));
         if(!TextUtils.isEmpty(education))
             params.add(new BasicNameValuePair("education", education));
-        if(!TextUtils.isEmpty(avatar))
-            params.add(new BasicNameValuePair("avatar", avatar));
+        List<FileNameValuePair> files=null;
+        if(avatar!=null) {
+            files = new ArrayList<FileNameValuePair>();
+            files.add(new FileNameValuePair("avatar", avatar));
+        }
 
         performAPIRequest(true, URL_ACCOUNT_INFO, Request.Method.POST, new Request.RequestCallback() {
             @Override
@@ -310,7 +313,7 @@ public class PixnetApiHelper extends DataProxy {
                 }
                 ((PixnetApiResponseListener) listener).onUpdateAccountInfo(parsedResponse);
             }
-        }, params);
+        }, params, files);
     }
 
     /**
