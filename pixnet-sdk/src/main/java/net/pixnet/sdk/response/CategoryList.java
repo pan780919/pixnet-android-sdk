@@ -34,6 +34,7 @@ public class CategoryList extends BasicResponse {
                 categories.add(new Category(ja.getJSONObject(i)));
             }
         }
+
         return obj;
     }
 }
