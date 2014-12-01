@@ -78,6 +78,7 @@ public class PixnetApiResponseListener implements DataProxy.DataProxyListener {
     public void onGetCommentListByElement(CommentList response){}
     public void onAddFolder(Folder response){}
     public void onAddSet(Set response){}
+    public void onAddElement(BasicResponse response){}
     public void onAddFaceByRecommend(Element response){}
     public void onAddFaceByElement(Element response){}
     public void onUpdateFolder(Folder response){}

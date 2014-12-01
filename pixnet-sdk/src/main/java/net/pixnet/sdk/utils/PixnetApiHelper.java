@@ -1409,7 +1409,35 @@ public class PixnetApiHelper extends DataProxy {
     /**
      * 新增相簿圖片影片
      */
-    public void addElement(){}
+    public void addElement(String setId, File file){
+        if(TextUtils.isEmpty(setId)){
+            listener.onError(Error.MISS_PARAMETER);
+            return;
+        }
+        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("set_id", setId));
+        List<FileNameValuePair> files=null;
+        if(file!=null) {
+            files = new ArrayList<FileNameValuePair>();
+            files.add(new FileNameValuePair("upload_file", file));
+        }
+
+        performAPIRequest(true, URL_ELEMENTS, Request.Method.POST, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                if(handleBasicResponse(response))
+                    return;
+                BasicResponse parsedResponse;
+                try {
+                    parsedResponse=new BasicResponse(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((PixnetApiResponseListener) listener).onAddElement(parsedResponse);
+            }
+        }, params, files);
+    }
 
     /**
      * 新增 Set 留言
