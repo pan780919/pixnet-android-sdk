@@ -7,6 +7,7 @@ public class AlbumMainPage extends BasicResponse {
 
     public MainPhoto mainphoto;
     public PhotoWall photowall;
+    public String system_albumset_id;
 
     public AlbumMainPage(String str) throws JSONException {
         super(str);
@@ -20,6 +21,8 @@ public class AlbumMainPage extends BasicResponse {
             mainphoto=new MainPhoto(jo.getJSONObject("mainphoto"));
         if(jo.has("photowall"))
             photowall=new PhotoWall(jo.getJSONObject("photowall"));
+        if(jo.has("system_albumset_id"))
+            system_albumset_id=jo.getString("system_albumset_id");
 
         return jo;
     }
@@ -39,10 +42,13 @@ public class AlbumMainPage extends BasicResponse {
     }
 
     public class PhotoWall{
+        public String set_id;
         public String type;
         public PhotoWall(JSONObject jo) throws JSONException {
             if(jo==null)
                 return;
+            if(jo.has("set_id"))
+                set_id=jo.getString("set_id");
             if(jo.has("type"))
                 type=jo.getString("type");
         }

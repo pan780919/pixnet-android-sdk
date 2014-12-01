@@ -658,6 +658,7 @@ public class PixnetApiHelper extends DataProxy {
     }
 
     // album
+
     /**
      * 列出相簿主圖及相片牆, 需要認證
      */
