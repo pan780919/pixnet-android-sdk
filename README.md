@@ -16,15 +16,16 @@ PIXNET Android SDK 支援使用 Android Studio 開發， Android 2.3 及之後�
 [http://developer.pixnet.pro/#!/apps](http://developer.pixnet.pro/#!/apps)
 
 Application Type 請選擇 Destop / Mobile App
+
 申請完成會拿到以下兩把鑰匙
 
  1. Consumer Key(client_id)
  2. Consumer Secret
  
- 新增 String resource: consumer_key & consumer_secret 並分別填入
+新增 String resource: consumer_key & consumer_secret 並分別填入
  
- import pixnet-android-sdk 至你的專案中，就可以開始使用了
- 詳細使用範例請參考 sample module
+import pixnet-android-sdk 至你的專案中，就可以開始使用了
+詳細使用範例請參考 sample module
 
 ## 聯絡我們
 
