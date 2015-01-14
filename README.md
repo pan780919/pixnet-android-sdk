@@ -22,9 +22,22 @@ Application Type 請選擇 Destop / Mobile App
  1. Consumer Key(client_id)
  2. Consumer Secret
  
-新增 String resource: consumer_key & consumer_secret 並分別填入
- 
-import pixnet-android-sdk 至你的專案中，就可以開始使用了
+新增 String resource: consumer_key & consumer_secret 並分別填入剛拿到的 key & secret
+
+在 build.gradle 的 dependencies 中加入 pixnet sdk
+```gradle
+dependencies{
+  compile 'net.pixnet.android:pixnet-android-sdk:1.0.1'
+}
+```
+
+注意： gradle 中 repositories 需設定為 jcenter
+```gradle
+repositories {
+  jcenter()
+}
+```
+
 詳細使用範例請參考 sample module
 
 ## 聯絡我們
