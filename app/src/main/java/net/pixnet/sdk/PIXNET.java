@@ -34,12 +34,10 @@ public class PIXNET {
 
         OAuthLoginHelper loginHelper = OAuthLoginHelper.newAuth1LoginHelper(getConsumerKey(context), getConsumerSecret(context), URL_OAUTH1_REQUEST, URL_OAUTH1_ACCESS, new OAuthLoginHelper.OAuthLoginListener() {
             @Override
-            public void onRequestUrlGot() {
-            }
+            public void onRequestUrlGot() {}
 
             @Override
-            public void onVerify() {
-            }
+            public void onVerify() {}
 
             @Override
             public void onAccessTokenGot(String token, String secret) {
@@ -48,6 +46,9 @@ public class PIXNET {
                 setOauthVersion(context, OAuthVersion.VER_1);
                 setOauthAccessTokenAndSecret(context, token, secret);
             }
+
+            @Override
+            public void onAccessTokenGot(String token, String refreshToken, int expires) {}
 
             @Override
             public void onError(String msg) {
@@ -67,7 +68,8 @@ public class PIXNET {
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
         String clientId = getConsumerKey(context);
-        OAuthLoginHelper helper = OAuthLoginHelper.newAuth2LoginHelper(clientId, getConsumerSecret(context), URL_OAUTH2_AUTH, URL_OAUTH2_GRANT, getRedirectUri(clientId), new OAuthLoginHelper.OAuthLoginListener() {
+        String clientSecret = getConsumerSecret(context);
+        OAuthLoginHelper helper = OAuthLoginHelper.newAuth2LoginHelper(clientId, clientSecret, URL_OAUTH2_AUTH, URL_OAUTH2_GRANT, getRedirectUri(clientId), new OAuthLoginHelper.OAuthLoginListener() {
             @Override
             public void onRequestUrlGot() {
                 dialog.dismiss();
@@ -80,10 +82,15 @@ public class PIXNET {
 
             @Override
             public void onAccessTokenGot(String token, String secret) {
+            }
+
+            @Override
+            public void onAccessTokenGot(String token, String refreshToken, int expires) {
                 dialog.dismiss();
-                listener.onAccessTokenGot(token, secret);
+                listener.onAccessTokenGot(token, refreshToken, expires);
                 setOauthVersion(context, OAuthVersion.VER_2);
                 setOauthAccessToken(context, token);
+                setOauthRefreshToken(context, refreshToken);
             }
 
             @Override
@@ -116,11 +123,43 @@ public class PIXNET {
             }
 
             @Override
+            public void onAccessTokenGot(String token, String refreshToken, int expires) {}
+
+            @Override
             public void onError(String msg) {
                 listener.onError(msg);
             }
         });
         loginHelper.loginByXauth(name, passwd);
+    }
+
+    public static void refreshToken(String refreshToken, final Context context, final OnAccessTokenGotListener listener){
+        String clientId = getConsumerKey(context);
+        String clientSecret = getConsumerSecret(context);
+        OAuthLoginHelper helper = OAuthLoginHelper.newAuth2RefreshHelper(clientId, clientSecret, URL_OAUTH2_GRANT, new OAuthLoginHelper.OAuthLoginListener() {
+            @Override
+            public void onRequestUrlGot() {}
+
+            @Override
+            public void onVerify() {}
+
+            @Override
+            public void onAccessTokenGot(String token, String secret) {}
+
+            @Override
+            public void onAccessTokenGot(String token, String refreshToken, int expires) {
+                listener.onAccessTokenGot(token, refreshToken, expires);
+                setOauthVersion(context, OAuthVersion.VER_2);
+                setOauthAccessToken(context, token);
+                setOauthRefreshToken(context, refreshToken);
+            }
+
+            @Override
+            public void onError(String msg) {
+                listener.onError(msg);
+            }
+        });
+        helper.refreshAccessToken(refreshToken);
     }
 
     public static void logout(Context c) {
@@ -150,6 +189,10 @@ public class PIXNET {
         Helper.putPrefString(c, "accessToken", token);
     }
 
+    public static void setOauthRefreshToken(Context c, String token) {
+        Helper.putPrefString(c, "refreshToken", token);
+    }
+
     public static String getConsumerKey(Context c) {
         return c.getString(R.string.consumer_key);
     }
@@ -160,6 +203,10 @@ public class PIXNET {
 
     public static String getOauthAccessToken(Context c) {
         return Helper.getPrefString(c, "accessToken", null);
+    }
+
+    public static String getOauthRefreshToken(Context c) {
+        return Helper.getPrefString(c, "refreshToken", null);
     }
 
     public static String getOauthAccessSecret(Context c) {
@@ -174,6 +221,7 @@ public class PIXNET {
 
     public interface OnAccessTokenGotListener {
         void onAccessTokenGot(String token, String secret);
+        void onAccessTokenGot(String token, String refreshToken, int expires);
 
         void onError(String msg);
     }

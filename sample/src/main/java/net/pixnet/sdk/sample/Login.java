@@ -16,6 +16,7 @@ public class Login extends ItemDetailFragment {
         LOGIN_X,
         LOGIN_1,
         LOGIN_2,
+        REFRESH,
         LOGOUT
     }
 
@@ -104,6 +105,17 @@ public class Login extends ItemDetailFragment {
                             public void onError(String msg) {
                                 Helper.toast(getActivity(), msg);
                             }
+                        });
+                        break;
+                    case REFRESH:
+                        Helper.log("refresh token");
+                        PIXNET.refreshToken(PIXNET.getOauthAccessToken(getActivity()), getActivity(), new PIXNET.OnAccessTokenGotListener() {
+                            @Override
+                            public void onAccessTokenGot(String token, String secret) {
+                            }
+
+                            @Override
+                            public void onError(String msg) {}
                         });
                         break;
                     case LOGOUT:

@@ -66,6 +66,15 @@ public class OAuthLoginHelper {
         return helper;
     }
 
+    public static OAuthLoginHelper newAuth2RefreshHelper(String clientId, String clientSecret, String grantUrl, OAuthLoginListener listener){
+        OAuthLoginHelper helper=new OAuthLoginHelper();
+        helper.key =clientId;
+        helper.secret =clientSecret;
+        helper.oauth2Url_grant=grantUrl;
+        helper.listener=listener;
+        return helper;
+    }
+
     public void setRedirectUri(String uri){
         redirect_uri=uri;
     }
@@ -238,7 +247,40 @@ public class OAuthLoginHelper {
             public void onResponse(String response) {
                 try {
                     JSONObject job = new JSONObject(response);
-                    listener.onAccessTokenGot(job.getString("access_token"), "OAuth2");
+                    listener.onAccessTokenGot(job.getString("access_token"), job.getString("refresh_token"), job.getInt("expires_in"));
+                }catch(JSONException e){
+                    e.printStackTrace();
+                    listener.onError(e.getMessage());
+                }
+            }
+        });
+        RequestController rc = RequestController.getInstance();
+        rc.setHttpConnectionTool(getConnectionTool(OAuthVersion.VER_2));
+        rc.addRequest(request);
+    }
+
+    /**
+     * 在3600秒 access_token expire 之前要記得 refresh token.
+     * @param refreshToken 在 Grant:create refresh token 階段拿到的 refresh_token. 如果有使用過 PIXNET OAuth1.0a,則可拿在那時用到的 access_token 來使用
+     */
+    public void refreshAccessToken(String refreshToken){
+        Helper.log("refreshAccessToken");
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("grant_type", "refresh_token"));
+        params.add(new BasicNameValuePair("refresh_token", refreshToken));
+        params.add(new BasicNameValuePair("client_id", key));
+        params.add(new BasicNameValuePair("client_secret", secret));
+
+        Request request = new Request(oauth2Url_grant);
+        request.setParams(params);
+        request.setCallback(new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                Helper.log("on refresh response");
+                Helper.log(response);
+                try {
+                    JSONObject job = new JSONObject(response);
+                    listener.onAccessTokenGot(job.getString("access_token"), job.getString("refresh_token"), job.getInt("expires_in"));
                 }catch(JSONException e){
                     e.printStackTrace();
                     listener.onError(e.getMessage());
@@ -257,7 +299,7 @@ public class OAuthLoginHelper {
                 tool=OAuthConnectionTool.newOaut1ConnectionTool(key, secret);
                 break;
             case VER_2:
-                tool=OAuthConnectionTool.newOauth2ConnectionTool();
+                tool=new HttpConnectionTool();
                 break;
             default:
                 tool=null;
@@ -281,6 +323,7 @@ public class OAuthLoginHelper {
         void onRequestUrlGot();
         void onVerify();
         void onAccessTokenGot(String token, String secret);
+        void onAccessTokenGot(String token, String refreshToken, int expires);
         void onError(String msg);
     }
 }
