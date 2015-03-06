@@ -272,17 +272,19 @@ public class HttpConnectionTool implements ConnectionTool {
         onRequestReady(hur);
 
         if(method == Request.Method.POST && files!=null) {
-                MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
-                entityBuilder.setMode(HttpMultipartMode.STRICT);
-                if (params != null)
-                    for(NameValuePair v : params)
-                        entityBuilder.addTextBody(v.getName(), v.getValue());
-                for (FileNameValuePair v : files)
-                    entityBuilder.addBinaryBody(v.getName(), v.getValue(), ContentType.DEFAULT_BINARY, v.getValue().getName());
-                HttpEntity entity = entityBuilder.build();
-                if (entity != null)
-                    ((HttpPost)hur).setEntity(entity);
-//            }
+            MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+            entityBuilder.setMode(HttpMultipartMode.STRICT);
+
+            ContentType contentType=ContentType.create(HTTP.PLAIN_TEXT_TYPE, HTTP.UTF_8);
+
+            if (params != null)
+                for(NameValuePair v : params)
+                    entityBuilder.addTextBody(v.getName(), v.getValue(), contentType);
+            for (FileNameValuePair v : files)
+                entityBuilder.addBinaryBody(v.getName(), v.getValue(), ContentType.DEFAULT_BINARY, v.getValue().getName());
+            HttpEntity entity = entityBuilder.build();
+            if (entity != null)
+                ((HttpPost)hur).setEntity(entity);
         }
 
         InputStream in = request(hur);
