@@ -235,6 +235,7 @@ public class HttpConnectionTool implements ConnectionTool {
 
     @Override
     public String performRequest(Request request) throws IOException {
+        Helper.log("performRequest");
         String url=formatUrl(request.getUrl());
         Helper.log(request.getMethod().name());
         Helper.log(url);

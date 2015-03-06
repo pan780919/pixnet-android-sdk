@@ -257,7 +257,7 @@ public class OAuthLoginHelper {
                 tool=OAuthConnectionTool.newOaut1ConnectionTool(key, secret);
                 break;
             case VER_2:
-                tool=new HttpConnectionTool();
+                tool=OAuthConnectionTool.newOauth2ConnectionTool();
                 break;
             default:
                 tool=null;

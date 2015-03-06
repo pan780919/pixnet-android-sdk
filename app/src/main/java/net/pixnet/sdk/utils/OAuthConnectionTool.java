@@ -2,6 +2,7 @@ package net.pixnet.sdk.utils;
 
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -12,6 +13,7 @@ import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.crypto.Mac;
@@ -22,6 +24,7 @@ import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
+import oauth.signpost.http.HttpRequest;
 
 /**
  * OAuth connection tool
@@ -102,17 +105,24 @@ public class OAuthConnectionTool
 
     @Override
     protected void onRequestReady(HttpUriRequest hur) {
-        OAuthConsumer consumer = new CommonsHttpOAuthConsumer(key, secret);
-        if(!TextUtils.isEmpty(accessToken))
-            consumer.setTokenWithSecret(accessToken, tokenSecret);
-        try {
-            consumer.sign(hur);
-        } catch (OAuthMessageSignerException e) {
-            e.printStackTrace();
-        } catch (OAuthExpectationFailedException e) {
-            e.printStackTrace();
-        } catch (OAuthCommunicationException e) {
-            e.printStackTrace();
+        switch (ver) {
+            case VER_1:
+                OAuthConsumer consumer = new CommonsHttpOAuthConsumer(key, secret);
+                if(!TextUtils.isEmpty(accessToken))
+                    consumer.setTokenWithSecret(accessToken, tokenSecret);
+                try {
+                    consumer.sign(hur);
+                } catch (OAuthMessageSignerException e) {
+                    e.printStackTrace();
+                } catch (OAuthExpectationFailedException e) {
+                    e.printStackTrace();
+                } catch (OAuthCommunicationException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case VER_2:
+                break;
+            default:
         }
     }
 //
