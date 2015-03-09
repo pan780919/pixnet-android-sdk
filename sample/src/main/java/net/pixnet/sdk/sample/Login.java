@@ -76,6 +76,9 @@ public class Login extends ItemDetailFragment {
                             }
 
                             @Override
+                            public void onAccessTokenGot(String token, String refreshToken, int expires) {}
+
+                            @Override
                             public void onError(String msg) {
                                 Helper.toast(getActivity(), msg);
                             }
@@ -87,6 +90,9 @@ public class Login extends ItemDetailFragment {
                             public void onAccessTokenGot(String token, String secret) {
                                 Helper.log("onAccessTokenGot:"+token);
                             }
+
+                            @Override
+                            public void onAccessTokenGot(String token, String refreshToken, int expires) {}
 
                             @Override
                             public void onError(String msg) {
@@ -102,6 +108,9 @@ public class Login extends ItemDetailFragment {
                             }
 
                             @Override
+                            public void onAccessTokenGot(String token, String refreshToken, int expires) {}
+
+                            @Override
                             public void onError(String msg) {
                                 Helper.toast(getActivity(), msg);
                             }
@@ -113,6 +122,9 @@ public class Login extends ItemDetailFragment {
                             @Override
                             public void onAccessTokenGot(String token, String secret) {
                             }
+
+                            @Override
+                            public void onAccessTokenGot(String token, String refreshToken, int expires) {}
 
                             @Override
                             public void onError(String msg) {}

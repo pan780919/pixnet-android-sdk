@@ -288,6 +288,11 @@ public class HttpConnectionTool implements ConnectionTool {
                 ((HttpPost)hur).setEntity(entity);
         }
 
+        Helper.log("print headers");
+        for(Header h : hur.getAllHeaders()){
+            Helper.log("header:"+h.getName()+"="+h.getValue());
+        }
+
         InputStream in = request(hur);
         return getStringFromInputStream(in);
     }

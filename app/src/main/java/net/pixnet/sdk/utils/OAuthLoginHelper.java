@@ -118,6 +118,7 @@ public class OAuthLoginHelper {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                Helper.log("URL:"+url);
                 Uri uri=Uri.parse(url);
                 String error=uri.getQueryParameter("error");
                 if(error!=null){
