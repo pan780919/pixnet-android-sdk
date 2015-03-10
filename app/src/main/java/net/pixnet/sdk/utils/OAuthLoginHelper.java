@@ -93,8 +93,6 @@ public class OAuthLoginHelper {
         request.setCallback(new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log("onResponse");
-                Helper.log(response);
                 HashMap<String, String> resParams = HttpConnectionTool.parseParamsByResponse(response);
                 String token = resParams.get("oauth_token");
                 String secret = resParams.get("oauth_token_secret");
@@ -269,7 +267,6 @@ public class OAuthLoginHelper {
      * @param refreshToken 在 Grant:create refresh token 階段拿到的 refresh_token. 如果有使用過 PIXNET OAuth1.0a,則可拿在那時用到的 access_token 來使用
      */
     public void refreshAccessToken(String refreshToken){
-        Helper.log("refreshAccessToken");
         List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("grant_type", "refresh_token"));
         params.add(new BasicNameValuePair("refresh_token", refreshToken));

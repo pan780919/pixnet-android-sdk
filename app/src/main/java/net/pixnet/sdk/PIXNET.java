@@ -123,18 +123,13 @@ public class PIXNET {
     public static void xAuthLogin(final Context context, final OnAccessTokenGotListener listener, String name, String passwd) {
         OAuthLoginHelper loginHelper = OAuthLoginHelper.newXAuthLoginHelper(getConsumerKey(context), getConsumerSecret(context), URL_OAUTH1_ACCESS, new OAuthLoginHelper.OAuthLoginListener() {
             @Override
-            public void onRequestUrlGot() {
-                Helper.log("onRequestUrlGot");
-            }
+            public void onRequestUrlGot() {}
 
             @Override
-            public void onVerify() {
-                Helper.log("onVerify");
-            }
+            public void onVerify() {}
 
             @Override
             public void onAccessTokenGot(String token, String secret) {
-                Helper.log("onAccessTokenGot");
                 listener.onAccessTokenGot(token, secret);
                 setOauthVersion(context, OAuthVersion.VER_1);
                 setOauthAccessTokenAndSecret(context, token, secret);
@@ -249,7 +244,7 @@ public class PIXNET {
          * on OAuth 2.0 Access Token got
          * @param token
          * @param refreshToken
-         * @param expires 多少時間後將會過期，以秒為單位
+         * @param expires 有效時間，以秒為單位
          */
         void onAccessTokenGot(String token, String refreshToken, int expires);
 

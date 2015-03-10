@@ -235,10 +235,7 @@ public class HttpConnectionTool implements ConnectionTool {
 
     @Override
     public String performRequest(Request request) throws IOException {
-        Helper.log("performRequest");
         String url=formatUrl(request.getUrl());
-        Helper.log(request.getMethod().name());
-        Helper.log(url);
         List<NameValuePair> params=request.getParams();
         List<NameValuePair> headerList=request.getHeaders();
         List<FileNameValuePair> files=request.getFiles();
@@ -286,11 +283,6 @@ public class HttpConnectionTool implements ConnectionTool {
             HttpEntity entity = entityBuilder.build();
             if (entity != null)
                 ((HttpPost)hur).setEntity(entity);
-        }
-
-        Helper.log("print headers");
-        for(Header h : hur.getAllHeaders()){
-            Helper.log("header:"+h.getName()+"="+h.getValue());
         }
 
         InputStream in = request(hur);
