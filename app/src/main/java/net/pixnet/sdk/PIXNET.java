@@ -11,6 +11,12 @@ import net.pixnet.sdk.utils.OAuthConnectionTool.OAuthVersion;
 import net.pixnet.sdk.utils.OAuthLoginHelper;
 import net.pixnet.sdk.utils.PixnetApiHelper;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class PIXNET {
     private static final String URL_OAUTH2_AUTH = "https://emma.pixnet.cc/oauth2/authorize";
     private static final String URL_OAUTH2_GRANT = "https://emma.pixnet.cc/oauth2/grant";
@@ -60,6 +66,18 @@ public class PIXNET {
     }
 
     public static void oAuth2Login(final Context context, final OnAccessTokenGotListener listener) {
+        List<NameValuePair> params=new ArrayList<>();
+        params.add(new BasicNameValuePair("login_theme", "mobileapp"));
+        oAuth2Login(context, params, listener);
+    }
+
+    public static void oAuth2OpenIdLogin(final Context context, final OnAccessTokenGotListener listener) {
+        List<NameValuePair> params=new ArrayList<>();
+        params.add(new BasicNameValuePair("login_theme", "mobileapp_openid"));
+        oAuth2Login(context, params, listener);
+    }
+
+    private static void oAuth2Login(final Context context, List<NameValuePair> theme, final OnAccessTokenGotListener listener) {
         WebView webView = new WebView(context);
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(webView)
@@ -99,7 +117,7 @@ public class PIXNET {
                 dialog.dismiss();
             }
         });
-        helper.loginByOauth2(webView);
+        helper.loginByOauth2(webView, theme);
     }
 
     public static void xAuthLogin(final Context context, final OnAccessTokenGotListener listener, String name, String passwd) {
@@ -220,7 +238,19 @@ public class PIXNET {
     }
 
     public interface OnAccessTokenGotListener {
+        /**
+         * on OAuth 1.0/X Access Token got
+         * @param token
+         * @param secret
+         */
         void onAccessTokenGot(String token, String secret);
+
+        /**
+         * on OAuth 2.0 Access Token got
+         * @param token
+         * @param refreshToken
+         * @param expires 多少時間後將會過期，以秒為單位
+         */
         void onAccessTokenGot(String token, String refreshToken, int expires);
 
         void onError(String msg);

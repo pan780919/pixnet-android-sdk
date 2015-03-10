@@ -112,13 +112,16 @@ public class OAuthLoginHelper {
     }
 
     public void loginByOauth2(WebView view){
+        loginByOauth2(view, null);
+    }
+
+    public void loginByOauth2(WebView view, List<NameValuePair> params){
         webView=view;
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                Helper.log("URL:"+url);
                 Uri uri=Uri.parse(url);
                 String error=uri.getQueryParameter("error");
                 if(error!=null){
@@ -137,11 +140,12 @@ public class OAuthLoginHelper {
                 return super.shouldOverrideUrlLoading(view, url);
             }
         });
-        webView.loadUrl(getOauth2RequestUrl());
+        webView.loadUrl(getOauth2RequestUrl(params));
     }
 
     public void getUrlForOauth1Request(){
-        Request request = new Request(oauth1Url_request);
+        String url=oauth1Url_request;
+        Request request = new Request(url);
         request.setCallback(new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
@@ -277,8 +281,6 @@ public class OAuthLoginHelper {
         request.setCallback(new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                Helper.log("on refresh response");
-                Helper.log(response);
                 try {
                     JSONObject job = new JSONObject(response);
                     listener.onAccessTokenGot(job.getString("access_token"), job.getString("refresh_token"), job.getInt("expires_in"));
@@ -313,11 +315,19 @@ public class OAuthLoginHelper {
      *
      * @return formatted request url
      */
-    private String getOauth2RequestUrl() {
-        return oauth2Url_auth
+    private String getOauth2RequestUrl(List<NameValuePair> params) {
+        String url = oauth2Url_auth
                 + "?client_id=" + key
                 + "&redirect_uri=" + redirect_uri
                 + "&response_type=code";
+
+        if(params!=null){
+            for(NameValuePair p : params){
+                url+="&"+p.getName()+"="+p.getValue();
+            }
+        }
+
+        return url;
     }
 
     public interface OAuthLoginListener {

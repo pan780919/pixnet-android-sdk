@@ -16,6 +16,7 @@ public class Login extends ItemDetailFragment {
         LOGIN_X,
         LOGIN_1,
         LOGIN_2,
+        OPENID_2,
         REFRESH,
         LOGOUT
     }
@@ -109,6 +110,22 @@ public class Login extends ItemDetailFragment {
 
                             @Override
                             public void onAccessTokenGot(String token, String refreshToken, int expires) {}
+
+                            @Override
+                            public void onError(String msg) {
+                                Helper.toast(getActivity(), msg);
+                            }
+                        });
+                        break;
+                    case OPENID_2:
+                        PIXNET.oAuth2OpenIdLogin(getActivity(), new PIXNET.OnAccessTokenGotListener() {
+                            @Override
+                            public void onAccessTokenGot(String token, String secret) {}
+
+                            @Override
+                            public void onAccessTokenGot(String token, String refreshToken, int expires) {
+                                Helper.toast(getActivity(), "token:"+token);
+                            }
 
                             @Override
                             public void onError(String msg) {
