@@ -97,7 +97,7 @@ public class OAuthConnectionTool
                 break;
             case VER_2:
                 if(PIXNET.isExpired(context))
-                    return Error.DATA_PARSE_FAILED;
+                    return Error.TOKEN_EXPIRED;
 
                 List<NameValuePair> params=request.getParams();
                 if(params==null)
