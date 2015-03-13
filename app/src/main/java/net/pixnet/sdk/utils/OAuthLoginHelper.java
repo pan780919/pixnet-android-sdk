@@ -1,6 +1,7 @@
 package net.pixnet.sdk.utils;
 
 import android.net.Uri;
+import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -31,47 +32,48 @@ public class OAuthLoginHelper {
     private String access_token;
     private String token_secret;
 
-    private OAuthLoginListener listener;
+    private OAuth1LoginListener listener1;
+    private OAuth2LoginListener listener2;
     private WebView webView;
     private String accessUrl;
     private String redirect_uri="http://oob";
 
-    public static OAuthLoginHelper newXAuthLoginHelper(String consumerKey, String consumerSecret, String accessUrl, OAuthLoginListener listener){
+    public static OAuthLoginHelper newXAuthLoginHelper(String consumerKey, String consumerSecret, String accessUrl, OAuth1LoginListener listener){
         OAuthLoginHelper helper=new OAuthLoginHelper();
         helper.key =consumerKey;
         helper.secret =consumerSecret;
         helper.xauthUrl_access=accessUrl;
-        helper.listener=listener;
+        helper.listener1=listener;
         return helper;
     }
 
-    public static OAuthLoginHelper newAuth1LoginHelper(String consumerKey, String consumerSecret, String requestUrl, String accessUrl, OAuthLoginListener listener){
+    public static OAuthLoginHelper newAuth1LoginHelper(String consumerKey, String consumerSecret, String requestUrl, String accessUrl, OAuth1LoginListener listener){
         OAuthLoginHelper helper=new OAuthLoginHelper();
         helper.key =consumerKey;
         helper.secret =consumerSecret;
         helper.oauth1Url_request=requestUrl;
         helper.oauth1Url_access=accessUrl;
-        helper.listener=listener;
+        helper.listener1=listener;
         return helper;
     }
 
-    public static OAuthLoginHelper newAuth2LoginHelper(String clientId, String clientSecret, String authUrl, String grantUrl, String redirectUri, OAuthLoginListener listener){
+    public static OAuthLoginHelper newAuth2LoginHelper(String clientId, String clientSecret, String authUrl, String grantUrl, String redirectUri, OAuth2LoginListener listener){
         OAuthLoginHelper helper=new OAuthLoginHelper();
         helper.key =clientId;
         helper.secret =clientSecret;
         helper.oauth2Url_auth=authUrl;
         helper.oauth2Url_grant=grantUrl;
         helper.setRedirectUri(redirectUri);
-        helper.listener=listener;
+        helper.listener2=listener;
         return helper;
     }
 
-    public static OAuthLoginHelper newAuth2RefreshHelper(String clientId, String clientSecret, String grantUrl, OAuthLoginListener listener){
+    public static OAuthLoginHelper newAuth2RefreshHelper(String clientId, String clientSecret, String grantUrl, OAuth2LoginListener listener){
         OAuthLoginHelper helper=new OAuthLoginHelper();
         helper.key =clientId;
         helper.secret =clientSecret;
         helper.oauth2Url_grant=grantUrl;
-        helper.listener=listener;
+        helper.listener2=listener;
         return helper;
     }
 
@@ -96,7 +98,7 @@ public class OAuthLoginHelper {
                 HashMap<String, String> resParams = HttpConnectionTool.parseParamsByResponse(response);
                 String token = resParams.get("oauth_token");
                 String secret = resParams.get("oauth_token_secret");
-                listener.onAccessTokenGot(token, secret);
+                listener1.onAccessTokenGot(token, secret);
             }
         });
         RequestController rc = RequestController.getInstance();
@@ -123,14 +125,13 @@ public class OAuthLoginHelper {
                 Uri uri=Uri.parse(url);
                 String error=uri.getQueryParameter("error");
                 if(error!=null){
-                    listener.onError(error);
+                    listener2.onError(error);
                     return true;
                 }
                 if(url.startsWith(redirect_uri)){
                     String code=uri.getQueryParameter("code");
                     if (code!=null) {
                         webView.setWebViewClient(null);
-                        listener.onRequestUrlGot();
                         getOauth2AccessToken(code);
                     }
                     return true;
@@ -152,7 +153,7 @@ public class OAuthLoginHelper {
                 oauthSecret=map.get("oauth_token_secret");
                 String url=map.get("xoauth_request_auth_url");
                 accessUrl= HttpConnectionTool.decodeUrl(url);
-                listener.onRequestUrlGot();
+                listener1.onRequestUrlGot();
 
                 if(webView!=null){
                     oauth1Verify();
@@ -177,7 +178,7 @@ public class OAuthLoginHelper {
                 Uri uri=Uri.parse(url);
                 String error=uri.getQueryParameter("error");
                 if(error!=null){
-                    listener.onError(error);
+                    listener1.onError(error);
                     return true;
                 }
                 if(url.startsWith(redirect_uri)){
@@ -197,7 +198,7 @@ public class OAuthLoginHelper {
             }
         });
         webView.loadUrl(accessUrl);
-        listener.onVerify();
+        listener1.onVerify();
     }
 
     public class Jsi{
@@ -223,7 +224,7 @@ public class OAuthLoginHelper {
                 HashMap<String, String> map = HttpConnectionTool.parseParamsByResponse(response);
                 access_token = map.get("oauth_token");
                 token_secret = map.get("oauth_token_secret");
-                listener.onAccessTokenGot(access_token, token_secret);
+                listener1.onAccessTokenGot(access_token, token_secret);
             }
         });
 
@@ -250,10 +251,13 @@ public class OAuthLoginHelper {
             public void onResponse(String response) {
                 try {
                     JSONObject job = new JSONObject(response);
-                    listener.onAccessTokenGot(job.getString("access_token"), job.getString("refresh_token"), job.getInt("expires_in"));
+                    String accessToken=job.getString("access_token");
+                    String refreshToken=job.getString("refresh_token");
+                    int expires=job.getInt("expires_in");
+                    listener2.onAccessTokenGot(accessToken, refreshToken, expires);
                 }catch(JSONException e){
                     e.printStackTrace();
-                    listener.onError(e.getMessage());
+                    listener2.onError(e.getMessage());
                 }
             }
         });
@@ -263,7 +267,7 @@ public class OAuthLoginHelper {
     }
 
     /**
-     * 在3600秒 access_token expire 之前要記得 refresh token.
+     * 在 access_token expire 之前要記得 refresh token.
      * @param refreshToken 在 Grant:create refresh token 階段拿到的 refresh_token. 如果有使用過 PIXNET OAuth1.0a,則可拿在那時用到的 access_token 來使用
      */
     public void refreshAccessToken(String refreshToken){
@@ -278,12 +282,17 @@ public class OAuthLoginHelper {
         request.setCallback(new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
+                JSONObject job;
                 try {
-                    JSONObject job = new JSONObject(response);
-                    listener.onAccessTokenGot(job.getString("access_token"), job.getString("refresh_token"), job.getInt("expires_in"));
+                    job = new JSONObject(response);
+                    String error=job.getString("error");
+                    if(!TextUtils.isEmpty(error)){
+                        listener2.onError(error);
+                    }
+                    listener2.onAccessTokenGot(job.getString("access_token"), job.getString("refresh_token"), job.getInt("expires_in"));
                 }catch(JSONException e){
                     e.printStackTrace();
-                    listener.onError(e.getMessage());
+                    listener2.onError(e.getMessage());
                 }
             }
         });
@@ -327,11 +336,15 @@ public class OAuthLoginHelper {
         return url;
     }
 
-    public interface OAuthLoginListener {
+    public interface OAuth1LoginListener {
         void onRequestUrlGot();
         void onVerify();
         void onAccessTokenGot(String token, String secret);
-        void onAccessTokenGot(String token, String refreshToken, int expires);
+        void onError(String msg);
+    }
+
+    public interface OAuth2LoginListener {
+        void onAccessTokenGot(String token, String refreshToken, long expires);
         void onError(String msg);
     }
 }

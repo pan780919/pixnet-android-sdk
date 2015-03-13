@@ -77,7 +77,7 @@ public class Login extends ItemDetailFragment {
                             }
 
                             @Override
-                            public void onAccessTokenGot(String token, String refreshToken, int expires) {}
+                            public void onAccessTokenGot(String token, String refreshToken, long expires) {}
 
                             @Override
                             public void onError(String msg) {
@@ -93,7 +93,7 @@ public class Login extends ItemDetailFragment {
                             }
 
                             @Override
-                            public void onAccessTokenGot(String token, String refreshToken, int expires) {}
+                            public void onAccessTokenGot(String token, String refreshToken, long expires) {}
 
                             @Override
                             public void onError(String msg) {
@@ -109,7 +109,7 @@ public class Login extends ItemDetailFragment {
                             }
 
                             @Override
-                            public void onAccessTokenGot(String token, String refreshToken, int expires) {}
+                            public void onAccessTokenGot(String token, String refreshToken, long expires) {}
 
                             @Override
                             public void onError(String msg) {
@@ -123,7 +123,7 @@ public class Login extends ItemDetailFragment {
                             public void onAccessTokenGot(String token, String secret) {}
 
                             @Override
-                            public void onAccessTokenGot(String token, String refreshToken, int expires) {
+                            public void onAccessTokenGot(String token, String refreshToken, long expires) {
                                 Helper.toast(getActivity(), "token:"+token);
                             }
 
@@ -141,7 +141,7 @@ public class Login extends ItemDetailFragment {
                             }
 
                             @Override
-                            public void onAccessTokenGot(String token, String refreshToken, int expires) {}
+                            public void onAccessTokenGot(String token, String refreshToken, long expires) {}
 
                             @Override
                             public void onError(String msg) {}

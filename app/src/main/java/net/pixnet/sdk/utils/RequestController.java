@@ -14,12 +14,12 @@ import java.util.Queue;
 public class RequestController {
 
     private static RequestController INSTANCE;
-    private static final int DEF_TASK_LIMIT = 3;
-    private int taskLimit = DEF_TASK_LIMIT;
+    protected static final int DEF_TASK_LIMIT = 3;
+    protected int taskLimit = DEF_TASK_LIMIT;
 
-    private Queue<Request> requestQueue;
-    private List<Worker> taskList;
-    private ConnectionTool httpConn;
+    protected Queue<Request> requestQueue;
+    protected List<Worker> taskList;
+    protected ConnectionTool httpConn;
 
     /**
      * constructor
@@ -32,7 +32,7 @@ public class RequestController {
         return INSTANCE;
     }
 
-    private RequestController(){
+    protected RequestController(){
         requestQueue = new LinkedList<Request>();
         taskList = new ArrayList<Worker>();
     }
@@ -48,14 +48,14 @@ public class RequestController {
         httpConn=tool;
     }
 
-    private HttpConnectionTool getHttpConnectionTool(){
+    protected HttpConnectionTool getHttpConnectionTool(){
         if(httpConn==null){
             httpConn = new HttpConnectionTool();
         }
         return (HttpConnectionTool) httpConn;
     }
 
-    private int getTaskSize(){
+    protected int getTaskSize(){
         return taskList.size();
     }
 
@@ -66,7 +66,7 @@ public class RequestController {
     }
 
     synchronized
-    private void runWorker(){
+    protected void runWorker(){
         if(getTaskSize() < taskLimit){
             Request request=requestQueue.poll();
             if(request!=null){
@@ -77,7 +77,7 @@ public class RequestController {
         }
     }
 
-    private void onResponse(Request request, String response){
+    protected void onResponse(Request request, String response){
         Request.RequestCallback callback=request.getCallback();
         if(callback!=null)
             callback.onResponse(response);
@@ -87,7 +87,7 @@ public class RequestController {
     /**
      * Worker AsyncTask instead of Thread
      */
-    private class Worker extends AsyncTask<Request, Void, String> {
+    protected class Worker extends AsyncTask<Request, Void, String> {
         Request request;
 
         protected String doInBackground(Request... requestArray) {

@@ -6,4 +6,5 @@ public class Error {
     public static final String LOGIN_NEED="需要先登入";
     public static final String MISS_PARAMETER="缺少必要參數";
     public static final String PARAMETER_INVALID="無效的參數";
+    public static final String TOKEN_EXPIRED="憑證已過期";
 }

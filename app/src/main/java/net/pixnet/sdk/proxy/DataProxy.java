@@ -9,10 +9,10 @@ import net.pixnet.sdk.utils.ConnectionTool;
 import net.pixnet.sdk.utils.FileNameValuePair;
 import net.pixnet.sdk.utils.HttpConnectionTool;
 import net.pixnet.sdk.utils.OAuthConnectionTool;
+import net.pixnet.sdk.utils.OauthRequestController;
 import net.pixnet.sdk.utils.Request;
 import net.pixnet.sdk.utils.Request.Method;
 import net.pixnet.sdk.utils.Request.RequestCallback;
-import net.pixnet.sdk.utils.RequestController;
 
 import org.apache.http.NameValuePair;
 import org.json.JSONException;
@@ -76,7 +76,7 @@ public abstract class DataProxy {
                     ((OAuthConnectionTool)tool).setAccessTokenAndSecret(PIXNET.getOauthAccessToken(c), PIXNET.getOauthAccessSecret(c));
                     break;
                 case VER_2:
-                    tool=OAuthConnectionTool.newOauth2ConnectionTool();
+                    tool=OAuthConnectionTool.newOauth2ConnectionTool(c);
                     ((OAuthConnectionTool)tool).setAccessToken(PIXNET.getOauthAccessToken(c));
                     break;
                 default:
@@ -134,7 +134,7 @@ public abstract class DataProxy {
             r.setFiles(files);
         r.setCallback(callback);
 
-        RequestController rc=RequestController.getInstance();
+        OauthRequestController rc=OauthRequestController.getInstance(c);
         rc.setHttpConnectionTool(getConnectionTool());
         rc.addRequest(r);
     }
@@ -142,6 +142,10 @@ public abstract class DataProxy {
     protected boolean handleBasicResponse(String response){
         if(response==null) {
             listener.onError(Error.NETWORK_ERROR);
+            return true;
+        }
+        if(response==Error.TOKEN_EXPIRED){
+            listener.onError(response);
             return true;
         }
         BasicResponse res;

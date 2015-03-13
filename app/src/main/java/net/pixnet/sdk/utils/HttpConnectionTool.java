@@ -235,14 +235,14 @@ public class HttpConnectionTool implements ConnectionTool {
 
     @Override
     public String performRequest(Request request) throws IOException {
-        String url=formatUrl(request.getUrl());
+//        String url=formatUrl(request.getUrl());
         List<NameValuePair> params=request.getParams();
         List<NameValuePair> headerList=request.getHeaders();
         List<FileNameValuePair> files=request.getFiles();
 
         Request.Method method = request.getMethod();
-        if(method != Request.Method.POST)
-            url=appendQueryString(url, params);
+//        if(method != Request.Method.POST)
+//            url=appendQueryString(url, params);
         HttpUriRequest hur = getRequest(request);
 
         Header[] headers=null;

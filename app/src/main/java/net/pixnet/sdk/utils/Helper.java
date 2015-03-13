@@ -35,7 +35,14 @@ public class Helper {
 		.putInt(key, value)
 		.commit();
 	}
-	
+
+    public static void putPrefLong(Context c, String key, long value){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        sp.edit()
+        .putLong(key, value)
+        .commit();
+    }
+
 	public static void putPrefBoolean(Context c, String key, boolean value){
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
 		sp.edit()
@@ -52,7 +59,12 @@ public class Helper {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
 		return sp.getInt(key, defValue);
 	}
-	
+
+    public static long getPrefLong(Context c, String key, long defValue){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        return sp.getLong(key, defValue);
+    }
+
 	public static boolean getPrefBoolean(Context c, String key, boolean defValue){
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
 		return sp.getBoolean(key, defValue);

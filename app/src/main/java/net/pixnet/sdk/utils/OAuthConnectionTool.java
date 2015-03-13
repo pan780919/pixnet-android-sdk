@@ -1,8 +1,12 @@
 package net.pixnet.sdk.utils;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
+
+import net.pixnet.sdk.PIXNET;
+import net.pixnet.sdk.proxy.*;
+import net.pixnet.sdk.proxy.Error;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -13,7 +17,6 @@ import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import javax.crypto.Mac;
@@ -24,7 +27,6 @@ import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
-import oauth.signpost.http.HttpRequest;
 
 /**
  * OAuth connection tool
@@ -41,6 +43,7 @@ public class OAuthConnectionTool
     private String timestamp = null;
     private String accessToken = null;
     private String tokenSecret = null;
+    private Context context;
 
     public static enum OAuthVersion {
         VER_1,
@@ -65,9 +68,10 @@ public class OAuthConnectionTool
      * new helper for OAuth2
      * @return OAuthConnectionTool 2.0
      */
-    public static OAuthConnectionTool newOauth2ConnectionTool(){
+    public static OAuthConnectionTool newOauth2ConnectionTool(Context c){
         OAuthConnectionTool tool=new OAuthConnectionTool();
         tool.ver=OAuthVersion.VER_2;
+        tool.context=c;
         return tool;
     }
 
@@ -92,6 +96,9 @@ public class OAuthConnectionTool
 //                request.setHeaders(headers);
                 break;
             case VER_2:
+                if(PIXNET.isExpired(context))
+                    return Error.DATA_PARSE_FAILED;
+
                 List<NameValuePair> params=request.getParams();
                 if(params==null)
                     params=new ArrayList<>();
