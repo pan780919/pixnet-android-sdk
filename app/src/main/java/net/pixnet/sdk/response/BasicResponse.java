@@ -29,16 +29,23 @@ public class BasicResponse {
     public String message;
 
     /**
-     * error code
+     * error
      * 0 = success
      */
     public int error;
+
+    /**
+     * error code
+     * reference: https://www.gitbook.com/book/pixnet/api-error-codes/details
+     */
+    public int code;
+
     public String error_description;
 
     public BasicResponse() {}
 
     public BasicResponse(String str) throws JSONException {
-        Helper.log("response:"+str);
+//        Helper.log("response:"+str);
         if(TextUtils.isEmpty(str))
             return;
 
@@ -54,6 +61,14 @@ public class BasicResponse {
     }
 
     protected JSONObject parseJSON(JSONObject jo) throws JSONException {
+        if(jo.has("code")){
+            String errCode = jo.getString("code");
+            try{
+                code = Integer.parseInt(errCode);
+            } catch (NumberFormatException e){
+                code = -1;
+            }
+        }
         if(jo.has("message"))
             message=jo.getString("message");
         if(jo.has("error")) {
