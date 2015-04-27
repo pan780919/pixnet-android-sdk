@@ -66,25 +66,29 @@ public abstract class DataProxy {
         this.listener=listener;
     }
 
-    protected ConnectionTool getConnectionTool(){
-        boolean isLogin=PIXNET.isLogin(c);
+    protected ConnectionTool getConnectionTool(boolean authentication){
         HttpConnectionTool tool;
-        if(isLogin){
-            switch (PIXNET.getOAuthVersion(c)){
-                case VER_1:
-                    tool=OAuthConnectionTool.newOaut1ConnectionTool(PIXNET.getConsumerKey(c), PIXNET.getConsumerSecret(c));
-                    ((OAuthConnectionTool)tool).setAccessTokenAndSecret(PIXNET.getOauthAccessToken(c), PIXNET.getOauthAccessSecret(c));
-                    break;
-                case VER_2:
-                    tool=OAuthConnectionTool.newOauth2ConnectionTool(c);
-                    ((OAuthConnectionTool)tool).setAccessToken(PIXNET.getOauthAccessToken(c));
-                    break;
-                default:
-                    tool = new HttpConnectionTool();
-            }
-        }
-        else{
+        if(!authentication)
             tool = new HttpConnectionTool();
+        else{
+            boolean isLogin=PIXNET.isLogin(c);
+            if(isLogin){
+                switch (PIXNET.getOAuthVersion(c)){
+                    case VER_1:
+                        tool=OAuthConnectionTool.newOaut1ConnectionTool(PIXNET.getConsumerKey(c), PIXNET.getConsumerSecret(c));
+                        ((OAuthConnectionTool)tool).setAccessTokenAndSecret(PIXNET.getOauthAccessToken(c), PIXNET.getOauthAccessSecret(c));
+                        break;
+                    case VER_2:
+                        tool=OAuthConnectionTool.newOauth2ConnectionTool(c);
+                        ((OAuthConnectionTool)tool).setAccessToken(PIXNET.getOauthAccessToken(c));
+                        break;
+                    default:
+                        tool = new HttpConnectionTool();
+                }
+            }
+            else{
+                tool = new HttpConnectionTool();
+            }
         }
         if(connectionTimeout>0)
             tool.timeout_connection=connectionTimeout;
@@ -135,7 +139,7 @@ public abstract class DataProxy {
         r.setCallback(callback);
 
         OauthRequestController rc=OauthRequestController.getInstance(c);
-        rc.setHttpConnectionTool(getConnectionTool());
+        rc.setHttpConnectionTool(getConnectionTool(authentication));
         rc.addRequest(r);
     }
 
