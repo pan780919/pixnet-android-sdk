@@ -102,7 +102,7 @@ public class Friend extends ItemDetailFragment {
                         return true;
                     }
                 });
-                friendHelper.setDefaultUserName("emmademo");
+                friendHelper.setBloggerName("emmademo");
                 friendHelper.setDefaultPerPage(2);
                 friendHelper.setDefaultTrimUser(false);
                 switch (Apis.values()[position]) {

@@ -125,12 +125,12 @@ public class Album extends ItemDetailFragment {
                         return true;
                     }
                 });
-                apiHelper.setDefaultUserName("emmedemo");
+                apiHelper.setBloggerName("emmedemo");
                 apiHelper.setDefaultPerPage(2);
                 apiHelper.setDefaultTrimUser(true);
                 switch (Apis.values()[position]){
                     case main:
-                        apiHelper.getMain();
+                        apiHelper.getAlbumMain();
                         break;
                     case getSetAndFolderList:
                         apiHelper.getSetAndFolderList();

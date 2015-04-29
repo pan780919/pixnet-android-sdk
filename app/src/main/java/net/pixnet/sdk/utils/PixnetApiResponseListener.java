@@ -46,6 +46,7 @@ public class PixnetApiResponseListener implements DataProxy.DataProxyListener {
 
     // mainpage
     public void onGetBestSelectedAlbum(SetList response){}
+    public void onGetCategoryArticleList(ArticleList response){}
 
     // account
     public void onCellphoneVerification(CellphoneVerification response){}
@@ -64,7 +65,7 @@ public class PixnetApiResponseListener implements DataProxy.DataProxyListener {
     public void onGetUserInfo(User response){}
 
     // album
-    public void onGetMain(AlbumMainPage response){}
+    public void onGetAlbumMain(AlbumMainPage response){}
     public void onGetSetAndFolderList(SetAndFolderList response){}
     public void onGetFolder(Folder response){}
     public void onGetFolderList(FolderList response){}

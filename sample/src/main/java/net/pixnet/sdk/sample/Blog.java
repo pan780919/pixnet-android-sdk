@@ -109,7 +109,7 @@ public class Blog extends ItemDetailFragment {
                         return true;
                     }
                 });
-                apiHelper.setDefaultUserName("emmademo");
+                apiHelper.setBloggerName("emmademo");
                 apiHelper.setDefaultPerPage(8);
                 apiHelper.setDefaultTrimUser(false);
                 switch (Apis.values()[position]) {

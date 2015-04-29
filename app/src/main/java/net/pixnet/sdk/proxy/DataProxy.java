@@ -28,12 +28,12 @@ public abstract class DataProxy {
     /**
      * 預設使用者名稱
      */
-    protected String defaultUserName="emmademo";
-    public String getDefaultUserName() {
-        return defaultUserName;
+    protected String bloggerName ="emmademo";
+    public String getBloggerName() {
+        return bloggerName;
     }
-    public void setDefaultUserName(String defaultUserName) {
-        this.defaultUserName = defaultUserName;
+    public void setBloggerName(String bloggerName) {
+        this.bloggerName = bloggerName;
     }
 
     /**

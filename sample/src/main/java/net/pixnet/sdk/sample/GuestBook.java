@@ -86,7 +86,7 @@ public class GuestBook extends ItemDetailFragment{
                         return true;
                     }
                 });
-                guestBookHelper.setDefaultUserName("emmademo");
+                guestBookHelper.setBloggerName("emmademo");
                 guestBookHelper.setDefaultPerPage(2);
                 guestBookHelper.setDefaultTrimUser(false);
                 switch (Apis.values()[position]){

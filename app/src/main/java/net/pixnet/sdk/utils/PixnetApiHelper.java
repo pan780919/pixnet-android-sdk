@@ -51,60 +51,63 @@ import java.util.List;
 
 public class PixnetApiHelper extends DataProxy {
 
+    public static final String HOST = "https://emma.pixnet.cc";
+
     // mainpage
-    public static final String URL_BEST_SELECTED_ALBUM = "https://emma.pixnet.cc/mainpage/album/best_selected/";
+    public static final String URL_BEST_SELECTED_ALBUM = HOST+"/mainpage/album/best_selected/";
+    public static final String URL_CATEGORY_ARTICLE = HOST+"/mainpage/blog/categories/";
 
     // account
-    public static final String URL_ACCOUNT="https://emma.pixnet.cc/account";
-    public static final String URL_ACCOUNT_INFO="https://emma.pixnet.cc/account/info";
-    public static final String URL_ACCOUNT_MIB="https://emma.pixnet.cc/account/mib";
-    public static final String URL_ACCOUNT_MIB_POSTION="https://emma.pixnet.cc/account/mib/positions";
-    public static final String URL_ACCOUNT_MIB_PAY="https://emma.pixnet.cc/account/mibpay";
-    public static final String URL_ACCOUNT_ANALYTICS="https://emma.pixnet.cc/account/analytics";
-    public static final String URL_ACCOUNT_PASSWD ="https://emma.pixnet.cc/account/password";
-    public static final String URL_ACCOUNT_NOTIFICATIONS ="https://emma.pixnet.cc/account/notifications";
-    public static final String URL_USER ="https://emma.pixnet.cc/users";
-    public static final String URL_PHONE_VERIFY ="https://emma.pixnet.cc/account/cellphone_verification";
+    public static final String URL_ACCOUNT=HOST+"/account";
+    public static final String URL_ACCOUNT_INFO=HOST+"/account/info";
+    public static final String URL_ACCOUNT_MIB=HOST+"/account/mib";
+    public static final String URL_ACCOUNT_MIB_POSTION=HOST+"/account/mib/positions";
+    public static final String URL_ACCOUNT_MIB_PAY=HOST+"/account/mibpay";
+    public static final String URL_ACCOUNT_ANALYTICS=HOST+"/account/analytics";
+    public static final String URL_ACCOUNT_PASSWD =HOST+"/account/password";
+    public static final String URL_ACCOUNT_NOTIFICATIONS =HOST+"/account/notifications";
+    public static final String URL_USER =HOST+"/users";
+    public static final String URL_PHONE_VERIFY =HOST+"/account/cellphone_verification";
 
     // album
-    private static final String URL_MAIN="https://emma.pixnet.cc/album/main";
-    private static final String URL_SETFOLDERS="https://emma.pixnet.cc/album/setfolders";
-    private static final String URL_SET="https://emma.pixnet.cc/album/sets";
-    private static final String URL_FOLDER="https://emma.pixnet.cc/album/folders";
-    private static final String URL_ELEMENTS="https://emma.pixnet.cc/album/elements";
-    private static final String URL_SET_COMMENT="https://emma.pixnet.cc/album/set_comments";
-    private static final String URL_ALBUM_COMMENT ="https://emma.pixnet.cc/album/comments";
-    private static final String URL_SORT_SETFOLDERS="https://emma.pixnet.cc/album/setfolders/position";
-    private static final String URL_SORT_SETS="https://emma.pixnet.cc/album/sets/position";
-    private static final String URL_SORT_ELEMENTS="https://emma.pixnet.cc/album/elements/position";
-    private static final String URL_SETS_NEAR="https://emma.pixnet.cc/album/sets/nearby";
-    private static final String URL_FACES="https://emma.pixnet.cc/album/faces";
-    private static final String URL_ALBUM_CONIFG="https://emma.pixnet.cc/album/config";
-    private static final String URL_ELEMENTS_NEARBY = "https://emma.pixnet.cc/album/elements/nearby";
+    private static final String URL_ALBUM_MAIN =HOST+"/album/main";
+    private static final String URL_SETFOLDERS=HOST+"/album/setfolders";
+    private static final String URL_SET=HOST+"/album/sets";
+    private static final String URL_FOLDER=HOST+"/album/folders";
+    private static final String URL_ELEMENTS=HOST+"/album/elements";
+    private static final String URL_SET_COMMENT=HOST+"/album/set_comments";
+    private static final String URL_ALBUM_COMMENT =HOST+"/album/comments";
+    private static final String URL_SORT_SETFOLDERS=HOST+"/album/setfolders/position";
+    private static final String URL_SORT_SETS=HOST+"/album/sets/position";
+    private static final String URL_SORT_ELEMENTS=HOST+"/album/elements/position";
+    private static final String URL_SETS_NEAR=HOST+"/album/sets/nearby";
+    private static final String URL_FACES=HOST+"/album/faces";
+    private static final String URL_ALBUM_CONIFG=HOST+"/album/config";
+    private static final String URL_ELEMENTS_NEARBY = HOST+"/album/elements/nearby";
 
     // blog
-    public static final String URL_CATEGORY = "https://emma.pixnet.cc/blog/categories";
-    public static final String URL_SITE_CATEGORY = "https://emma.pixnet.cc/blog/site_categories";
-    public static final String URL_ARTICLE = "https://emma.pixnet.cc/blog/articles";
-    public static final String URL_BLOG_COMMENT = "https://emma.pixnet.cc/blog/comments";
-    public static final String URL_BLOG = "https://emma.pixnet.cc/blog";
-    public static final String URL_TAGS = "https://emma.pixnet.cc/blog/suggested_tags";
+    public static final String URL_CATEGORY = HOST+"/blog/categories";
+    public static final String URL_SITE_CATEGORY = HOST+"/blog/site_categories";
+    public static final String URL_ARTICLE = HOST+"/blog/articles";
+    public static final String URL_BLOG_COMMENT = HOST+"/blog/comments";
+    public static final String URL_BLOG = HOST+"/blog";
+    public static final String URL_TAGS = HOST+"/blog/suggested_tags";
 
     // friend
-    private static final String URL_NEWS = "https://emma.pixnet.cc/friend/news";
-    private static final String URL_GROUP = "https://emma.pixnet.cc/friend/groups";
-    private static final String URL_FRIENDSHIP = "https://emma.pixnet.cc/friendships";
-    private static final String URL_SUBSCRIPTION = "https://emma.pixnet.cc/friend/subscriptions";
-    private static final String URL_SUBSCRIPTION_GROUP = "https://emma.pixnet.cc/friend/subscription_groups";
+    private static final String URL_NEWS = HOST+"/friend/news";
+    private static final String URL_GROUP = HOST+"/friend/groups";
+    private static final String URL_FRIENDSHIP = HOST+"/friendships";
+    private static final String URL_SUBSCRIPTION = HOST+"/friend/subscriptions";
+    private static final String URL_SUBSCRIPTION_GROUP = HOST+"/friend/subscription_groups";
 
     // block
-    public static final String URL_BLOCK = "https://emma.pixnet.cc/blocks";
+    public static final String URL_BLOCK = HOST+"/blocks";
 
     // guestbook
-    public static final String URL_GUESTBOOK = "https://emma.pixnet.cc/guestbook";
+    public static final String URL_GUESTBOOK = HOST+"/guestbook";
 
     // account
-    public static enum NotificationType{
+    public enum NotificationType{
         friend,
         system,
         comment,
@@ -112,13 +115,13 @@ public class PixnetApiHelper extends DataProxy {
     }
 
     // album
-    public static enum ElementType{
+    public enum ElementType{
         pic,
         video,
         audio
     }
 
-    public static enum Permission{
+    public enum Permission{
         all,
         friend,
         password,
@@ -126,11 +129,17 @@ public class PixnetApiHelper extends DataProxy {
         friendGroup
     }
 
-    public static enum CommentPermission{
+    public enum CommentPermission{
         denied,
         allow,
         friend,
         member
+    }
+
+    public enum SortType{
+        hot,
+        latest,
+        hot_week
     }
 
     // mainpage
@@ -151,6 +160,24 @@ public class PixnetApiHelper extends DataProxy {
                     return;
                 }
                 ((PixnetApiResponseListener)listener).onGetBestSelectedAlbum(parsedResponse);
+            }
+        });
+    }
+
+    public void getCategoryArticleList(SortType type, String categoryId){
+        performAPIRequest(false, URL_CATEGORY_ARTICLE, new Request.RequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                if(handleBasicResponse(response))
+                    return;
+                ArticleList parsedResponse;
+                try {
+                    parsedResponse=new ArticleList(response);
+                } catch (JSONException e) {
+                    listener.onError(Error.DATA_PARSE_FAILED);
+                    return;
+                }
+                ((PixnetApiResponseListener)listener).onGetCategoryArticleList(parsedResponse);
             }
         });
     }
@@ -662,8 +689,8 @@ public class PixnetApiHelper extends DataProxy {
     /**
      * 列出相簿主圖及相片牆, 需要認證
      */
-    public void getMain(){
-        performAPIRequest(true, URL_MAIN, new RequestCallback() {
+    public void getAlbumMain(){
+        performAPIRequest(true, URL_ALBUM_MAIN, new RequestCallback() {
             @Override
             public void onResponse(String response) {
                 if(handleBasicResponse(response))
@@ -675,7 +702,7 @@ public class PixnetApiHelper extends DataProxy {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
                 }
-                ((PixnetApiResponseListener) listener).onGetMain(parsedResponse);
+                ((PixnetApiResponseListener) listener).onGetAlbumMain(parsedResponse);
             }
         });
     }
@@ -695,7 +722,7 @@ public class PixnetApiHelper extends DataProxy {
      * @see #getSetAndFolderList(String, int, int, boolean)
      */
     public void getSetAndFolderList(int page){
-        getSetAndFolderList(defaultUserName, defaultPerPage, page, defaultTrimUser);
+        getSetAndFolderList(bloggerName, defaultPerPage, page, defaultTrimUser);
     }
     /**
      * 相簿首頁 (與 http://:user.pixnet.net/album/list 同步)
@@ -742,7 +769,7 @@ public class PixnetApiHelper extends DataProxy {
      * @see #getFolder(String, String, int, int)
      */
     public void getFolder(String folderId, int page){
-        getFolder(folderId, defaultUserName, defaultPerPage, page);
+        getFolder(folderId, bloggerName, defaultPerPage, page);
     }
     /**
      * 讀取個人相簿單一資料夾
@@ -788,7 +815,7 @@ public class PixnetApiHelper extends DataProxy {
      * @see #getFolderList(String, int, int, boolean)
      */
     public void getFolderList(int page){
-        getFolderList(defaultUserName, defaultPerPage, page, defaultTrimUser);
+        getFolderList(bloggerName, defaultPerPage, page, defaultTrimUser);
     }
     /**
      * 列出個人相簿資料夾
@@ -835,7 +862,7 @@ public class PixnetApiHelper extends DataProxy {
      * @see #getSet(String, String, int, int)
      */
     public void getSet(String id, int page){
-        getSet(defaultUserName, id, defaultPerPage, page);
+        getSet(bloggerName, id, defaultPerPage, page);
     }
     /**
      * 讀取個人相簿單一 Set
@@ -892,7 +919,7 @@ public class PixnetApiHelper extends DataProxy {
      * @see #getSetList(String, String, boolean, int, int)
      */
     public void getSetList(String parentId, int page){
-        getSetList(defaultUserName, parentId, defaultTrimUser, defaultPerPage, page);
+        getSetList(bloggerName, parentId, defaultTrimUser, defaultPerPage, page);
     }
     /**
      * 列出相簿個人 Set 清單
@@ -954,7 +981,7 @@ public class PixnetApiHelper extends DataProxy {
      * @see #getSetListByNear(String, double, double, int, int, int, int, boolean)
      */
     public void getSetListByNear(double lat, double lng, int minDistance, int maxDistance, int page){
-        getSetListByNear(defaultUserName, lat, lng, minDistance, maxDistance, defaultPerPage, page, defaultTrimUser);
+        getSetListByNear(bloggerName, lat, lng, minDistance, maxDistance, defaultPerPage, page, defaultTrimUser);
     }
     /**
      * 列出附近的相簿 Set
@@ -1002,7 +1029,7 @@ public class PixnetApiHelper extends DataProxy {
      * @see #getElement(String, String, boolean, boolean, int, int)
      */
     public void getElement(String elementId){
-        getElement(elementId, defaultUserName, false, false, 0, 0);
+        getElement(elementId, bloggerName, false, false, 0, 0);
     }
     /**
      * 讀取相簿單篇圖片影片
@@ -1065,7 +1092,7 @@ public class PixnetApiHelper extends DataProxy {
      * @see #getElementListBySet(String, String, ElementType, int, int, String, boolean, boolean, boolean, int, int)
      */
     public void getElementListBySet(String setId, ElementType type, int page, boolean withDetail){
-        getElementListBySet(defaultUserName, setId, type, defaultPerPage, page, null, withDetail, defaultTrimUser, false, 0, 0);
+        getElementListBySet(bloggerName, setId, type, defaultPerPage, page, null, withDetail, defaultTrimUser, false, 0, 0);
     }
     /**
      * 列出單一相簿 Set 的所有相片
@@ -1205,7 +1232,7 @@ public class PixnetApiHelper extends DataProxy {
      * @see #getCommentListBySet(String, String, String, int, int)
      */
     public void getCommentListBySet(String setId, String password, int page){
-        getCommentListBySet(defaultUserName, setId, password, defaultPerPage, page);
+        getCommentListBySet(bloggerName, setId, password, defaultPerPage, page);
     }
     /**
      * 列出 Set 的留言
@@ -1261,7 +1288,7 @@ public class PixnetApiHelper extends DataProxy {
      * @see #getCommentListByElement(String, String, boolean, String, int, int)
      */
     public void getCommentListByElement(String id, boolean isSet, int page){
-        getCommentListByElement(defaultUserName, id, isSet, null, defaultPerPage, page);
+        getCommentListByElement(bloggerName, id, isSet, null, defaultPerPage, page);
     }
     /**
      * 列出相片留言
@@ -1994,7 +2021,7 @@ public class PixnetApiHelper extends DataProxy {
 
     // blog
     public void getBlogCategorieList() {
-        getBlogCategorieList(defaultUserName);
+        getBlogCategorieList(bloggerName);
     }
 
     public void getBlogCategorieList(String user) {
@@ -2203,7 +2230,7 @@ public class PixnetApiHelper extends DataProxy {
     }
 
     public void getAllArticleList(int page, int per_page) {
-        getAllArticleList(defaultUserName, null, page, per_page, null, null, null, defaultTrimUser);
+        getAllArticleList(bloggerName, null, page, per_page, null, null, null, defaultTrimUser);
     }
 
     public void getAllArticleList(String user, String blog_password, int page, int per_page, String category_id, String status, String is_top, boolean trim_user) {
@@ -2247,7 +2274,7 @@ public class PixnetApiHelper extends DataProxy {
     }
 
     public void getArticle(String id) {
-        getArticle(id, defaultUserName);
+        getArticle(id, bloggerName);
     }
 
     public void getArticle(String id, String user) {
@@ -2289,7 +2316,7 @@ public class PixnetApiHelper extends DataProxy {
     }
 
     public void getRelatedArticleList(String id) {
-        getRelatedArticleList(id, defaultUserName);
+        getRelatedArticleList(id, bloggerName);
     }
 
     public void getRelatedArticleList(String id, String user) {
@@ -2512,7 +2539,7 @@ public class PixnetApiHelper extends DataProxy {
     }
 
     public void getArticleListByLatest() {
-        getArticleListByLatest(defaultUserName, null, null, defaultTrimUser);
+        getArticleListByLatest(bloggerName, null, null, defaultTrimUser);
     }
 
     public void getArticleListByLatest(String user, String blog_password, String limit, boolean trim_user) {
@@ -2550,7 +2577,7 @@ public class PixnetApiHelper extends DataProxy {
      * 列出部落格熱門文章
      */
     public void getArticleListByHot() {
-        getArticleListByHot(defaultUserName, null, 1, defaultTrimUser);
+        getArticleListByHot(bloggerName, null, 1, defaultTrimUser);
     }
 
     /**
@@ -2596,7 +2623,7 @@ public class PixnetApiHelper extends DataProxy {
      * @param period 起始日與結束日 "YYYYmmdd-YYYYmmdd"
      */
     public void getArticleListByHotWithin(int limit, String period) {
-        getArticleListByHotWithin(defaultUserName, limit, defaultTrimUser, period);
+        getArticleListByHotWithin(bloggerName, limit, defaultTrimUser, period);
     }
 
     /**
@@ -2641,7 +2668,7 @@ public class PixnetApiHelper extends DataProxy {
     }
 
     public void searchArticleList(String key, int page) {
-        searchArticleList(key, defaultUserName, null, null, page, defaultPerPage);
+        searchArticleList(key, bloggerName, null, null, page, defaultPerPage);
     }
 
     public void searchArticleList(String key, String user, String site, String type, int page, int per_page) {
@@ -2699,7 +2726,7 @@ public class PixnetApiHelper extends DataProxy {
      * @see #getCommentList(String, String, String, String, String, String, int, int)
      */
     public void getCommentList(String article_id,int page){
-        getCommentList(defaultUserName,article_id,null,null,null,null,page,defaultPerPage);
+        getCommentList(bloggerName,article_id,null,null,null,null,page,defaultPerPage);
     }
     /**
      *
@@ -2708,7 +2735,7 @@ public class PixnetApiHelper extends DataProxy {
      * @see #getCommentList(String, String, String, String, String, String, int, int)
      */
     public void getCommentList(String filter, String sort, int page) {
-        getCommentList(defaultUserName,null,null,null,filter,sort,page,defaultPerPage);
+        getCommentList(bloggerName,null,null,null,filter,sort,page,defaultPerPage);
     }
     /**
      * 列出部落格留言
@@ -2767,7 +2794,7 @@ public class PixnetApiHelper extends DataProxy {
      * @see #addComment(String, String, String, String, String, String, String, String, String, String)
      */
     public void addComment(String article_id,String body){
-        addComment(article_id, body, defaultUserName);
+        addComment(article_id, body, bloggerName);
     }
     /**
      * @see #addComment(String, String, String, String, String, String, String, String, String, String)
@@ -2844,7 +2871,7 @@ public class PixnetApiHelper extends DataProxy {
     }
 
     public void getComment(String id) {
-        getComment(id, defaultUserName);
+        getComment(id, bloggerName);
     }
 
     public void getComment(String id, String user) {
@@ -3009,7 +3036,7 @@ public class PixnetApiHelper extends DataProxy {
     }
 
     public void getCommentListByLatest() {
-        getCommentListByLatest(defaultUserName);
+        getCommentListByLatest(bloggerName);
     }
 
     public void getCommentListByLatest(String user) {
@@ -3082,7 +3109,7 @@ public class PixnetApiHelper extends DataProxy {
     }
 
     public void getBlogInfo() {
-        getBlogInfo(defaultUserName);
+        getBlogInfo(bloggerName);
     }
 
     public void getBlogInfo(String user) {
@@ -3143,7 +3170,7 @@ public class PixnetApiHelper extends DataProxy {
 
 
     public void getTags(){
-        getTags(defaultUserName);
+        getTags(bloggerName);
     }
     /**
      * 部落格 熱門標籤 及 相關標籤
@@ -3765,7 +3792,7 @@ public class PixnetApiHelper extends DataProxy {
 
     // guestbook
     public void getGuestbookList() {
-        getGuestbookList(defaultUserName, null, null, defaultPerPage);
+        getGuestbookList(bloggerName, null, null, defaultPerPage);
     }
 
     public void getGuestbookList(String user, String filter, String cursor, int per_page) {
@@ -3844,7 +3871,7 @@ public class PixnetApiHelper extends DataProxy {
     }
 
     public void getGuestbook(String id) {
-        getGuestbook(defaultUserName, id);
+        getGuestbook(bloggerName, id);
     }
 
     public void getGuestbook(String user, String id) {

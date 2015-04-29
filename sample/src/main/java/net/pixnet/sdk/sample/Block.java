@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import net.pixnet.sdk.PIXNET;
-import net.pixnet.sdk.proxy.DataProxy;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.utils.Helper;
 import net.pixnet.sdk.utils.PixnetApiHelper;
@@ -80,7 +79,7 @@ public class Block extends ItemDetailFragment {
                         return true;
                     }
                 });
-                apiHelper.setDefaultUserName("emmademo");
+                apiHelper.setBloggerName("emmademo");
                 apiHelper.setDefaultPerPage(2);
                 apiHelper.setDefaultTrimUser(false);
                 switch (Apis.values()[position]) {
