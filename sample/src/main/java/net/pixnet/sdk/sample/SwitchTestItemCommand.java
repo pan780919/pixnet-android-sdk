@@ -10,6 +10,8 @@ public class SwitchTestItemCommand {
                 return new Login();
             case ACCOUNT:
                 return new Account();
+            case MAIN:
+                return new MainPage();
             case BLOG:
                 return new Blog();
             case ALBUM:

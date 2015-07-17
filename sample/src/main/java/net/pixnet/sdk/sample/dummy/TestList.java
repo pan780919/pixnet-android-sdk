@@ -16,6 +16,7 @@ public class TestList {
     public static enum ItemId{
         LOGIN,
         ACCOUNT,
+        MAIN,
         BLOG,
         ALBUM,
         BLOCK,
@@ -36,6 +37,7 @@ public class TestList {
     static {
         addItem(new TestItem(ItemId.LOGIN, "LOGIN"));
         addItem(new TestItem(ItemId.ACCOUNT, "ACCOUNT"));
+        addItem(new TestItem(ItemId.MAIN, "MAIN"));
         addItem(new TestItem(ItemId.BLOG, "BLOG"));
         addItem(new TestItem(ItemId.ALBUM, "ALBUM"));
         addItem(new TestItem(ItemId.BLOCK,"BLOCK"));

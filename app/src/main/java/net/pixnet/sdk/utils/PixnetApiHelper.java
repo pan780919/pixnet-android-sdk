@@ -54,8 +54,8 @@ public class PixnetApiHelper extends DataProxy {
     public static final String HOST = "https://emma.pixnet.cc";
 
     // mainpage
-    public static final String URL_BEST_SELECTED_ALBUM = HOST+"/mainpage/album/best_selected/";
-    public static final String URL_CATEGORY_ARTICLE = HOST+"/mainpage/blog/categories/";
+    public static final String URL_BEST_SELECTED_ALBUM = HOST+"/mainpage/album/best_selected";
+    public static final String URL_CATEGORY_ARTICLE = HOST+"/mainpage/blog/categories";
 
     // account
     public static final String URL_ACCOUNT=HOST+"/account";
@@ -165,7 +165,12 @@ public class PixnetApiHelper extends DataProxy {
     }
 
     public void getCategoryArticleList(SortType type, String categoryId){
-        performAPIRequest(false, URL_CATEGORY_ARTICLE, new Request.RequestCallback() {
+        List<NameValuePair> params=new ArrayList<>();
+        params.add(new BasicNameValuePair("api_version", "2"));
+
+        String url = URL_CATEGORY_ARTICLE + "/" + type.name() + "/" + categoryId;
+
+        performAPIRequest(false, url, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
                 if(handleBasicResponse(response))
@@ -179,7 +184,7 @@ public class PixnetApiHelper extends DataProxy {
                 }
                 ((PixnetApiResponseListener)listener).onGetCategoryArticleList(parsedResponse);
             }
-        });
+        }, params);
     }
 
     //account
@@ -199,7 +204,7 @@ public class PixnetApiHelper extends DataProxy {
             listener.onError(Error.MISS_PARAMETER);
             return;
         }
-        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        List<NameValuePair> params=new ArrayList<>();
         params.add(new BasicNameValuePair("code", code));
         performCellphoneVerification(params);
     }
