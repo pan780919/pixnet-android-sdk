@@ -64,6 +64,12 @@ public class Analytics extends BasicResponse {
 
             if(statisticsData.has("highest"))
                 blog.statistics.highest=statisticsData.getInt("highest");
+            if(statisticsData.has("is_addon_service")) {
+                int is_addon_service=statisticsData.getInt("is_addon_service");
+                if(is_addon_service>0)
+                    blog.statistics.is_addon_service=true;
+                else blog.statistics.is_addon_service=false;
+            }
             if(statisticsData.has("data")) {
                 JSONArray datas=statisticsData.getJSONArray("data");
                 int i=0, len=datas.length();
@@ -166,6 +172,7 @@ public class Analytics extends BasicResponse {
 
     public class Statistics{
         public int highest;
+        public boolean is_addon_service;
         public List<StatisticData> data;
     }
 

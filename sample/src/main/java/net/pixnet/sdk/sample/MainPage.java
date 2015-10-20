@@ -14,27 +14,18 @@ import net.pixnet.sdk.utils.Helper;
 import net.pixnet.sdk.utils.PixnetApiHelper;
 import net.pixnet.sdk.utils.PixnetApiResponseListener;
 
-public class Account extends ItemDetailFragment {
+public class MainPage extends ItemDetailFragment {
 
     private enum Apis{
-        getAccountInfo,
-        updateAccountInfo,
-        getMIBInfo,
-        updateMIBInfo,
-        getMIBPositionInfo,
-        updateMIBPositionInfo,
-        payMIB,
-        getAnalyticData,
-        updatePassword,
-        getNotificationList,
-        getUserInfo
+        bestSelectedAlbum,
+        categoryArticles
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final Apis[] data=Apis.values();
+        final Apis[] data= Apis.values();
 
         setListAdapter(new BaseAdapter() {
             @Override
@@ -90,46 +81,13 @@ public class Account extends ItemDetailFragment {
                         Helper.log(response.getRawData());
                         return false;
                     }
-
-                    @Override
-                    public void onGetMIBInfo(MIB response) {
-                        Helper.log(response
-                                .account
-                                .id_number);
-                    }
                 });
                 switch (Apis.values()[position]){
-                    case getAccountInfo:
-                        apiHelper.getAccountInfo(true, null, true, true, true);
+                    case bestSelectedAlbum:
+                        apiHelper.getBestSelectedAlbum();
                         break;
-                    case updateAccountInfo:
-                        apiHelper.updateAccountInfo("221111", "UncleBen2");
-                        break;
-                    case getMIBInfo:
-                        apiHelper.getMIBInfo();
-                        break;
-                    case updateMIBInfo:
-                        break;
-                    case getMIBPositionInfo:
-                        apiHelper.getMIBPostionInfo("790");
-                        break;
-                    case updateMIBPositionInfo:
-                        apiHelper.updateMIBPositionInfo("790", true, true);
-                        break;
-                    case payMIB:
-                        apiHelper.payMIB();
-                        break;
-                    case getAnalyticData:
-                        apiHelper.getAnalyticData(1, 1);
-                        break;
-                    case updatePassword:
-                        apiHelper.updatePassword("221111", "121111");
-                        break;
-                    case getNotificationList:
-                        apiHelper.getNotifications();
-                        break;
-                    case getUserInfo:
-                        apiHelper.getUserInfo("ben68");
+                    case categoryArticles:
+                        apiHelper.getCategoryArticleList(PixnetApiHelper.SortType.hot, "14");
                         break;
                     default:
                 }

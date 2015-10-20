@@ -44,6 +44,12 @@ public class PIXNET {
         dialog.show();
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
+        Helper.log("consumer key");
+        Helper.log(getConsumerKey(context));
+
+        Helper.log("consumer secret");
+        Helper.log(getConsumerSecret(context));
+
         OAuthLoginHelper loginHelper = OAuthLoginHelper.newAuth1LoginHelper(getConsumerKey(context), getConsumerSecret(context), URL_OAUTH1_REQUEST, URL_OAUTH1_ACCESS, new OAuthLoginHelper.OAuth1LoginListener() {
             @Override
             public void onRequestUrlGot() {}
