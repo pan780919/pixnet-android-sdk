@@ -27,7 +27,7 @@ Application Type 請選擇 Destop / Mobile App
 在 build.gradle 的 dependencies 中加入 pixnet sdk
 ```gradle
 dependencies{
-  compile 'net.pixnet.android:pixnet-android-sdk:1.0.1'
+  compile 'net.pixnet.android:pixnet-android-sdk:1.0.7'
 }
 ```
 
