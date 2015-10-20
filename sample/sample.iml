@@ -95,7 +95,7 @@
     <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="httpcore-4.4-beta1" level="project" />
     <orderEntry type="library" exported="" name="signpost-core-1.2.1.2" level="project" />
+    <orderEntry type="library" exported="" name="pixnet-android-sdk-1.0.8" level="project" />
     <orderEntry type="library" exported="" name="httpmime-4.4-beta1" level="project" />
-    <orderEntry type="module" module-name="app" exported="" />
   </component>
 </module>
