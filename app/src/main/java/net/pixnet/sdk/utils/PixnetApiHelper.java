@@ -2363,10 +2363,10 @@ public class PixnetApiHelper extends DataProxy {
     }
 
     public void addArticle(String title, String body) {
-        addArticle(title, body, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        addArticle(title, body, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
-    public void addArticle(String title, String body, String status, String public_at, String category_id, String site_category_id, String use_nl2br, String comment_perm, String comment_hidden, String tags, String thumb, String cover, String trackback, String password, String password_hint, String friend_group_ids, String notify_twitter, String notify_facebook) {
+    public void addArticle(String title, String body, String status, String public_at, String category_id, String site_category_id, String sub_site_category_id, String use_nl2br, String comment_perm, String comment_hidden, String tags, String thumb, String cover, String trackback, String password, String password_hint, String friend_group_ids, String notify_twitter, String notify_facebook) {
         if (title == null || TextUtils.isEmpty(title)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
@@ -2389,6 +2389,9 @@ public class PixnetApiHelper extends DataProxy {
         }
         if (!TextUtils.isEmpty(site_category_id)) {
             params.add(new BasicNameValuePair("site_category_id", site_category_id));
+        }
+        if (!TextUtils.isEmpty(sub_site_category_id)) {
+            params.add(new BasicNameValuePair("sub_site_category_id", sub_site_category_id));
         }
         if (!TextUtils.isEmpty(use_nl2br)) {
             params.add(new BasicNameValuePair("use_nl2br", use_nl2br));
@@ -2443,7 +2446,7 @@ public class PixnetApiHelper extends DataProxy {
         }, params);
     }
 
-    public void updateArticle(String id, String title, String body, String status, String public_at, String category_id, String site_category_id, String use_nl2br, String comment_perm, String comment_hidden, String tags, String thumb, String cover, String trackback, String password, String password_hint, String friend_group_ids, String notify_twitter, String notify_facebook) {
+    public void updateArticle(String id, String title, String body, String status, String public_at, String category_id, String site_category_id, String sub_site_category_id, String use_nl2br, String comment_perm, String comment_hidden, String tags, String thumb, String cover, String trackback, String password, String password_hint, String friend_group_ids, String notify_twitter, String notify_facebook) {
         if (id == null || TextUtils.isEmpty(id)) {
             listener.onError(net.pixnet.sdk.proxy.Error.MISS_PARAMETER);
             return;
@@ -2466,6 +2469,9 @@ public class PixnetApiHelper extends DataProxy {
         }
         if (!TextUtils.isEmpty(site_category_id)) {
             params.add(new BasicNameValuePair("site_category_id", site_category_id));
+        }
+        if (!TextUtils.isEmpty(sub_site_category_id)) {
+            params.add(new BasicNameValuePair("sub_site_category_id", sub_site_category_id));
         }
         if (!TextUtils.isEmpty(use_nl2br)) {
             params.add(new BasicNameValuePair("use_nl2br", use_nl2br));

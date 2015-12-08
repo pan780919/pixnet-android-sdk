@@ -13,6 +13,7 @@ import net.pixnet.sdk.response.Article;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.utils.Helper;
 import net.pixnet.sdk.utils.PixnetApiHelper;
+import net.pixnet.sdk.utils.PixnetApiResponseListener;
 
 /**
  * Created by Koi on 2014/8/15.
@@ -120,7 +121,7 @@ public class Blog extends ItemDetailFragment {
                         apiHelper.setBlogInfo("Test Name", "Test description", null, null);
                         break;
                     case getBlogCategorieList:
-                         apiHelper.getBlogCategorieList();
+                        apiHelper.getBlogCategorieList();
                         break;
                     case addCategory:
                         apiHelper.addCategory("Test");
@@ -135,16 +136,14 @@ public class Blog extends ItemDetailFragment {
                         apiHelper.getAllArticleList();
                         break;
                     case getArticle:
-                        apiHelper.setListener(new DataProxy.DataProxyListener() {
+                        apiHelper.setListener(new PixnetApiResponseListener(){
                             @Override
                             public void onError(String msg) {
-
+                                Helper.log(msg);
                             }
-
                             @Override
-                            public boolean onDataResponse(BasicResponse response) {
-                                Article article = (Article) response;
-                                Helper.log(response.getRawData());
+                            public void onGetArticle(Article article) {
+                                Helper.log(article.getRawData());
                                 Bundle bundle = new Bundle();
                                 if (article.body != null) {
                                     bundle.putString("body", article.body);
@@ -162,20 +161,21 @@ public class Blog extends ItemDetailFragment {
                                 //Intent intent = new Intent(Blog.this.getActivity(),Show_Article.class);
                                 //intent.putExtra("bundle",bundle);
                                 //startActivityForResult(intent, 0);
-                                return true;
                             }
                         });
-                        apiHelper.getArticle("165129609");
+                        apiHelper.setBloggerName("doggysojourn");
+                        apiHelper.getArticle("46250784");
 
                         break;
                     case getRelatedArticleList:
                         apiHelper.getRelatedArticleList("61695293");
                         break;
                     case addArticle:
-                        apiHelper.addArticle("TestTitle", "TestBody");
+//                        apiHelper.addArticle("TestTitle", "TestBody");
+                        apiHelper.addArticle("test title", "test body", null, null, null, null, "-1", null, null, null, null, null, null, null, null, null, null, null, null);
                         break;
                     case updateArticle:
-                        apiHelper.updateArticle("174157501", "TestUpdateTitle", "Body", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                        apiHelper.updateArticle("174157501", "TestUpdateTitle", "Body", null, null, null, null, "-1", null, null, null, null, null, null, null, null, null, null, null, null);
                         break;
                     case removeArticle:
                         apiHelper.deleteArticle("174156916");

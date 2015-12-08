@@ -31,6 +31,8 @@ public class Article extends BasicResponse {
      * category id
      */
     public String category_id;
+    public String sub_site_category;
+    public String sub_site_category_id;
     /**
      * article url
      */
@@ -127,6 +129,12 @@ public class Article extends BasicResponse {
         }
         if (article.has("category_id")) {
             category_id = article.getString("category_id");
+        }
+        if (article.has("sub_site_category")) {
+            sub_site_category = article.getString("sub_site_category");
+        }
+        if (article.has("sub_site_category_id")) {
+            sub_site_category_id = article.getString("sub_site_category_id");
         }
         if (article.has("link")) {
             link = article.getString("link");
