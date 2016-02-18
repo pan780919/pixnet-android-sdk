@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.util.Base64;
 
 import net.pixnet.sdk.PIXNET;
-import net.pixnet.sdk.proxy.*;
 import net.pixnet.sdk.proxy.Error;
 
 import org.apache.http.NameValuePair;
@@ -195,7 +194,7 @@ public class OAuthConnectionTool
     }
 
     private ArrayList<String> getBasicOAuthParameters() {
-        ArrayList<String> paraList = new ArrayList<String>();
+        ArrayList<String> paraList = new ArrayList<>();
         paraList.add("oauth_nonce=" + nonce);
         paraList.add("oauth_consumer_key=" + key);
         paraList.add("oauth_signature_method=" + SIGNATRUE_METHOD);

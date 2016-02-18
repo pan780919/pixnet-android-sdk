@@ -87,7 +87,7 @@ public class MainPage extends ItemDetailFragment {
                         apiHelper.getBestSelectedAlbum();
                         break;
                     case categoryArticles:
-                        apiHelper.getCategoryArticleList(PixnetApiHelper.SortType.hot, "14");
+                        apiHelper.getCategoryArticleList(PixnetApiHelper.SortType.hot_weekly, "14");
                         break;
                     default:
                 }

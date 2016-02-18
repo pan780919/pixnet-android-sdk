@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import net.pixnet.sdk.PIXNET;
+import net.pixnet.sdk.response.AccountInfo;
 import net.pixnet.sdk.response.BasicResponse;
 import net.pixnet.sdk.response.MIB;
 import net.pixnet.sdk.utils.Helper;
@@ -89,6 +90,12 @@ public class Account extends ItemDetailFragment {
                         Helper.log("onDataResponse");
                         Helper.log(response.getRawData());
                         return false;
+                    }
+
+                    @Override
+                    public void onGetAccountInfo(AccountInfo response) {
+                        Helper.log(String.valueOf(response.quota.album_space_left));
+                        Helper.log(String.valueOf(response.quota.album_space_quota));
                     }
 
                     @Override

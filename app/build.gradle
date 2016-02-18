@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 ext {
     PUBLISH_GROUP_ID = 'net.pixnet.android'
     PUBLISH_ARTIFACT_ID = 'pixnet-android-sdk'
-    PUBLISH_VERSION = '1.0.9'
+    PUBLISH_VERSION = '1.0.10'
 }
 
 android {
@@ -13,7 +13,7 @@ android {
         minSdkVersion 8
         targetSdkVersion 21
         versionCode 8
-        versionName "1.0.9"
+        versionName "1.0.10"
     }
     productFlavors {
     }
@@ -21,7 +21,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'org.apache.httpcomponents:httpmime:4.4-beta1'
+    compile 'org.apache.httpcomponents:httpmime:4.5.1'
     compile 'oauth.signpost:signpost-commonshttp4:1.2.1.2'
 }
 

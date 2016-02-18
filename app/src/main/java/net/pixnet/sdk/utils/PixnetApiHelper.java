@@ -139,7 +139,7 @@ public class PixnetApiHelper extends DataProxy {
     public enum SortType{
         hot,
         latest,
-        hot_week
+        hot_weekly
     }
 
     // mainpage
@@ -150,39 +150,47 @@ public class PixnetApiHelper extends DataProxy {
         performAPIRequest(false, URL_BEST_SELECTED_ALBUM, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 SetList parsedResponse;
                 try {
-                    parsedResponse=new SetList(response);
+                    parsedResponse = new SetList(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
                 }
-                ((PixnetApiResponseListener)listener).onGetBestSelectedAlbum(parsedResponse);
+                ((PixnetApiResponseListener) listener).onGetBestSelectedAlbum(parsedResponse);
             }
         });
     }
 
-    public void getCategoryArticleList(SortType type, String categoryId){
+    public void getCategoryArticleList(SortType type, String categoryId) {
+        getCategoryArticleList(type, categoryId, 1);
+    }
+    public void getCategoryArticleList(SortType type, String categoryId, int page) {
+        getCategoryArticleList(type, categoryId, defaultPerPage, page);
+    }
+    public void getCategoryArticleList(SortType type, String categoryId, int perPage, int page){
         List<NameValuePair> params=new ArrayList<>();
         params.add(new BasicNameValuePair("api_version", "2"));
+        params.add(new BasicNameValuePair("per_page", String.valueOf(perPage)));
+        params.add(new BasicNameValuePair("page", String.valueOf(page)));
 
         String url = URL_CATEGORY_ARTICLE + "/" + type.name() + "/" + categoryId;
 
         performAPIRequest(false, url, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 ArticleList parsedResponse;
                 try {
-                    parsedResponse=new ArticleList(response);
+                    parsedResponse = new ArticleList(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
                 }
-                ((PixnetApiResponseListener)listener).onGetCategoryArticleList(parsedResponse);
+                ((PixnetApiResponseListener) listener).onGetCategoryArticleList(parsedResponse);
             }
         }, params);
     }
@@ -265,11 +273,11 @@ public class PixnetApiHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 AccountInfo parsedResponse;
                 try {
-                    parsedResponse=new AccountInfo(response);
+                    parsedResponse = new AccountInfo(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
@@ -516,11 +524,11 @@ public class PixnetApiHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_MIB_PAY, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 BasicResponse parsedResponse;
                 try {
-                    parsedResponse=new BasicResponse(response);
+                    parsedResponse = new BasicResponse(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
@@ -582,11 +590,11 @@ public class PixnetApiHelper extends DataProxy {
         performAPIRequest(true, URL_ACCOUNT_PASSWD, Request.Method.POST, new Request.RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 BasicResponse parsedResponse;
                 try {
-                    parsedResponse=new BasicResponse(response);
+                    parsedResponse = new BasicResponse(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
@@ -750,11 +758,11 @@ public class PixnetApiHelper extends DataProxy {
         performAPIRequest(false, URL_SETFOLDERS, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 SetAndFolderList parsedResponse;
                 try {
-                    parsedResponse=new SetAndFolderList(response);
+                    parsedResponse = new SetAndFolderList(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
@@ -793,14 +801,14 @@ public class PixnetApiHelper extends DataProxy {
         params.add(new BasicNameValuePair("per_page", String.valueOf(perPage)));
         params.add(new BasicNameValuePair("page", String.valueOf(page)));
 
-        performAPIRequest(false, URL_FOLDER+"/"+folderId, new RequestCallback() {
+        performAPIRequest(false, URL_FOLDER + "/" + folderId, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 Folder parsedResponse;
                 try {
-                    parsedResponse=new Folder(response);
+                    parsedResponse = new Folder(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
@@ -843,11 +851,11 @@ public class PixnetApiHelper extends DataProxy {
         performAPIRequest(false, URL_FOLDER, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 FolderList parsedResponse;
                 try {
-                    parsedResponse=new FolderList(response);
+                    parsedResponse = new FolderList(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
@@ -885,14 +893,14 @@ public class PixnetApiHelper extends DataProxy {
         params.add(new BasicNameValuePair("per_page", String.valueOf(perPage)));
         params.add(new BasicNameValuePair("page", String.valueOf(page)));
 
-        performAPIRequest(false, URL_SET+"/"+id, new RequestCallback() {
+        performAPIRequest(false, URL_SET + "/" + id, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 Set parsedResponse;
                 try {
-                    parsedResponse=new Set(response);
+                    parsedResponse = new Set(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
@@ -950,11 +958,11 @@ public class PixnetApiHelper extends DataProxy {
         performAPIRequest(false, URL_SET, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 SetList parsedResponse;
                 try {
-                    parsedResponse=new SetList(response);
+                    parsedResponse = new SetList(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
@@ -1016,11 +1024,11 @@ public class PixnetApiHelper extends DataProxy {
         performAPIRequest(false, URL_SETS_NEAR, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 SetList parsedResponse;
                 try {
-                    parsedResponse=new SetList(response);
+                    parsedResponse = new SetList(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
@@ -1058,14 +1066,14 @@ public class PixnetApiHelper extends DataProxy {
         if(iframeHeight>0)
             params.add(new BasicNameValuePair("iframe_height", String.valueOf(iframeHeight)));
 
-        performAPIRequest(false, URL_ELEMENTS+"/"+elementId, new RequestCallback() {
+        performAPIRequest(false, URL_ELEMENTS + "/" + elementId, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 Element parsedResponse;
                 try {
-                    parsedResponse=new Element(response);
+                    parsedResponse = new Element(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
@@ -1263,11 +1271,11 @@ public class PixnetApiHelper extends DataProxy {
         performAPIRequest(false, URL_SET_COMMENT, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 CommentList parsedResponse;
                 try {
-                    parsedResponse=new CommentList(response);
+                    parsedResponse = new CommentList(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
@@ -1352,11 +1360,11 @@ public class PixnetApiHelper extends DataProxy {
         performAPIRequest(true, URL_FOLDER, Method.POST, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 Folder parsedResponse;
                 try {
-                    parsedResponse=new Folder(response);
+                    parsedResponse = new Folder(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
@@ -1447,11 +1455,11 @@ public class PixnetApiHelper extends DataProxy {
             listener.onError(Error.MISS_PARAMETER);
             return;
         }
-        List<NameValuePair> params=new ArrayList<NameValuePair>();
+        List<NameValuePair> params=new ArrayList<>();
         params.add(new BasicNameValuePair("set_id", setId));
         List<FileNameValuePair> files=null;
         if(file!=null) {
-            files = new ArrayList<FileNameValuePair>();
+            files = new ArrayList<>();
             files.add(new FileNameValuePair("upload_file", file));
         }
 
@@ -1567,28 +1575,28 @@ public class PixnetApiHelper extends DataProxy {
         params.add(new BasicNameValuePair("title", title));
         params.add(new BasicNameValuePair("description", description));
 
-        performAPIRequest(true, URL_FOLDER+"/"+folderId, Method.POST, new RequestCallback() {
+        performAPIRequest(true, URL_FOLDER + "/" + folderId, Method.POST, new RequestCallback() {
             @Override
             public void onResponse(String response) {
-                if(handleBasicResponse(response))
+                if (handleBasicResponse(response))
                     return;
                 Folder parsedResponse;
                 try {
-                    parsedResponse=new Folder(response);
+                    parsedResponse = new Folder(response);
                 } catch (JSONException e) {
                     listener.onError(Error.DATA_PARSE_FAILED);
                     return;
                 }
-                ((PixnetApiResponseListener)listener).onUpdateFolder(parsedResponse);
+                ((PixnetApiResponseListener) listener).onUpdateFolder(parsedResponse);
             }
         }, params);
     }
 
     /**
-     * @see #updateSet(String, String, String, Permission, String, boolean, boolean, CommentPermission, String, String, List, boolean, boolean, String)
+     * @see #updateSet(String, String, String, Permission, String, boolean, boolean, CommentPermission, String, String, List, boolean, boolean, String, float, float)
      */
     public void updateSet(String setId, String title, String description){
-        updateSet(setId, title, description, Permission.all, null, false, true, CommentPermission.allow, null, null, null, false, false, null);
+        updateSet(setId, title, description, Permission.all, null, false, true, CommentPermission.allow, null, null, null, false, false, null, 0, 0);
     }
 
     /**
@@ -1607,8 +1615,10 @@ public class PixnetApiHelper extends DataProxy {
      * @param allowCommercialUsr 是否允許商業使用
      * @param allowDerivatoin 是否允許創作衍生著作
      * @param parentId 如果這個 parent_id 被指定, 則此相簿會放置在這個相簿資料夾底下(只能放在資料夾底下)
+     * @param lat 相簿所在的緯度。必須與 lng 同時指定
+     * @param lng 相簿所在的經度。必須與 lat 同時指定
      */
-    public void updateSet(String setId, String title, String description, Permission permission, String categoryId, boolean isLockRight, boolean allowCC, CommentPermission canComment, String password, String passwordHint, List<String> friendGroupIds, boolean allowCommercialUsr, boolean allowDerivatoin, String parentId){
+    public void updateSet(String setId, String title, String description, Permission permission, String categoryId, boolean isLockRight, boolean allowCC, CommentPermission canComment, String password, String passwordHint, List<String> friendGroupIds, boolean allowCommercialUsr, boolean allowDerivatoin, String parentId, float lat, float lng){
         if(TextUtils.isEmpty(title) || TextUtils.isEmpty(description)){
             listener.onError(Error.MISS_PARAMETER);
             return;
@@ -1617,15 +1627,20 @@ public class PixnetApiHelper extends DataProxy {
         params.add(new BasicNameValuePair("title", title));
         params.add(new BasicNameValuePair("description", description));
         params.add(new BasicNameValuePair("permission", String.valueOf(permission.ordinal())));
-        if(TextUtils.isEmpty(categoryId))
+        if(!TextUtils.isEmpty(categoryId))
             params.add(new BasicNameValuePair("category_id", categoryId));
         params.add(new BasicNameValuePair("is_lockright", isLockRight?"1":"0"));
         params.add(new BasicNameValuePair("allow_cc", allowCC?"cc":"copyrighted"));
         params.add(new BasicNameValuePair("cancomment", String.valueOf(canComment.ordinal())));
-        if(TextUtils.isEmpty(password))
+        if(!TextUtils.isEmpty(password))
             params.add(new BasicNameValuePair("password", password));
-        if(TextUtils.isEmpty(passwordHint))
+        if(!TextUtils.isEmpty(passwordHint))
             params.add(new BasicNameValuePair("password_hint", passwordHint));
+        if(lat>0 && lng >0){
+            params.add(new BasicNameValuePair("latitude", String.valueOf(lat)));
+            params.add(new BasicNameValuePair("longitude", String.valueOf(lng)));
+        }
+
         if(friendGroupIds!=null){
             String ids="";
             int i=0, len=friendGroupIds.size();

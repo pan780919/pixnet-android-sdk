@@ -1,6 +1,7 @@
 package net.pixnet.sdk.response;
 
 import net.pixnet.sdk.proxy.DataProxy;
+import net.pixnet.sdk.utils.Helper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
