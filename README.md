@@ -9,7 +9,7 @@ Learn More detail at [http://developer.pixnet.pro/](http://developer.pixnet.pro/
 
 ##安裝 - Installation#
 
-PIXNET Android SDK 支援使用 Android Studio 開發， Android 2.3+
+PIXNET Android SDK 支援使用 Android Studio 開發， 支援 Android 2.3+
 
 ##使用 - Usage#
 ###在使用之前，請先至 PIXNET Developer 註冊新的 APP。
