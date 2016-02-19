@@ -83,7 +83,7 @@ public class Login extends ItemDetailFragment {
                             public void onError(String msg) {
                                 Helper.toast(getActivity(), msg);
                             }
-                        }, "eggyu5448", "aa5448");
+                        }, "ben68", "121111");
                         break;
                     case LOGIN_1:
                         PIXNET.oAuth1Login(getActivity(), new PIXNET.OnAccessTokenGotListener() {
