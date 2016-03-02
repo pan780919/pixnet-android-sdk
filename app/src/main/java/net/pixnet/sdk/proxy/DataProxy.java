@@ -47,6 +47,42 @@ public abstract class DataProxy {
         this.defaultPerPage = defaultPerPage;
     }
 
+    protected String thumbSize = "320";
+    public enum ThumbSize{
+        ss,
+        s,
+        m,
+        l,
+        ll
+    }
+    /**
+     * 預設縮圖大小為 320x320px
+     * ss:60x60
+     * s:100x100
+     * m:320x320
+     * l:640x640
+     * ll:960x960
+     */
+    public void setThumbSize(ThumbSize thumbSize){
+        switch (thumbSize){
+            case ss:
+                this.thumbSize ="60";
+                break;
+            case s:
+                this.thumbSize ="100";
+                break;
+            case m:
+                this.thumbSize ="320";
+                break;
+            case l:
+                this.thumbSize ="640";
+                break;
+            case ll:
+                this.thumbSize ="960";
+                break;
+        }
+    }
+
     /**
      * 預設是否每篇文章都要回傳作者資訊, 如果設定為 true, 則就不回傳
      */

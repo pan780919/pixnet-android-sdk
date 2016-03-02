@@ -133,6 +133,8 @@ public class Blog extends ItemDetailFragment {
                     case sortCategorieList:
                         break;
                     case getAllArticleList:
+                        apiHelper.setBloggerName("giddens");
+                        apiHelper.setThumbSize(DataProxy.ThumbSize.m);
                         apiHelper.getAllArticleList();
                         break;
                     case getArticle:
