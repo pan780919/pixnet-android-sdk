@@ -28,7 +28,7 @@ Application Type 請選擇 Destop / Mobile App
 ```gradle
 dependencies{
   ...
-  compile 'net.pixnet.android:pixnet-android-sdk:1.0.10'
+  compile 'net.pixnet.android:pixnet-android-sdk:1.0.11'
   ...
 }
 ```
