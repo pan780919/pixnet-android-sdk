@@ -168,14 +168,17 @@ public class PixnetApiHelper extends DataProxy {
         getCategoryArticleList(type, categoryId, 1);
     }
     public void getCategoryArticleList(SortType type, String categoryId, int page) {
-        getCategoryArticleList(type, categoryId, defaultPerPage, page);
+        getCategoryArticleList(type, categoryId, true, defaultPerPage, page);
     }
-    public void getCategoryArticleList(SortType type, String categoryId, int perPage, int page){
+    public void getCategoryArticleList(SortType type, String categoryId, boolean topAuthor, int perPage, int page){
         List<NameValuePair> params=new ArrayList<>();
         params.add(new BasicNameValuePair("api_version", "2"));
         params.add(new BasicNameValuePair("per_page", String.valueOf(perPage)));
         params.add(new BasicNameValuePair("page", String.valueOf(page)));
         params.add(new BasicNameValuePair("thumb_size", thumbSize));
+        if (topAuthor) {
+            params.add(new BasicNameValuePair("filter", "top_authors"));
+        }
 
         String url = URL_CATEGORY_ARTICLE + "/" + type.name() + "/" + categoryId;
 
